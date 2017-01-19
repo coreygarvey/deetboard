@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Welcome to SalesEngine{% endblock %}
+{% block head %}Welcome to SalesEngine{% endblock %}
+{% block content %}
+    <p>Welcome {{ user.first_name }}  </p>
+    <h2>Admin Orgs</h2>
+    <p> {{ admin_org }} </p>
+    <a href="/logout/">Logout</a>
+{% endblock %}

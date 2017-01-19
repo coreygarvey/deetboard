@@ -1,0 +1,1 @@
+http://{{ site.domain }}{% url 'registration_activate' activation_key %}
