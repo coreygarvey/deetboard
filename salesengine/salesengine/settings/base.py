@@ -84,8 +84,8 @@ WSGI_APPLICATION = 'salesengine.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'salesengine',
-        'USER': 'salese',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASS'),
         'HOST': 'localhost',
         'PORT': '',
@@ -101,8 +101,8 @@ ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, us
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASS') #my gmail password
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') #my gmail username
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASS') #my gmail password
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
