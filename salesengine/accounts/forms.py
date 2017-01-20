@@ -33,11 +33,8 @@ class MyRegistrationForm(ModelForm):
     the ``commit=False`` argument, as several registration workflows
     will make use of it to create inactive user accounts.
     """
-    # Explicitly declared here because Django's default
-    # UserCreationForm, which we subclass, does not require this field
-    # but workflows in django-registration which involve explicit
-    # activation step do require it. If you need an optional email
-    # field, simply subclass and declare the field not required.
+    # Explicitly declared here because django-registration involves 
+    # explicit activation step and requires it. 
     email = forms.EmailField(
         #help_text=_(u'email address'),
         required=True
@@ -80,3 +77,23 @@ class MyRegistrationForm(ModelForm):
             except ValidationError as v:
                 self.add_error(User.USERNAME_FIELD, v)
         super(MyRegistrationForm, self).clean()
+
+class MyRegistrationForm2(ModelForm):
+    """
+    Form for registering a new user account.
+    Validates that the requested username is not already in use, and
+    requires the password to be entered twice to catch typos.
+    Subclasses should feel free to add any additional validation they
+    need, but should take care when overriding ``save()`` to respect
+    the ``commit=False`` argument, as several registration workflows
+    will make use of it to create inactive user accounts.
+    """
+
+    class Meta:
+        model = Account
+        fields = [
+            #User.USERNAME_FIELD,
+            'first_name',
+            'last_name',
+            'password',
+        ]

@@ -19,8 +19,8 @@ from views import IndexView
 
 from django.contrib.auth.views import login
 from registration.backends.hmac.views import RegistrationView
-from accounts.forms import AccountRegistrationForm, MyRegistrationForm
-from accounts.views import register, register_success, logout_page, home
+from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyRegistrationForm2
+from accounts.views import register, register_success, logout_page, home, ActivationView
 
 
 from orgs.views import OrgCreateView
@@ -41,6 +41,11 @@ urlpatterns = [
         ),
         name='registration_register',
     ),
+    url(r'^accounts/activate/(?P<activation_key>[-:\w]+)/$',
+        ActivationView.as_view(
+            form_class=MyRegistrationForm2
+            ),
+        name='registration_activate'),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
     
 
