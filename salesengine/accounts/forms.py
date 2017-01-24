@@ -88,7 +88,8 @@ class MyRegistrationForm2(ModelForm):
     the ``commit=False`` argument, as several registration workflows
     will make use of it to create inactive user accounts.
     """
-
+    password = forms.CharField(widget=forms.PasswordInput)
+    
     class Meta:
         model = Account
         fields = [

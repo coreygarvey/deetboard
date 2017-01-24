@@ -15,14 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from views import IndexView
+from django.views.generic import TemplateView
+
 
 from django.contrib.auth.views import login
 from registration.backends.hmac.views import RegistrationView
+
 from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyRegistrationForm2
-from accounts.views import register, register_success, logout_page, home, ActivationView
+from accounts.views import register, register_success, logout_page, home, ActivationView2
 
-
+from views import IndexView
 from orgs.views import OrgCreateView
 
 urlpatterns = [
@@ -33,6 +35,12 @@ urlpatterns = [
 
     url(r'^$', login),
     url(r'^logout/$', logout_page),
+    url(r'^accounts/activate/complete/$',
+        TemplateView.as_view(
+            template_name='registration/activation_complete.html'
+        ),
+        name='registration_activation_complete'),
+
     url(r'^accounts/login/$', login), # If user is not login it will redirect to login page
     url(r'^accounts/register/$',
         RegistrationView.as_view(
@@ -42,13 +50,13 @@ urlpatterns = [
         name='registration_register',
     ),
     url(r'^accounts/activate/(?P<activation_key>[-:\w]+)/$',
-        ActivationView.as_view(
+        ActivationView2.as_view(
             form_class=MyRegistrationForm2
             ),
         name='registration_activate'),
-    url(r'^accounts/', include('registration.backends.hmac.urls')),
+    #url(r'^accounts/', include('registration.backends.hmac.urls')),
     
-
+    
 
     url(r'^register/$', register),
     url(r'^register/success/$', register_success),
