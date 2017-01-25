@@ -23,7 +23,7 @@ from braces.views import LoginRequiredMixin
 class OrgCreateView(LoginRequiredMixin, CreateView):
     form_class = OrgForm
     template_name = 'registration/org_create_form.html'
-    success_url = 'home/'
+    success_url = '/accounts/new_org/create_org/'
 
     def form_valid(self, form):        
         form.instance.admin = self.request.user
@@ -32,6 +32,19 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
     def form_invalid(self, form):
         return HttpResponse("Form is invalid")
 
+"""
+# Invitations after Org is created
+# Pull from AccountRegistrationView
+def org_invite(request):
+    extra_questions = get_questions(request)
+    form = OrgInviteForm(request.POST or None, extra=extra_questions)
+    if form.is_valid():
+        for (question, answer) in form.extra_answers():
+            save_answer(request, question, answer)
+        return redirect("create_user_success")
+
+    return render_to_response("signup/form.html", {'form': form})
+"""
 
 class OrgList(generics.ListCreateAPIView):
     queryset = Org.objects.all()

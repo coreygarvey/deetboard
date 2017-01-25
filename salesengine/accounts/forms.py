@@ -78,7 +78,7 @@ class MyRegistrationForm(ModelForm):
                 self.add_error(User.USERNAME_FIELD, v)
         super(MyRegistrationForm, self).clean()
 
-class MyRegistrationForm2(ModelForm):
+class MyActivationForm(ModelForm):
     """
     Form for registering a new user account.
     Validates that the requested username is not already in use, and
@@ -93,7 +93,8 @@ class MyRegistrationForm2(ModelForm):
     class Meta:
         model = Account
         fields = [
-            #User.USERNAME_FIELD,
+            'username',
+            'role',
             'first_name',
             'last_name',
             'password',

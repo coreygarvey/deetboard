@@ -8,7 +8,7 @@ from core.models import TimeStampedModel
 from django.template.loader import render_to_string
 
 class AccountManager(BaseUserManager):
-	def create_user(self, email, role, first_name, last_name, password=None):
+	def create_user(self, email, username, role, first_name, last_name, password=None):
 		"""
 		Creates and saves a User with the given org, email,
 		role, and password.
@@ -23,6 +23,7 @@ class AccountManager(BaseUserManager):
 
 		user = self.model(
 			email=AccountManager.normalize_email(email),
+			username=username,
 			role=role,
 			first_name=first_name,
 			last_name=last_name,
@@ -33,13 +34,14 @@ class AccountManager(BaseUserManager):
 		
 		return user
 
-	def create_superuser(self, email, role, first_name, last_name, password):
+	def create_superuser(self, email, username, role, first_name, last_name, password):
 		"""
 		Creates and saves a superuser with the given
 		org, email, role and password
 		"""
 		user = self.create_user(email, 
 			password=password,
+			username=username,
 			role = role,
 			first_name=first_name,
 			last_name=last_name,
@@ -54,6 +56,8 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=50, unique=True)
+
     date_joined = models.DateTimeField(auto_now_add=True)
     org = models.ForeignKey('orgs.Org', related_name='accounts', on_delete=models.CASCADE, null=True)
     email = models.EmailField(
@@ -75,7 +79,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     objects = AccountManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['role', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['username', 'role', 'first_name', 'last_name']
 
     def get_full_name(self):
     	# The user identified by their email

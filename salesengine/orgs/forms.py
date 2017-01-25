@@ -17,3 +17,41 @@ class OrgForm(forms.ModelForm):
 	class Meta:
 		model = Org
 		fields = ['title']
+
+
+"""
+class UserCreationForm(forms.Form):
+    invite1 = forms.EmailField()
+    invite2 = forms.EmailField()
+    invite3 = forms.EmailField()
+
+    def clean(self):
+        
+        # Apply the reserved-name validator to the username.
+        
+        # This is done in clean() because Django does not currently
+        # have a non-ugly way to just add a validator to an existing
+        # field on a form when subclassing; the standard approach is
+        # to re-declare the entire field in order to specify the
+        # validator. That's not an option here because we're dealing
+        # with the user model and we don't know -- given custom users
+        # -- how to declare the username field.
+        #
+        # So defining clean() and attaching the error message (if
+        # there is one) to the username field is the least-ugly
+        # solution.
+        username_value = self.cleaned_data.get(User.USERNAME_FIELD)
+        if username_value is not None:
+            try:
+                if hasattr(self, 'reserved_names'):
+                    reserved_names = self.reserved_names
+                else:
+                    reserved_names = validators.DEFAULT_RESERVED_NAMES
+                validator = validators.ReservedNameValidator(
+                    reserved_names=reserved_names
+                )
+                validator(username_value)
+            except ValidationError as v:
+                self.add_error(User.USERNAME_FIELD, v)
+        super(MyRegistrationForm, self).clean()
+"""

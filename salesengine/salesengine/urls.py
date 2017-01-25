@@ -19,10 +19,10 @@ from django.views.generic import TemplateView
 
 
 from django.contrib.auth.views import login
-from registration.backends.hmac.views import RegistrationView
+#from registration.backends.hmac.views import RegistrationView
 
-from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyRegistrationForm2
-from accounts.views import register, register_success, logout_page, home, ActivationView2
+from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm
+from accounts.views import register, register_success, logout_page, home, AccountActivationView, AccountRegistrationView, AccountRegistrationTypeView
 
 from views import IndexView
 from orgs.views import OrgCreateView
@@ -35,6 +35,10 @@ urlpatterns = [
 
     url(r'^$', login),
     url(r'^logout/$', logout_page),
+
+    url(r'^register/$', AccountRegistrationTypeView.as_view()),
+
+
     url(r'^accounts/activate/complete/$',
         TemplateView.as_view(
             template_name='registration/activation_complete.html'
@@ -42,23 +46,33 @@ urlpatterns = [
         name='registration_activation_complete'),
 
     url(r'^accounts/login/$', login), # If user is not login it will redirect to login page
-    url(r'^accounts/register/$',
-        RegistrationView.as_view(
-            #form_class=AccountRegistrationForm
-            form_class=MyRegistrationForm
-        ),
+    
+
+    # URLs for registration when creating new organization
+    # Registration
+    url(r'^accounts/new_org/register/$',
+        AccountRegistrationView.as_view(),
         name='registration_register',
-    ),
-    url(r'^accounts/activate/(?P<activation_key>[-:\w]+)/$',
-        ActivationView2.as_view(
-            form_class=MyRegistrationForm2
+    ),  
+
+    url(r'^accounts/new_org/activate/(?P<activation_key>[-:\w]+)/$',
+        AccountActivationView.as_view(),
+        name='new_org_registration_activate'),
+
+    url(r'^accounts/new_org/create_org/',
+        OrgCreateView.as_view(
             ),
-        name='registration_activate'),
-    #url(r'^accounts/', include('registration.backends.hmac.urls')),
+        name = 'new_org'),
+
+    # Invitations to coworkers after Org is created
+    #url(r'^accounts/new_org/invite/&', org_invite)
+
+
+    url(r'^accounts/', include('registration.backends.hmac.urls')),
     
     
 
-    url(r'^register/$', register),
+    
     url(r'^register/success/$', register_success),
     url(r'^home/$', home),
     

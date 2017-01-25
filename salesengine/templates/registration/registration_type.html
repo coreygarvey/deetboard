@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Registration Type{% endblock %}
+{% block head %}Registration Type{% endblock %}
+{% block content %}
+    <h3>Select Registration Type</h3>
+    <table>
+    	<tr>
+    		<td>New Organization</td>
+    		<td>Join Organization</td>
+    	</tr>
+    	<tr>
+    		<td>
+    			<a href="/accounts/new_org/register">New Org</a>
+    		</td>
+    		<td>
+    			<a href="/accounts/find_org/register">Find Org</a>
+    		</td>
+    	</tr>
+    </table>
+{% endblock %}

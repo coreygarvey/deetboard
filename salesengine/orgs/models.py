@@ -6,7 +6,8 @@ from core.models import TimeStampedModel
 class Org(TimeStampedModel):
     title = models.CharField(max_length=50)
     admin = models.ForeignKey('accounts.Account', related_name="admin_org")
-
+    # Fields to add: size, category
+    
     def __str__(self):
         return "%s" % (self.title)
     
