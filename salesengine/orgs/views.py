@@ -23,7 +23,7 @@ from braces.views import LoginRequiredMixin
 class OrgCreateView(LoginRequiredMixin, CreateView):
     form_class = OrgForm
     template_name = 'registration/org_create_form.html'
-    success_url = '/accounts/new_org/create_org/'
+    success_url = '/accounts/new_org/invitation/'
 
     def form_valid(self, form):        
         form.instance.admin = self.request.user

@@ -22,7 +22,7 @@ from django.contrib.auth.views import login
 #from registration.backends.hmac.views import RegistrationView
 
 from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm
-from accounts.views import register, register_success, logout_page, home, AccountActivationView, AccountRegistrationView, AccountRegistrationTypeView
+from accounts.views import register, register_success, logout_page, home, AccountActivationView, AccountRegistrationView, AccountRegistrationTypeView, InvitationView
 
 from views import IndexView
 from orgs.views import OrgCreateView
@@ -66,6 +66,18 @@ urlpatterns = [
 
     # Invitations to coworkers after Org is created
     #url(r'^accounts/new_org/invite/&', org_invite)
+
+    url(r'^accounts/new_org/invitation/$',
+        InvitationView.as_view(),
+        name='registration_invitation',
+    ),
+
+    url(r'^accounts/invitation/complete/$',
+        TemplateView.as_view(
+            template_name='registration/invitation_complete.html'
+        ),
+        name='invitation_complete'),
+
 
 
     url(r'^accounts/', include('registration.backends.hmac.urls')),

@@ -5,7 +5,7 @@ from registration.forms import RegistrationForm
 from django.utils.translation import ugettext_lazy as _
 
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 
 from models import Account
 
@@ -99,3 +99,68 @@ class MyActivationForm(ModelForm):
             'last_name',
             'password',
         ]
+
+
+
+
+
+
+
+
+class InvitationForm(Form):
+    invite1 = forms.EmailField()
+    invite2 = forms.EmailField()
+    invite3 = forms.EmailField()
+
+    class Meta:
+        fields = [
+            'invite1',
+            'invite2',
+            'invite3'
+        ]
+        required_css_class = 'required'
+
+    def clean(self):
+        """
+        Apply the reserved-name validator to the username.
+        """
+        # This is done in clean() because Django does not currently
+        # have a non-ugly way to just add a validator to an existing
+        # field on a form when subclassing; the standard approach is
+        # to re-declare the entire field in order to specify the
+        # validator. That's not an option here because we're dealing
+        # with the user model and we don't know -- given custom users
+        # -- how to declare the username field.
+        #
+        # So defining clean() and attaching the error message (if
+        # there is one) to the username field is the least-ugly
+        # solution.
+        fields = [
+            'invite1',
+            'invite2',
+            'invite3',
+        ]
+
+        for i in fields:
+            username_value = self.cleaned_data.get(i)
+            print "Looping through fields"
+            print "Here is: " + username_value
+            if username_value is not None:
+                try:
+                    if hasattr(self, 'reserved_names'):
+                        reserved_names = self.reserved_names
+                    else:
+                        reserved_names = validators.DEFAULT_RESERVED_NAMES
+                    validator = validators.ReservedNameValidator(
+                        reserved_names=reserved_names
+                    )
+                    validator(username_value)
+                except ValidationError as v:
+                    self.add_error(User.USERNAME_FIELD, v)
+        super(InvitationForm, self).clean()
+
+
+
+
+
+
