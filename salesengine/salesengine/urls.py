@@ -67,9 +67,9 @@ urlpatterns = [
     # Invitations to coworkers after Org is created
     #url(r'^accounts/new_org/invite/&', org_invite)
 
-    url(r'^accounts/new_org/invitation/$',
+    url(r'^orgs/(?P<pk>\d+)/invitation/$',
         InvitationView.as_view(),
-        name='registration_invitation',
+        name='new_org_invitation',
     ),
 
     url(r'^accounts/invitation/complete/$',
@@ -77,6 +77,10 @@ urlpatterns = [
             template_name='registration/invitation_complete.html'
         ),
         name='invitation_complete'),
+
+    url(r'^accounts/new_org/activate/(?P<activation_key>[-:\w]+)/$',
+        AccountActivationView.as_view(),
+        name='invite_registration_activate'),
 
 
 

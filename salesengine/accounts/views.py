@@ -144,7 +144,15 @@ class AccountActivationView(UpdateView):
                 user=activated_user,
                 request=self.request
             )
-            success_url = self.get_success_url(activated_user)
+
+            # Determine if account is already a part of Org
+            if updated_user.org is None:
+                new_org = True
+            else:  
+                new_org = False
+            print 'updated_user.org:'
+            print updated_user.org
+            success_url = self.get_success_url(activated_user, new_org)
             # Login user after updated and saved
             login(self.request, updated_user)
             try:
@@ -176,8 +184,11 @@ class AccountActivationView(UpdateView):
                 return user
         return False
 
-    def get_success_url(self, user):
-        return ('new_org', (), {})
+    def get_success_url(self, user, new_org):
+        if new_org:
+            return ('new_org', (), {})
+        else:
+            return ('/', (), {})
 
     def validate_key(self, activation_key):
         
@@ -236,12 +247,8 @@ class AccountActivationView(UpdateView):
         # 1.10).
         return self.render_to_response(self.get_context_data(form=form))
 
-
-
 class AccountRegistrationTypeView(TemplateView):
     template_name = "registration/registration_type.html"
-
-
 
 
 
@@ -264,6 +271,7 @@ class InvitationView(FormView):
     form_class = InvitationForm
     success_url = None
     template_name = 'registration/invitation_form.html'
+
 
     def dispatch(self, *args, **kwargs):
         """
@@ -326,6 +334,10 @@ class InvitationView(FormView):
         # Username set to email, must not show in ActivationForm
         new_user.username = email
         new_user.is_active = False
+        # Add org to user profile
+        org_pk = self.kwargs['pk']
+        org = Org.objects.get(pk=org_pk)
+        new_user.org = org
         new_user.save()
 
         self.send_activation_email(new_user)
@@ -369,19 +381,6 @@ class InvitationView(FormView):
         message = render_to_string(self.email_body_template,
                                    context)
         user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
