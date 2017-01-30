@@ -6,6 +6,10 @@ from core.models import TimeStampedModel
 class Org(TimeStampedModel):
     title = models.CharField(max_length=50)
     admin = models.ForeignKey('accounts.Account', related_name="admin_org")
+
+    email_domain = models.CharField(max_length=50)
+    email_all = models.BooleanField(default=False)
+
     # Fields to add: size, category
     
     def __str__(self):

@@ -289,10 +289,22 @@ class InvitationView(FormView):
             form.cleaned_data['invite3'],
         ]
         for invite in invited_users:
-            print "Registering invite: " + invite
-            new_user = self.register(invite)
+            # This should check that invite is valid email, not just filled in
+            if invite != '':
+                print "Registering invite: " + invite
+                new_user = self.register(invite)
         
+        # Allow all users with domain to register
+        org_pk = self.kwargs['pk']
+        org = Org.objects.get(pk=org_pk)
+        if form.cleaned_data['inviteEmail'] == True:
+            org.email_all=True
+        else:
+            org.email_all=False
+        org.save()
+
         success_url = self.get_success_url()
+
 
         # success_url may be a simple string, or a tuple providing the
         # full argument set for redirect(). Attempting to unpack it

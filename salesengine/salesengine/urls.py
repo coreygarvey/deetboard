@@ -83,6 +83,14 @@ urlpatterns = [
         name='invite_registration_activate'),
 
 
+    
+    #url(r'^accounts/find_org/register/$',
+    #    AccountRegistrationView.as_view(),
+    #    name='registration_register',
+    #),
+    
+
+
 
     url(r'^accounts/', include('registration.backends.hmac.urls')),
     

@@ -20,6 +20,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView
 from braces.views import LoginRequiredMixin
 
+import re
 
 class OrgCreateView(LoginRequiredMixin, CreateView):
     form_class = OrgForm
@@ -28,36 +29,23 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):        
         form.instance.admin = self.request.user
         
+        email = self.request.user.email
+        domain = re.search("@[\w.]+", email)
+        form.instance.email_domain = domain.group()
+        
         return super(OrgCreateView, self).form_valid(form)
+
     def form_invalid(self, form):
         return HttpResponse("Form is invalid")
+
     def get_success_url(self):
         org_pk = self.object.id
-        print 'Org_pk: '
-        print org_pk
         org = Org.objects.get(pk=org_pk)
-        print 'Org: '
-        print org
         current_user = self.request.user
         current_user.org = org
         current_user.save()
-        print "Org:"
-        print current_user.org
         return reverse('new_org_invitation',args=(self.object.id,))
 
-"""
-# Invitations after Org is created
-# Pull from AccountRegistrationView
-def org_invite(request):
-    extra_questions = get_questions(request)
-    form = OrgInviteForm(request.POST or None, extra=extra_questions)
-    if form.is_valid():
-        for (question, answer) in form.extra_answers():
-            save_answer(request, question, answer)
-        return redirect("create_user_success")
-
-    return render_to_response("signup/form.html", {'form': form})
-"""
 
 class OrgList(generics.ListCreateAPIView):
     queryset = Org.objects.all()

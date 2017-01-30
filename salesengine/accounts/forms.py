@@ -101,25 +101,25 @@ class MyActivationForm(ModelForm):
         ]
 
 
-
-
-
-
-
-
 class InvitationForm(Form):
-    invite1 = forms.EmailField()
-    invite2 = forms.EmailField()
-    invite3 = forms.EmailField()
+    invite1 = forms.EmailField(required=False)
+    invite2 = forms.EmailField(required=False)
+    invite3 = forms.EmailField(required=False)
+    inviteEmail = forms.BooleanField(
+        required=False,
+        # Must add domain name to HTML when presenting form
+        label = "Anyone with email from this domain can join"
+        )
 
     class Meta:
         fields = [
             'invite1',
             'invite2',
-            'invite3'
+            'invite3',
+            'inviteEmail'
         ]
         required_css_class = 'required'
-
+        
     def clean(self):
         """
         Apply the reserved-name validator to the username.
@@ -143,9 +143,8 @@ class InvitationForm(Form):
 
         for i in fields:
             username_value = self.cleaned_data.get(i)
-            print "Looping through fields"
-            print "Here is: " + username_value
-            if username_value is not None:
+            if username_value != '':
+                print "Here is: " + username_value
                 try:
                     if hasattr(self, 'reserved_names'):
                         reserved_names = self.reserved_names
