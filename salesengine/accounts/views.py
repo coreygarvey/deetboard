@@ -39,8 +39,13 @@ class AccountRegistrationView(BaseRegistrationView):
     form_class = MyRegistrationForm
 
     def register(self, form):
-        new_user = self.create_inactive_user(form)
-        signals.user_registered.send(sender=self.__class__,
+        
+        if Account.objects.filter(username=self.cleaned_data['username']).exists():
+            new_user = Account.objects.filter(username=self.cleaned_data['username'])
+            self.send_activation_email(new_user)
+        else:
+            new_user = self.create_inactive_user(form)
+            signals.user_registered.send(sender=self.__class__,
                                      user=new_user,
                                      request=self.request)
         return new_user
@@ -55,13 +60,9 @@ class AccountRegistrationView(BaseRegistrationView):
         """
         new_user = form.save(commit=False)
         form_email = form.cleaned_data['email']
-        # Username set to email, must not show in ActivationForm
-        new_user.username = form_email
         new_user.is_active = False
         new_user.save()
-
         self.send_activation_email(new_user)
-
         return new_user
 
     def get_activation_key(self, user):

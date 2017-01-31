@@ -13,8 +13,6 @@ from . import validators
 
 class AccountRegistrationForm(RegistrationForm):
 
-
-
 	class Meta:
 		model = Account
 		fields = ['email']
@@ -47,6 +45,16 @@ class MyRegistrationForm(ModelForm):
             'email',
         ]
         required_css_class = 'required'
+
+    def clean_email(self):
+        username = self.cleaned_data.get(User.USERNAME_FIELD)
+        print username
+        new_user = Account.objects.filter(email=username)
+        print new_user
+        if Account.objects.filter(email=username).exists():
+            print "Why not here"
+            raise forms.ValidationError(u'Username "%s" is already in use.' % username)
+        return username
 
     def clean(self):
         """
@@ -90,6 +98,10 @@ class MyActivationForm(ModelForm):
     """
     password = forms.CharField(widget=forms.PasswordInput)
     
+    def __init__(self, *args, **kwargs):
+        super(MyActivationForm, self).__init__(*args, **kwargs)
+        #eeeself.fields['username'].widget.attrs['placeholder'] = "testing"
+
     class Meta:
         model = Account
         fields = [
