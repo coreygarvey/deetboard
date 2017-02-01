@@ -34,7 +34,6 @@ class MyRegistrationForm(ModelForm):
     # Explicitly declared here because django-registration involves 
     # explicit activation step and requires it. 
     email = forms.EmailField(
-        #help_text=_(u'email address'),
         required=True
     )
 
@@ -48,12 +47,9 @@ class MyRegistrationForm(ModelForm):
 
     def clean_email(self):
         username = self.cleaned_data.get(User.USERNAME_FIELD)
-        print username
-        new_user = Account.objects.filter(email=username)
-        print new_user
         if Account.objects.filter(email=username).exists():
-            print "Why not here"
-            raise forms.ValidationError(u'Username "%s" is already in use.' % username)
+            raise forms.ValidationError(
+                u'Username "%s" is already in use.\n If you need any another verification email, click below.' % username)
         return username
 
     def clean(self):
@@ -171,7 +167,36 @@ class InvitationForm(Form):
         super(InvitationForm, self).clean()
 
 
+class ReactivateForm(Form):
+    """
+    Form for registering a new user account.
+    Validates that the requested username is not already in use, and
+    requires the password to be entered twice to catch typos.
+    Subclasses should feel free to add any additional validation they
+    need, but should take care when overriding ``save()`` to respect
+    the ``commit=False`` argument, as several registration workflows
+    will make use of it to create inactive user accounts.
+    """
+    # Explicitly declared here because django-registration involves 
+    # explicit activation step and requires it. 
+    email = forms.EmailField(
+        required=True
+    )
 
+    class Meta:
+        fields = [
+            #User.USERNAME_FIELD,
+            'email'
+        ]
+        required_css_class = 'required'
 
-
-
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        try:
+            print email
+            user = Account.objects.filter(email=email)
+            print user
+        except:    
+            raise forms.ValidationError(
+                u'Email "%s" is not registered.\n To register, click below.' % email)
+        return email

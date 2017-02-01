@@ -22,7 +22,7 @@ from django.contrib.auth.views import login
 #from registration.backends.hmac.views import RegistrationView
 
 from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm
-from accounts.views import register, register_success, logout_page, home, AccountActivationView, AccountRegistrationView, AccountRegistrationTypeView, InvitationView
+from accounts.views import register, register_success, logout_page, home, AccountActivationView, AccountRegistrationView, AccountRegistrationTypeView, InvitationView, AccountReactivateView
 
 from views import IndexView
 from orgs.views import OrgCreateView
@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^$', login),
     url(r'^logout/$', logout_page),
 
-    url(r'^register/$', AccountRegistrationTypeView.as_view()),
+    url(r'^accounts/register/$', AccountRegistrationTypeView.as_view()),
 
 
     url(r'^accounts/activate/complete/$',
@@ -64,6 +64,13 @@ urlpatterns = [
             ),
         name = 'new_org'),
 
+
+    # Reauthenticate with an email
+    url(r'^accounts/reactivate/$',
+        AccountReactivateView.as_view(),
+        name='registration_reactivate',
+    ),  
+
     # Invitations to coworkers after Org is created
     #url(r'^accounts/new_org/invite/&', org_invite)
 
@@ -78,14 +85,11 @@ urlpatterns = [
         ),
         name='invitation_complete'),
 
-    url(r'^accounts/new_org/activate/(?P<activation_key>[-:\w]+)/$',
-        AccountActivationView.as_view(),
-        name='invite_registration_activate'),
 
 
     
     #url(r'^accounts/find_org/register/$',
-    #    AccountRegistrationView.as_view(),
+    #    AccountFindOrgView.as_view(),
     #    name='registration_register',
     #),
     
