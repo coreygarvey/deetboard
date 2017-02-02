@@ -18,11 +18,11 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 
 
-from django.contrib.auth.views import login
+from django.contrib.auth.views import login, password_reset_confirm, password_reset_complete
 #from registration.backends.hmac.views import RegistrationView
 
 from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm
-from accounts.views import register, register_success, logout_page, home, AccountActivationView, AccountRegistrationView, AccountRegistrationTypeView, InvitationView, AccountReactivateView
+from accounts.views import register, register_success, logout_page, home, AccountActivationView, AccountRegistrationView, AccountRegistrationTypeView, InvitationView, AccountReactivateView, AccountFindOrgView
 
 from views import IndexView
 from orgs.views import OrgCreateView
@@ -32,7 +32,6 @@ urlpatterns = [
     url(r'^orgs/', include('orgs.urls'), name="org"),
 
     url(r'^api/', include('core.api'), name="api"),
-
     url(r'^$', login),
     url(r'^logout/$', logout_page),
 
@@ -88,14 +87,16 @@ urlpatterns = [
 
 
     
-    #url(r'^accounts/find_org/register/$',
-    #    AccountFindOrgView.as_view(),
-    #    name='registration_register',
-    #),
+    url(r'^accounts/find_org/register/$',
+        AccountFindOrgView.as_view(),
+        name='registration_register',
+    ),
+
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, name='password_reset_confirm'),
+
+    url(r'^reset/complete/$', password_reset_complete, name='password_reset_complete'),
+
     
-
-
-
     url(r'^accounts/', include('registration.backends.hmac.urls')),
     
     

@@ -200,3 +200,23 @@ class ReactivateForm(Form):
             raise forms.ValidationError(
                 u'Email "%s" is not registered.\n To register, click below.' % email)
         return email
+
+
+class FindOrgForm(Form):
+    """
+    Form for registering with allowed domain.
+    Checks if the user's email domain is associated with a particular
+    org. If so, soft register and sends authentication email to user.
+    """
+    # Explicitly declared here because django-registration involves 
+    # explicit activation step and requires it. 
+    email = forms.EmailField(
+        required=True
+    )
+
+    class Meta:
+        fields = [
+            #User.USERNAME_FIELD,
+            'email'
+        ]
+        required_css_class = 'required'
