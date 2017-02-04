@@ -551,6 +551,8 @@ class AccountFindOrgView(FormView):
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
+        new_user = self.register(email)
+
         print "Finding org for: " + email
         #user = Account.objects.get(email=email)
 
@@ -560,6 +562,7 @@ class AccountFindOrgView(FormView):
         try:
             myOrg = Org.objects.get(email_domain=domain.group())
             print "Found it!"
+            new_user = self.register(email)
         except:
             print "Couldn't find it!"
         #self.send_activation_email(user)
@@ -587,6 +590,7 @@ class AccountFindOrgView(FormView):
         return getattr(settings, 'INVITATION_OPEN', True)
 
 
+
     def register(self, email):
         new_user = self.create_inactive_user(email)
         signals.user_registered.send(sender=self.__class__,
@@ -597,6 +601,24 @@ class AccountFindOrgView(FormView):
     def get_success_url(self):
         return ('invitation_complete', (), {})
 
+    def user_org(self, email):
+        # Add org to user profile if present
+        org_pk = self.kwargs['pk']
+        org = Org.objects.get(pk=org_pk)
+        new_user.org = org
+        new_user.save()
+
+        domain = re.search("@[\w.]+", email)
+        print "Domain: "
+        print domain.group()
+        try:
+            myOrg = Org.objects.get(email_domain=domain.group())
+            print "Found it!"
+            return myOrg
+        except:
+            print "Couldn't find it!"
+            return None
+
     def create_inactive_user(self, email):
         """
         Create the inactive user account and send an email containing
@@ -606,6 +628,8 @@ class AccountFindOrgView(FormView):
         # Username set to email, must not show in ActivationForm
         new_user.username = email
         new_user.is_active = False
+        new_user.org = self.user_org(email)
+        new_user.save()
         # Add org to user profile
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)

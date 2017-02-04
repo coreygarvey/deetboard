@@ -56,7 +56,7 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=50, unique=True)
+    username = models.CharField(max_length=50)
 
     date_joined = models.DateTimeField(auto_now_add=True)
     org = models.ForeignKey('orgs.Org', related_name='accounts', on_delete=models.CASCADE, null=True)
