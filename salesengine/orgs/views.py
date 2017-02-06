@@ -28,15 +28,21 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
     
     def form_valid(self, form):        
         form.instance.admin = self.request.user
-        
+
         email = self.request.user.email
         domain = re.search("@[\w.]+", email)
         form.instance.email_domain = domain.group()
+
         
         return super(OrgCreateView, self).form_valid(form)
 
-    def form_invalid(self, form):
-        return HttpResponse("Form is invalid")
+    def get_form_kwargs(self):
+        kwargs = super(OrgCreateView, self).get_form_kwargs()
+        kwargs.update({
+            'request' : self.request
+        })
+        return kwargs
+    
 
     def get_success_url(self):
         org_pk = self.object.id

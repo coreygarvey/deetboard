@@ -22,7 +22,7 @@ from django.contrib.auth.views import login, password_reset_confirm, password_re
 #from registration.backends.hmac.views import RegistrationView
 
 from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm
-from accounts.views import register, register_success, logout_page, home, AccountActivationView, AccountRegistrationView, AccountRegistrationTypeView, InvitationView, AccountReactivateView, AccountFindOrgView
+from accounts.views import register, register_success, logout_page, home, AccountActivationView, AccountRegistrationView, AccountRegistrationTypeView, InvitationView, AccountReactivateView, AccountFindOrgView, MultiActivationView
 
 from views import IndexView
 from orgs.views import OrgCreateView
@@ -57,6 +57,10 @@ urlpatterns = [
     url(r'^accounts/new_org/activate/(?P<activation_key>[-:\w]+)/$',
         AccountActivationView.as_view(),
         name='new_org_registration_activate'),
+
+    url(r'^accounts/multi/activate/org/(?P<org_id>[0-9]+)/(?P<activation_key>[-:\w]+)/$',
+        MultiActivationView.as_view(),
+        name='multi_registration_activate'),
 
     url(r'^accounts/new_org/create_org/',
         OrgCreateView.as_view(
@@ -107,6 +111,4 @@ urlpatterns = [
     
     url(r'^org_create/$', OrgCreateView.as_view())
     #url(r'^join_org/$', start),
-
-
 ]

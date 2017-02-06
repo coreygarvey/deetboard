@@ -1,0 +1,2 @@
+We found your team. Finish by activating below:
+http://{{ site.domain }}{% url 'new_org_registration_activate' activation_key %}
