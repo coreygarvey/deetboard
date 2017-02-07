@@ -9,9 +9,10 @@ from django.conf import settings
 from django.core import signing
 from django.template.loader import render_to_string
 from django.views.generic import TemplateView
+from django.core.urlresolvers import reverse
 
 from models import Account
-from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, InvitationForm, ReactivateForm, FindOrgForm
+from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, InvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm
 from serializers import AccountSerializer
 from orgs.models import Org
 
@@ -140,27 +141,16 @@ class MultiActivationView(UpdateView):
             updated_user.set_password(password)
             
             user_email = updated_user.email
-            print 'user_email'
-            print user_email
 
             domain = re.search("@[\w.]+", user_email)
-            print "Domain: "
-            print domain.group()
             domain_group = domain.group()
-            print "Domain group"
-            domain_group
 
             # If url has org id, add to user
             try:
                 org_id  = self.kwargs.get('org_id')
                 org = Org.objects.get(id=org_id)
                 if domain_group == org.email_domain and org.email_all == True:
-                    print "Made it!"
                     updated_user.org = Org.objects.get(id=org_id)    
-                print "org_id"
-                print org_id
-                
-                
 
             except:
                 pass
@@ -178,7 +168,7 @@ class MultiActivationView(UpdateView):
                 new_org = False
             print 'updated_user.org:'
             print updated_user.org
-            success_url = self.get_success_url(activated_user, new_org)
+            success_url = self.get_success_url(updated_user, new_org)
             # Login user after updated and saved
             login(self.request, updated_user)
             try:
@@ -214,7 +204,8 @@ class MultiActivationView(UpdateView):
         if new_org:
             return ('new_org', (), {})
         else:
-            return ('/', (), {})
+            org_pk = user.org.id
+            return reverse('general_invitation',args=(org_pk,))
 
     def validate_key(self, activation_key):
         
@@ -368,7 +359,8 @@ class AccountActivationView(UpdateView):
         if new_org:
             return ('new_org', (), {})
         else:
-            return ('/', (), {})
+            org_pk = user.org.id
+            return reverse('general_invitation',args=(org_pk,))
 
     def validate_key(self, activation_key):
         
@@ -377,11 +369,15 @@ class AccountActivationView(UpdateView):
         #valid or ``None`` if not.
         
         try:
-            username = signing.loads(
+            results = signing.loads(
                 activation_key,
                 salt=REGISTRATION_SALT,
                 max_age=settings.ACCOUNT_ACTIVATION_DAYS * 86400
             )
+            #print "printing username"
+            #username = results.get('username')
+            #print username
+            #print results.get('org_pk')
             return username
         # SignatureExpired is a subclass of BadSignature, so this will
         # catch either one.
@@ -465,6 +461,9 @@ class InvitationView(FormView):
         return super(InvitationView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
+        org_pk = self.kwargs['pk']
+        org = Org.objects.get(pk=org_pk)
+
         invited_users = [
             form.cleaned_data['invite1'],
             form.cleaned_data['invite2'],
@@ -475,11 +474,10 @@ class InvitationView(FormView):
             if invite != '':
                 print "Registering invite: " + invite
                 new_user = self.register(invite)
+                new_user.org = org
+                new_user.save()
         
         # Allow all users with domain to register
-        org_pk = self.kwargs['pk']
-        org = Org.objects.get(pk=org_pk)
-        print org
         if form.cleaned_data['inviteEmail'] == True:
             print "email all"
             org.email_all=True
@@ -547,6 +545,8 @@ class InvitationView(FormView):
         """
         return signing.dumps(
             obj=getattr(user, user.USERNAME_FIELD),
+            #obj={"username": getattr(user, user.USERNAME_FIELD),
+            #     "org_pk": self.kwargs['pk']},
             salt=REGISTRATION_SALT
         )
 
@@ -579,6 +579,36 @@ class InvitationView(FormView):
                                    context)
         user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
 
+class GeneralInvitationView(InvitationView):
+    form_class = GeneralInvitationForm
+
+    def form_valid(self, form):
+        org_pk = self.kwargs['pk']
+        #org = Org.objects.get(pk=org_pk)
+        org = self.request.user.org
+        invited_users = [
+            form.cleaned_data['invite1'],
+            form.cleaned_data['invite2'],
+            form.cleaned_data['invite3'],
+        ]
+        for invite in invited_users:
+            # This should check that invite is valid email, not just filled in
+            if invite != '':
+                print "Registering invite: " + invite
+                new_user = self.register(invite)
+                new_user.org = org
+                new_user.save()
+
+        success_url = self.get_success_url()
+
+        # success_url may be a simple string, or a tuple providing the
+        # full argument set for redirect(). Attempting to unpack it
+        # tells us which one it is.
+        try:
+            to, args, kwargs = success_url
+            return redirect(to, *args, **kwargs)
+        except ValueError:
+            return redirect(success_url)
 
 class AccountReactivateView(FormView):
     """

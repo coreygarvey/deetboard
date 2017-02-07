@@ -1,1 +1,1 @@
-http://{{ site.domain }}{% url 'new_org_registration_activate' activation_key %}
+http://{{ site.domain }}{% url 'registration_activate' activation_key %}
