@@ -20,7 +20,6 @@ from rest_framework import generics, permissions
 from core.permissions import IsAdminOrReadOnly
 
 from registration import signals
-from registration.views import ActivationView as BaseActivationView
 from registration.views import RegistrationView as BaseRegistrationView
 
 import re
@@ -28,8 +27,10 @@ import re
 
 REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
 
-# HMAC
-class AccountRegistrationView(BaseRegistrationView):
+class RegistrationTypeView(TemplateView):
+    template_name = "registration/registration_type.html"
+
+class RegistrationView(BaseRegistrationView):
     """
     Register a new (inactive) user account, generate an activation key
     and email it to the user.
@@ -68,7 +69,10 @@ class AccountRegistrationView(BaseRegistrationView):
         Generate the activation key which will be emailed to the user.
         """
         return signing.dumps(
-            obj=getattr(user, user.USERNAME_FIELD),
+            #obj=getattr(user, user.USERNAME_FIELD),
+            obj={"username": getattr(user, user.USERNAME_FIELD),
+                 "org_id": None},
+
             salt=REGISTRATION_SALT
         )
 
@@ -101,11 +105,7 @@ class AccountRegistrationView(BaseRegistrationView):
                                    context)
         user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
 
-
-
-
-#HMAC
-class MultiActivationView(UpdateView):
+class ActivationView(UpdateView):
     """
     Given a valid activation key, activate the user's
     account. Otherwise, show an error message stating the account
@@ -117,58 +117,43 @@ class MultiActivationView(UpdateView):
     form_class = MyActivationForm
     model = Account
 
-
     def get_object(self):
         activation_key = self.kwargs.get('activation_key')
-        username = self.validate_key(activation_key)
+        activation_message = self.validate_key(activation_key)
+        username = activation_message.get("username")
         if username is not None:
             user = self.get_user(username)
             return get_object_or_404(Account, pk=user.id)
-        print 'User'
         current_user = self.request.user
-        
-        
         return Account.objects.get(id=current_user)
 
     def form_valid(self, form, *args, **kwargs):
         # Try to activate user when form submitted is valid
         activation_key = self.kwargs['activation_key']
-        activated_user = self.activate(self.args, self.kwargs)
+        activation_message = self.activate(activation_key)
+        username = activation_message.get('username')
+        # Obtain user with username, 
+        #   checks to make sure validation worked correctly
+        activated_user = self.get_user(username)
+        org_id = activation_message.get('org_pk')
         if activated_user:
+            # CAN THIS BE activated_user = ??
             updated_user = form.save(commit=False)
             updated_user.is_active = True
             password = form.cleaned_data['password']
             updated_user.set_password(password)
-            
-            user_email = updated_user.email
-
-            domain = re.search("@[\w.]+", user_email)
-            domain_group = domain.group()
-
-            # If url has org id, add to user
-            try:
-                org_id  = self.kwargs.get('org_id')
+            updated_user.save()
+            # Connect user with org
+            if org_id is not None:
                 org = Org.objects.get(id=org_id)
-                if domain_group == org.email_domain and org.email_all == True:
-                    updated_user.org = Org.objects.get(id=org_id)    
-
-            except:
-                pass
-            updated_user.save()
+                updated_user.orgs.add(org)
             signals.user_activated.send(
                 sender=self.__class__,
                 user=activated_user,
                 request=self.request
             )
-
-            # Determine if account is already a part of Org
-            if updated_user.org is None:
-                new_org = True
-            else:  
-                new_org = False
-            print 'updated_user.org:'
-            print updated_user.org
-            success_url = self.get_success_url(updated_user, new_org)
+            # Determine next move based on account's org
+            success_url = self.get_success_url(activated_user, org_id)
             # Login user after updated and saved
             login(self.request, updated_user)
             try:
@@ -179,228 +164,58 @@ class MultiActivationView(UpdateView):
         # Return form if it doesn't activate user
         return self.render_to_response(self.template_name, self.get_context_data(form=form))
 
-
-    def activate(self, *args, **kwargs):
+    def activate(self, activation_key):
         # This is safe even if, somehow, there's no activation key,
         # because unsign() will raise BadSignature rather than
         # TypeError on a value of None.
-        activation_key = self.kwargs.get('activation_key')
-        print activation_key
-        username = self.validate_key(activation_key)
-        print username
-        if username is not None:
+        print "activation_key"
+        print activation_key  
+        activation_message = self.validate_key(activation_key)
+        if activation_message is not None:
+            username = activation_message.get('username')
+            org_id = activation_message.get('org_id')
             user = self.get_user(username)
-            print user
-            print 'About to make active'
             if user is not None:
-                user.is_active = True
                 user.save()
-                print 'User is_active: '
-                print user.is_active
-                return user
+                return activation_message
         return False
 
-    def get_success_url(self, user, new_org):
-        if new_org:
+    def get_success_url(self, user, org_id):
+        # Users without org will create new
+        if org_id is None:
             return ('new_org', (), {})
         else:
-            org_pk = user.org.id
-            return reverse('general_invitation',args=(org_pk,))
+            return reverse('general_invitation',args=(org_id,))
 
     def validate_key(self, activation_key):
-        
         #Verify that the activation key is valid and within the
         #permitted activation time window, returning the username if
         #valid or ``None`` if not.
-        
-        try:
-            username = signing.loads(
-                activation_key,
-                salt=REGISTRATION_SALT,
-                max_age=settings.ACCOUNT_ACTIVATION_DAYS * 86400
-            )
-            return username
-        # SignatureExpired is a subclass of BadSignature, so this will
-        # catch either one.
-        except signing.BadSignature:
-            return None
-
-    def get_user(self, username):
-        
-        #Given the verified username, look up and return the
-        #corresponding user account if it exists, or ``None`` if it
-        #doesn't.
-        
-        User = get_user_model()
-        lookup_kwargs = {
-            User.USERNAME_FIELD: username,
-            'is_active': False
-        }
-        try:
-            user = User.objects.get(**lookup_kwargs)
-            return user
-        except User.DoesNotExist:
-            return None
-
-
-    def form_invalid(self, form):
-        # tl;dr -- this method is implemented to work around Django
-        # ticket #25548, which is present in the Django 1.9 release
-        # (but not in Django 1.8 or 1.10).
-        #
-        # The longer explanation is that in Django 1.9,
-        # FormMixin.form_invalid() does not pass the form instance to
-        # get_context_data(). This causes get_context_data() to
-        # construct a new form instance with the same data in order to
-        # put it into the template context, and then any access to
-        # that form's ``errors`` or ``cleaned_data`` runs that form
-        # instance's validation. The end result is that validation
-        # gets run twice on an invalid form submission, which is
-        # undesirable for performance reasons.
-        #
-        # Manually implementing this method, and passing the form
-        # instance to get_context_data(), solves this issue (which was
-        # fixed in Django 1.9.1 and so is not present in Django
-        # 1.10).
-        return self.render_to_response(self.get_context_data(form=form))
-
-
-#HMAC
-class AccountActivationView(UpdateView):
-    """
-    Given a valid activation key, activate the user's
-    account. Otherwise, show an error message stating the account
-    couldn't be activated.
-    """
-    disallowed_url = 'registration_disallowed'
-    success_url = None
-    template_name = 'registration/activation_form.html'
-    form_class = MyActivationForm
-    model = Account
-
-
-    def get_object(self):
-        activation_key = self.kwargs.get('activation_key')
-        username = self.validate_key(activation_key)
-        if username is not None:
-            user = self.get_user(username)
-            return get_object_or_404(Account, pk=user.id)
-        print 'User'
-        current_user = self.request.user
-        
-        
-        return Account.objects.get(id=current_user)
-
-    def form_valid(self, form, *args, **kwargs):
-        # Try to activate user when form submitted is valid
-        activation_key = self.kwargs['activation_key']
-        activated_user = self.activate(self.args, self.kwargs)
-        if activated_user:
-            updated_user = form.save(commit=False)
-            updated_user.is_active = True
-            password = form.cleaned_data['password']
-            updated_user.set_password(password)
-            
-            # If url has org id, add to user
-            try:
-                org_id  = self.kwargs.get('org_id')
-                print "org_id"
-                print org_id
-                updated_user.org = Org.objects.get(id=org_id)
-            except:
-                pass
-            updated_user.save()
-            signals.user_activated.send(
-                sender=self.__class__,
-                user=activated_user,
-                request=self.request
-            )
-
-            # Determine if account is already a part of Org
-            if updated_user.org is None:
-                new_org = True
-            else:  
-                new_org = False
-            print 'updated_user.org:'
-            print updated_user.org
-            success_url = self.get_success_url(activated_user, new_org)
-            # Login user after updated and saved
-            login(self.request, updated_user)
-            try:
-                to, args, kwargs = success_url
-                return redirect(to, *args, **kwargs)
-            except ValueError:
-                return redirect(success_url)
-        # Return form if it doesn't activate user
-        return self.render_to_response(self.template_name, self.get_context_data(form=form))
-
-
-    def activate(self, *args, **kwargs):
-        # This is safe even if, somehow, there's no activation key,
-        # because unsign() will raise BadSignature rather than
-        # TypeError on a value of None.
-        activation_key = self.kwargs.get('activation_key')
-        print activation_key
-        username = self.validate_key(activation_key)
-        print username
-        if username is not None:
-            user = self.get_user(username)
-            print user
-            print 'About to make active'
-            if user is not None:
-                user.is_active = True
-                user.save()
-                print 'User is_active: '
-                print user.is_active
-                return user
-        return False
-
-    def get_success_url(self, user, new_org):
-        if new_org:
-            return ('new_org', (), {})
-        else:
-            org_pk = user.org.id
-            return reverse('general_invitation',args=(org_pk,))
-
-    def validate_key(self, activation_key):
-        
-        #Verify that the activation key is valid and within the
-        #permitted activation time window, returning the username if
-        #valid or ``None`` if not.
-        
         try:
             results = signing.loads(
                 activation_key,
                 salt=REGISTRATION_SALT,
                 max_age=settings.ACCOUNT_ACTIVATION_DAYS * 86400
             )
-            #print "printing username"
-            #username = results.get('username')
-            #print username
-            #print results.get('org_pk')
-            return username
+            return results
         # SignatureExpired is a subclass of BadSignature, so this will
         # catch either one.
         except signing.BadSignature:
             return None
 
-    def get_user(self, username):
-        
+    def get_user(self, username):        
         #Given the verified username, look up and return the
         #corresponding user account if it exists, or ``None`` if it
         #doesn't.
-        
         User = get_user_model()
         lookup_kwargs = {
             User.USERNAME_FIELD: username,
-            'is_active': False
         }
         try:
             user = User.objects.get(**lookup_kwargs)
             return user
         except User.DoesNotExist:
             return None
-
 
     def form_invalid(self, form):
         # tl;dr -- this method is implemented to work around Django
@@ -422,14 +237,6 @@ class AccountActivationView(UpdateView):
         # fixed in Django 1.9.1 and so is not present in Django
         # 1.10).
         return self.render_to_response(self.get_context_data(form=form))
-
-
-
-
-class AccountRegistrationTypeView(TemplateView):
-    template_name = "registration/registration_type.html"
-
-
 
 class InvitationView(FormView):
     """
@@ -474,9 +281,10 @@ class InvitationView(FormView):
             if invite != '':
                 print "Registering invite: " + invite
                 new_user = self.register(invite)
-                new_user.org = org
                 new_user.save()
+                new_user.orgs.add(org)
         
+
         # Allow all users with domain to register
         if form.cleaned_data['inviteEmail'] == True:
             print "email all"
@@ -532,9 +340,8 @@ class InvitationView(FormView):
         # Add org to user profile
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)
-        new_user.org = org
         new_user.save()
-
+        new_user.orgs.add(org)
         self.send_activation_email(new_user)
 
         return new_user
@@ -544,9 +351,9 @@ class InvitationView(FormView):
         Generate the activation key which will be emailed to the user.
         """
         return signing.dumps(
-            obj=getattr(user, user.USERNAME_FIELD),
-            #obj={"username": getattr(user, user.USERNAME_FIELD),
-            #     "org_pk": self.kwargs['pk']},
+            #obj=getattr(user, user.USERNAME_FIELD),
+            obj={"username": getattr(user, user.USERNAME_FIELD),
+                 "org_pk": self.kwargs['pk']},
             salt=REGISTRATION_SALT
         )
 
@@ -584,8 +391,8 @@ class GeneralInvitationView(InvitationView):
 
     def form_valid(self, form):
         org_pk = self.kwargs['pk']
-        #org = Org.objects.get(pk=org_pk)
-        org = self.request.user.org
+        org = Org.objects.get(pk=org_pk)
+        #org = self.request.user.org
         invited_users = [
             form.cleaned_data['invite1'],
             form.cleaned_data['invite2'],
@@ -596,8 +403,8 @@ class GeneralInvitationView(InvitationView):
             if invite != '':
                 print "Registering invite: " + invite
                 new_user = self.register(invite)
-                new_user.org = org
                 new_user.save()
+                new_user.orgs.add(org)
 
         success_url = self.get_success_url()
 
@@ -610,7 +417,7 @@ class GeneralInvitationView(InvitationView):
         except ValueError:
             return redirect(success_url)
 
-class AccountReactivateView(FormView):
+class ReactivateView(FormView):
     """
     Register a new (inactive) user account, generate an activation key
     and email it to the user.
@@ -637,7 +444,7 @@ class AccountReactivateView(FormView):
         """
         if not self.invitation_allowed():
             return redirect(self.disallowed_url)
-        return super(AccountReactivateView, self).dispatch(*args, **kwargs)
+        return super(ReactivateView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
@@ -693,8 +500,8 @@ class AccountReactivateView(FormView):
         # Add org to user profile
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)
-        new_user.org = org
         new_user.save()
+        new_user.orgs.add(org)
 
         self.send_activation_email(new_user)
 
@@ -705,7 +512,9 @@ class AccountReactivateView(FormView):
         Generate the activation key which will be emailed to the user.
         """
         return signing.dumps(
-            obj=getattr(user, user.USERNAME_FIELD),
+            #obj=getattr(user, user.USERNAME_FIELD),
+            obj={"username": getattr(user, user.USERNAME_FIELD),
+                 "org_pk": None},
             salt=REGISTRATION_SALT
         )
 
@@ -738,9 +547,7 @@ class AccountReactivateView(FormView):
                                    context)
         user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
 
-
-
-class AccountFindOrgView(FormView):
+class FindOrgView(FormView):
     """
     Search for user's email domain to see if there is a team
     open to all emails from that domain. If so, soft register and
@@ -755,9 +562,7 @@ class AccountFindOrgView(FormView):
 
     multi_org_email_body_template = 'registration/multi_org_email_body.txt'
     multi_org_email_subject_template = 'registration/multi_org_email_subject.txt'
-    """
-    Base class for user invitation views.
-    """
+
     disallowed_url = 'invitation_disallowed'
     form_class = FindOrgForm
     success_url = None
@@ -771,12 +576,11 @@ class AccountFindOrgView(FormView):
         """
         if not self.invitation_allowed():
             return redirect(self.disallowed_url)
-        return super(AccountFindOrgView, self).dispatch(*args, **kwargs)
+        return super(FindOrgView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
         new_user = self.register(email)
-
       
         success_url = self.get_success_url()
 
@@ -814,15 +618,11 @@ class AccountFindOrgView(FormView):
 
     def user_org(self, email):
         domain = re.search("@[\w.]+", email)
-        print "Domain: "
-        print domain.group()
         # Get all orgs through filter. Return array regardless
         try:
             myOrgs = Org.objects.filter(email_domain=domain.group())
-            print "Found it!"
             return list(myOrgs)
         except:
-            print "Couldn't find it!"
             return []
 
     def create_inactive_user(self, email):
@@ -830,38 +630,37 @@ class AccountFindOrgView(FormView):
         Create the inactive user account and send an email containing
         activation instructions.
         """
-        new_user = Account(email=email)
-        # Username set to email, must not show in ActivationForm
-        new_user.username = email
-        new_user.is_active = False
+        if Account.objects.filter(email=email).count() == 1:
+            user = Account.objects.get(email=email)
+        else:
+            user = Account(email=email)
+            # Username set to email, must not show in ActivationForm
+            user.username = email
+            user.is_active = False
+            user.save()
 
         user_orgs = self.user_org(email)
         org_count = len(user_orgs)
-        if org_count > 1 or org_count ==0:
-            new_user.org = None
-        elif org_count == 1:
-            new_user.org = user_orgs[0]
-        new_user.save()
 
-        self.send_activation_email(new_user,user_orgs)
+        self.send_activation_email(user,user_orgs)
+        return user
 
-        return new_user
-
-    def get_activation_key(self, user):
+    def get_activation_key(self, user, org_id):
         """
         Generate the activation key which will be emailed to the user.
         """
         return signing.dumps(
-            obj=getattr(user, user.USERNAME_FIELD),
+            #obj=getattr(user, user.USERNAME_FIELD),
+            obj={"username": getattr(user, user.USERNAME_FIELD),
+                 "org_pk": org_id},
             salt=REGISTRATION_SALT
         )
 
-    def get_email_context(self, activation_key):
+    def get_email_context(self):
         """
         Build the template context used for the activation email.
         """
         return {
-            'activation_key': activation_key,
             'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
             'site': get_current_site(self.request)
         }
@@ -871,34 +670,40 @@ class AccountFindOrgView(FormView):
         Send the activation email. The activation key is simply the
         username, signed using TimestampSigner.
         """
-        activation_key = self.get_activation_key(user)
-        context = self.get_email_context(activation_key)
-        context.update({
-            'orgs': user_orgs
-        })
+        email_orgs = {}
+        context = self.get_email_context()
         org_count = len(user_orgs)
-        print "user_orgs"
-        print user_orgs
-        # Different emails for users with and without an Org
+        for org in user_orgs:
+            org_id = org.id
+            activation_key = self.get_activation_key(user, org_id)
+            email_orgs[activation_key] = org
+
+        new_activation_key = self.get_activation_key(user, None)
+        context.update({
+            'email_orgs': email_orgs,
+            'new_activation_key': new_activation_key
+        })
         if org_count == 0:
             subject = render_to_string(self.no_org_email_subject_template,
                                    context)    
             message = render_to_string(self.no_org_email_body_template,
                                    context)
-        elif org_count == 1:
-            subject = render_to_string(self.join_org_email_subject_template,
-                                   context)
-            message = render_to_string(self.join_org_email_body_template,
-                                   context)
         else:
-            subject = render_to_string(self.multi_org_email_subject_template,
-                                   context)
-            message = render_to_string(self.multi_org_email_body_template,
-                                   context)
-        # Force subject to a single line to avoid header-injection
-        # issues.
+            if org_count == 1:
+                subject = render_to_string(self.join_org_email_subject_template,
+                                       context)
+                message = render_to_string(self.join_org_email_body_template,
+                                       context)
+            else:
+                subject = render_to_string(self.multi_org_email_subject_template,
+                                       context)
+                message = render_to_string(self.multi_org_email_body_template,
+                                       context)
+            # Force subject to a single line to avoid header-injection
+            # issues.
         subject = ''.join(subject.splitlines())
         user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+
 
 
 @csrf_protect

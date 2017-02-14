@@ -42,14 +42,13 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
             'request' : self.request
         })
         return kwargs
-    
 
     def get_success_url(self):
         org_pk = self.object.id
         org = Org.objects.get(pk=org_pk)
         current_user = self.request.user
-        current_user.org = org
         current_user.save()
+        current_user.orgs.add(org)
         return reverse('new_org_invitation',args=(self.object.id,))
 
 

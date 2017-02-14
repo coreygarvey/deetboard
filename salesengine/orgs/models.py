@@ -21,7 +21,9 @@ class Org(TimeStampedModel):
 
 class Expert(TimeStampedModel):
     account = models.OneToOneField('accounts.Account', on_delete=models.CASCADE)
-    
+    orgs = models.ManyToManyField('orgs.Org', related_name='experts')
+
+
     def __str__(self):
         return self.account
 
@@ -31,7 +33,9 @@ class Expert(TimeStampedModel):
 class Skill(TimeStampedModel):
     title = models.CharField(max_length=30)
     category = models.CharField(max_length=30)
+    orgs = models.ManyToManyField('orgs.Org', related_name='skills')
     experts = models.ManyToManyField(Expert, related_name='skills')
+
 
     def __str__(self):
         return self.title

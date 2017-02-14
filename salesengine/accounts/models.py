@@ -59,7 +59,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50)
 
     date_joined = models.DateTimeField(auto_now_add=True)
-    org = models.ForeignKey('orgs.Org', related_name='accounts', on_delete=models.CASCADE, null=True)
+    orgs = models.ManyToManyField('orgs.Org', related_name='accounts')
     email = models.EmailField(
     	verbose_name="email address",
     	max_length=255,
@@ -70,7 +70,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30, default='')
     last_name = models.CharField(max_length=30, default='')
     notifs = models.BooleanField(default=False)
-    features_following = models.ManyToManyField('products.Feature', related_name='followers', null=True)
+    features_following = models.ManyToManyField('products.Feature', related_name='followers')
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -95,8 +95,14 @@ class Account(AbstractBaseUser, PermissionsMixin):
 		Sends an email to this User.
 		"""
 		email = self.email
+		print "email: "
+		print email
+		print subject
+		print message
+		print from_email
+		print self.email
 		send_mail(subject, message, from_email, [self.email])
-
+		print "after send"
     def __unicode__(self):
     	return self.email
 

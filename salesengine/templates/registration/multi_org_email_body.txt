@@ -1,5 +1,8 @@
 Several Orgs match your email. Click below to choose which to join.
 
-{% for org in orgs %}
-  http://{{ site.domain }}{% url 'multi_registration_activate' org.pk activation_key %}
+{% for activation_key, org in email_orgs.items %}
+  http://{{ site.domain }}{% url 'registration_activate' activation_key %}
 {% endfor %}
+
+Or start a new team
+http://{{ site.domain }}{% url 'registration_activate' new_activation_key %}

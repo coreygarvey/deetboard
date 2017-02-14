@@ -6,7 +6,8 @@ from core.models import TimeStampedModel
 class Product(TimeStampedModel):
     admins = models.ManyToManyField('accounts.Account', related_name='products_admin')
     title = models.CharField(max_length=50)
-    
+    org = models.ForeignKey('orgs.Org', related_name='products')
+
     def __str__(self):
         return "%s" % (self.title)
     
