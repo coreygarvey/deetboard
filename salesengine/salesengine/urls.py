@@ -40,64 +40,63 @@ urlpatterns = [
 
 
     # Account Registration Views
+    # Remove this?!
     url(r'^accounts/register/$', 
         RegistrationTypeView.as_view()
     ),
 
-    url(r'^accounts/new_org/register/$',
+    url(r'^new_org/$',
         RegistrationView.as_view(),
-        name='registration_register',
+        name='new_org',
     ), 
 
-    url(r'^accounts/activate/(?P<activation_key>[-:\w]+)/$',
+    url(r'^activate/(?P<activation_key>[-:\w]+)/$',
         ActivationView.as_view(),
-        name='registration_activate',
+        name='activate',
     ),
 
-    url(r'^orgs/new_org/(?P<pk>\d+)/invitation/$',
+    url(r'^new_org/invitation/(?P<pk>\d+)/$',
         InvitationView.as_view(),
         name='new_org_invitation',
     ),
 
-    url(r'^orgs/(?P<pk>\d+)/invitation/$',
+    url(r'^invitation/(?P<pk>\d+)/$',
         GeneralInvitationView.as_view(),
         name='general_invitation',
     ),
 
-    url(r'^accounts/reactivate/$',
+    url(r'^reactivate/$',
         ReactivateView.as_view(),
-        name='registration_reactivate',
+        name='reactivate',
     ), 
 
-    url(r'^accounts/find_org/register/$',
+    # Search for org by email
+    url(r'^find_org/$',
         FindOrgView.as_view(),
-        name='registration_register',
+        name='find_org',
     ),
 
-    url(r'^accounts/activate/complete/$',
+    # Page shown after invitations sent
+    url(r'^find_org/complete/$',
         TemplateView.as_view(
-            template_name='registration/activation_complete.html'
+            template_name='registration/find_org_complete.html'
         ),
-        name='registration_activation_complete',
-    ),
+        name='find_org_complete'),
+
+
 
     url(r'^accounts/login/$', 
         login,
     ), # If user is not login it will redirect to login page
-    
-
-
-    url(r'^accounts/new_org/create_org/',
-        OrgCreateView.as_view(
-            ),
-        name = 'new_org'),
      
-    # Invitations to coworkers after Org is created
-    url(r'^accounts/invitation/complete/$',
+    # Page shown after invitations sent
+    url(r'^invitation/complete/$',
         TemplateView.as_view(
             template_name='registration/invitation_complete.html'
         ),
         name='invitation_complete'),
+
+
 
     url(r'^reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, name='password_reset_confirm'),
 
@@ -107,7 +106,13 @@ urlpatterns = [
     
     url(r'^register/success/$', register_success),
     url(r'^home/$', home),
-    
+
+
+    url(r'^create_org/',
+        OrgCreateView.as_view(
+            ),
+        name = 'new_org'),
+
     url(r'^org_create/$', OrgCreateView.as_view())
     #url(r'^join_org/$', start),
 

@@ -39,11 +39,7 @@ class OrgForm(forms.ModelForm):
 
 		self.clean_email_domain()
 
-
-
 		super(OrgForm, self).clean()
-
-	
 
 
 """

@@ -182,9 +182,12 @@ class ActivationView(UpdateView):
 
     def get_success_url(self, user, org_id):
         # Users without org will create new
+        print "Right here!"
+        print org_id
         if org_id is None:
             return ('new_org', (), {})
         else:
+            print "Should be general activation"
             return reverse('general_invitation',args=(org_id,))
 
     def validate_key(self, activation_key):
@@ -268,6 +271,7 @@ class InvitationView(FormView):
         return super(InvitationView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
+        # Need to protect for only admin of org
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)
 
@@ -390,9 +394,9 @@ class GeneralInvitationView(InvitationView):
     form_class = GeneralInvitationForm
 
     def form_valid(self, form):
+        # Protect for only users in org
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)
-        #org = self.request.user.org
         invited_users = [
             form.cleaned_data['invite1'],
             form.cleaned_data['invite2'],
@@ -614,7 +618,7 @@ class FindOrgView(FormView):
         return new_user
 
     def get_success_url(self):
-        return ('invitation_complete', (), {})
+        return ('find_org_complete', (), {})
 
     def user_org(self, email):
         domain = re.search("@[\w.]+", email)
