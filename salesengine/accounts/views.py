@@ -41,6 +41,7 @@ class RegistrationView(BaseRegistrationView):
     email_body_template = 'registration/activation_email.txt'
     email_subject_template = 'registration/activation_email_subject.txt'
     form_class = MyRegistrationForm
+    template_name = 'registration/homepage.html'
 
     def register(self, form):
         new_user = self.create_inactive_user(form)

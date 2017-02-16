@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'^orgs/', include('orgs.urls'), name="org"),
 
     url(r'^api/', include('core.api'), name="api"),
-    url(r'^$', login),
+    url(r'^login/$', login),
     url(r'^logout/$', logout_page),
 
 
@@ -44,6 +44,11 @@ urlpatterns = [
     url(r'^accounts/register/$', 
         RegistrationTypeView.as_view()
     ),
+
+    url(r'^$',
+        RegistrationView.as_view(),
+        name='home',
+    ), 
 
     url(r'^new_org/$',
         RegistrationView.as_view(),
@@ -65,12 +70,6 @@ urlpatterns = [
         name='general_invitation',
     ),
 
-    url(r'^reactivate/$',
-        ReactivateView.as_view(),
-        name='reactivate',
-    ), 
-
-    # Search for org by email
     url(r'^find_org/$',
         FindOrgView.as_view(),
         name='find_org',
@@ -81,7 +80,16 @@ urlpatterns = [
         TemplateView.as_view(
             template_name='registration/find_org_complete.html'
         ),
-        name='find_org_complete'),
+        name='find_org_complete'
+    ),
+
+    url(r'^reactivate/$',
+        ReactivateView.as_view(),
+        name='reactivate',
+    ), 
+
+    # Search for org by email
+
 
 
 
