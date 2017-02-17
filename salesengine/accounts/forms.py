@@ -109,7 +109,7 @@ class MyActivationForm(ModelForm):
         ]
 
 
-class InvitationForm(Form):
+class AdminInvitationForm(Form):
     invite1 = forms.EmailField(required=False)
     invite2 = forms.EmailField(required=False)
     invite3 = forms.EmailField(required=False)

@@ -12,7 +12,7 @@ from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 
 from models import Account
-from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, InvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm
+from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm
 from serializers import AccountSerializer
 from orgs.models import Org
 
@@ -254,7 +254,7 @@ class InvitationView(FormView):
     Base class for user invitation views.
     """
     disallowed_url = 'invitation_disallowed'
-    form_class = InvitationForm
+    form_class = AdminInvitationForm
     success_url = None
     template_name = 'registration/invitation_form.html'
 
