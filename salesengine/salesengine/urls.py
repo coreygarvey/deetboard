@@ -24,7 +24,8 @@ from django.contrib.auth.views import login, password_reset_confirm, password_re
 
 from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm
 
-from accounts.views import register, register_success, logout_page, home
+from views import home
+from accounts.views import register, register_success, logout_page
 from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, GeneralInvitationView, ReactivateView, FindOrgView
 
 from views import IndexView
@@ -47,7 +48,7 @@ urlpatterns = [
 
     url(r'^$',
         RegistrationView.as_view(),
-        name='home',
+        name='landing',
     ), 
 
     url(r'^new_org/$',
@@ -88,11 +89,6 @@ urlpatterns = [
         name='reactivate',
     ), 
 
-    # Search for org by email
-
-
-
-
     url(r'^accounts/login/$', 
         login,
     ), # If user is not login it will redirect to login page
@@ -102,9 +98,8 @@ urlpatterns = [
         TemplateView.as_view(
             template_name='registration/invitation_complete.html'
         ),
-        name='invitation_complete'),
-
-
+        name='invitation_complete'
+    ),
 
     url(r'^reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, name='password_reset_confirm'),
 
@@ -113,13 +108,18 @@ urlpatterns = [
     url(r'^accounts/', include('registration.backends.hmac.urls')),
     
     url(r'^register/success/$', register_success),
-    url(r'^home/$', home),
-
+    
+    # After Registration
+    url(r'^home/$', 
+        home,
+        name = 'home'
+    ),
 
     url(r'^create_org/',
         OrgCreateView.as_view(
             ),
-        name = 'new_org'),
+        name = 'new_org'
+    ),
 
     url(r'^org_create/$', OrgCreateView.as_view())
     #url(r'^join_org/$', start),

@@ -41,7 +41,7 @@ class RegistrationView(BaseRegistrationView):
     email_body_template = 'registration/activation_email.txt'
     email_subject_template = 'registration/activation_email_subject.txt'
     form_class = MyRegistrationForm
-    template_name = 'registration/homepage.html'
+    template_name = 'registration/landing.html'
 
     def register(self, form):
         new_user = self.create_inactive_user(form)
@@ -183,12 +183,9 @@ class ActivationView(UpdateView):
 
     def get_success_url(self, user, org_id):
         # Users without org will create new
-        print "Right here!"
-        print org_id
         if org_id is None:
             return ('new_org', (), {})
         else:
-            print "Should be general activation"
             return reverse('general_invitation',args=(org_id,))
 
     def validate_key(self, activation_key):
@@ -292,10 +289,8 @@ class InvitationView(FormView):
 
         # Allow all users with domain to register
         if form.cleaned_data['inviteEmail'] == True:
-            print "email all"
             org.email_all=True
         else:
-            print "not email all"
             org.email_all=False
         org.save()
 
@@ -331,7 +326,7 @@ class InvitationView(FormView):
         return new_user
 
     def get_success_url(self):
-        return ('invitation_complete', (), {})
+        return ('home', (), {})
 
     def create_inactive_user(self, email):
         """
@@ -747,15 +742,7 @@ def logout_page(request):
     logout(request)
     return HttpResponseRedirect('/')
  
-@login_required
-def home(request):
-    return render_to_response(
-        'home.html',
-        { 
-            'user': request.user,
-            'admin_org': Org.objects.get(admin=request.user)
-        }
-    )
+
 
 def start(request):
     return render(request, 'start.html')

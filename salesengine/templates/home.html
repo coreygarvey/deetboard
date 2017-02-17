@@ -3,7 +3,23 @@
 {% block head %}Welcome to SalesEngine{% endblock %}
 {% block content %}
     <p>Welcome {{ user.first_name }}  </p>
-    <h2>Admin Orgs</h2>
-    <p> {{ admin_org }} </p>
+    
+    {% if user_orgs %}
+	    <h2>Teams</h2>
+	    {% for org in user_orgs.all %}
+			<span>{{ org.title }}</span>
+		{% endfor %}
+	{% endif %}
+
+	{% if admin_orgs %}
+		<h3>Admin Teams</h3>
+		{% for org in admin_orgs.all %}
+			<span>{{ org.title }}<span>
+		{% endfor %}
+	{% endif %}
+    
+    </br>
+    </br>
+    </br>
     <a href="/logout/">Logout</a>
 {% endblock %}
