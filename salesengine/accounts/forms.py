@@ -164,7 +164,7 @@ class AdminInvitationForm(Form):
                     validator(username_value)
                 except ValidationError as v:
                     self.add_error(User.USERNAME_FIELD, v)
-        super(InvitationForm, self).clean()
+        super(AdminInvitationForm, self).clean()
 
 class GeneralInvitationForm(Form):
     invite1 = forms.EmailField(required=False)

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
     'accounts',
     'orgs',
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'screenshots',
     'questions',
 ]
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -58,6 +60,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'salesengine.urls'
 
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -69,10 +73,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'salesengine.context_processors.site',
             ],
         },
     },
 ]
+
+SITE_URL = 'salesengine.com' # this will reduce the Sites framework db call.
+
 
 
 WSGI_APPLICATION = 'salesengine.wsgi.application'

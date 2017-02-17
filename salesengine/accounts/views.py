@@ -10,6 +10,7 @@ from django.core import signing
 from django.template.loader import render_to_string
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
+from django.template import RequestContext
 
 from models import Account
 from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm
@@ -38,7 +39,7 @@ class RegistrationView(BaseRegistrationView):
     the activation key is simply the username, signed using Django's
     TimestampSigner, with HMAC verification on activation.
     """
-    email_body_template = 'registration/activation_email.txt'
+    email_body_template = 'registration/activation_email_body.txt'
     email_subject_template = 'registration/activation_email_subject.txt'
     form_class = MyRegistrationForm
     template_name = 'registration/landing.html'
@@ -81,11 +82,13 @@ class RegistrationView(BaseRegistrationView):
         """
         Build the template context used for the activation email.
         """
-        return {
-            'activation_key': activation_key,
-            'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
-            'site': get_current_site(self.request)
-        }
+        context = RequestContext(self.request, 
+            {
+                'activation_key': activation_key,
+                'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
+                'site': get_current_site(self.request)
+            })
+        return context
 
     def send_activation_email(self, user):
         """
@@ -248,8 +251,8 @@ class InvitationView(FormView):
     TimestampSigner, with HMAC verification on activation.
     """
     # Must change so invited flow is different when activating, no Org creation
-    email_body_template = 'registration/activation_email.txt'
-    email_subject_template = 'registration/activation_email_subject.txt'
+    email_body_template = 'registration/invitation_email_body.txt'
+    email_subject_template = 'registration/invitation_email_subject.txt'
     """
     Base class for user invitation views.
     """
@@ -342,7 +345,7 @@ class InvitationView(FormView):
         org = Org.objects.get(pk=org_pk)
         new_user.save()
         new_user.orgs.add(org)
-        self.send_activation_email(new_user)
+        self.send_activation_email(new_user, org)
 
         return new_user
 
@@ -367,7 +370,7 @@ class InvitationView(FormView):
             'site': get_current_site(self.request)
         }
 
-    def send_activation_email(self, user):
+    def send_activation_email(self, user, org):
         """
         Send the activation email. The activation key is simply the
         username, signed using TimestampSigner.
@@ -375,7 +378,8 @@ class InvitationView(FormView):
         activation_key = self.get_activation_key(user)
         context = self.get_email_context(activation_key)
         context.update({
-            'user': user
+            'current_user': self.request.user,
+            'org': org
         })
         subject = render_to_string(self.email_subject_template,
                                    context)
