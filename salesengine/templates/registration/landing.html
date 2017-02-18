@@ -1,13 +1,31 @@
 {% extends "base.html" %}
+{% load addcss %}
+{% load widget_tweaks %}
 {% block title %}Sales Engine{% endblock %}
-{% block head %}Know More, Sell More{% endblock %}
+
+{% block nav %}{% include "nav/landing-nav.html" %}{% endblock %}
+
 {% block content %}
-    <form method="post" action="">{% csrf_token %}
-        <table border="0">
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Register" />
-    </form>
-    <a href="/login/">Login</a>
-    <a href="/find_org/">Find Your Team</a>
+    <div id="landing-body">
+    	<div id="tagline">
+    		<h1>Know More Sell More</h1>
+    		<h4>No matter your pitch, SalesEngine connects companies to get the best information to customers.
+    	</div>
+
+	    <div id="landing-form">
+	    	<form method="post" action="">{% csrf_token %}
+		            
+					
+				{% render_field form.email placeholder="Email address" id+="landing-input" class+="form-control" %}
+					
+				<input type="submit" class="btn btn-primary" value="Start a new team" />
+
+		    </form>
+		    <div id="landing-links">
+				Is your company already on SalesEngine? 
+				<a href="/login/">Login</a> or
+		    	<a href="/find_org/">find your team</a>
+	    </div>
+	</div>
+    
 {% endblock %}

@@ -1,0 +1,34 @@
+body {
+  padding-top: 100px;
+}
+h1 {
+	font-size: 80px;
+    color: #FCA205;
+}
+
+
+/* Landing page */
+#landing-body {
+	width: 600px;
+	padding: 40px;
+}
+
+#tagline {
+	padding: 10px;
+}
+
+#landing-form {
+	padding: 10px;
+}
+
+#landing-input {
+	width: 200px;
+	margin: 10px 0 15px;
+	display: inline-block;
+}
+
+#landing-button {
+	width: 200px;
+	margin: 10px 0 25px;
+	display: inline-block;
+}

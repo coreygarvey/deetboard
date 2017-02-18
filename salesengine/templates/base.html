@@ -1,16 +1,26 @@
 {% load staticfiles %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html lang="en" PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head>
         <title>Django Login Application |
         {% block title %}{% endblock %}</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         
         {% include "styles.html" %}    
 		
     </head>
     <body>
-        <h1>{% block head %}{% endblock %}</h1>
-        {% block content %}{% endblock %}
- 
+        {% block nav %}{% endblock %}  
+
+        
+        <div class="container base-container">
+
+            {% block content %}{% endblock %}
+
+        </div><!-- /.container -->
+
+        
+        {% include "postjs.html" %}  
     </body>
 </html>
