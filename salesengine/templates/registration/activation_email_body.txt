@@ -1,3 +1,5 @@
-<h2>Welcome to SalesEngine!</h2>
+Welcome to SalesEngine!
 
-<a href="{{ site.domain }}{% url 'activate' activation_key %}">Click Here</a> to activate your account.
+Click on the link below to activate your account.
+
+{{ site.domain }}{% url 'activate' activation_key %}

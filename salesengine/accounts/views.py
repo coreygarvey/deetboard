@@ -31,7 +31,49 @@ REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
 class RegistrationTypeView(TemplateView):
     template_name = "registration/registration_type.html"
 
-class RegistrationView(BaseRegistrationView):
+class ActivationKeyMixin(object):
+
+    def get_activation_key(self, user, org_pk=None):
+        """
+        Generate the activation key which will be emailed to the user.
+        """
+
+        return signing.dumps(
+            #obj=getattr(user, user.USERNAME_FIELD),
+            obj={"username": getattr(user, user.USERNAME_FIELD),
+                 "org_pk": org_pk},
+            salt=REGISTRATION_SALT
+        )
+
+class ActivationContextMixin(object):
+    def get_activation_context(self, activation_key):
+        """
+        Build the template context used for the activation email.
+        """
+        return {
+            'activation_key': activation_key,
+            'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
+            'site': get_current_site(self.request)
+        }
+
+class InvitationAllowedMixin(object):
+    def invitation_allowed(self):
+        """
+        Override this to enable/disable user registration, either
+        globally or on a per-request basis.
+        """
+        return getattr(settings, 'INVITATION_OPEN', True)
+
+class RegistrationMixin(object):
+    def register(self, email):
+        new_user = self.create_inactive_user(email)
+        signals.user_registered.send(sender=self.__class__,
+                                     user=new_user,
+                                     request=self.request)
+        return new_user
+
+class RegistrationView(ActivationContextMixin, ActivationKeyMixin, 
+                        RegistrationMixin, BaseRegistrationView):
     """
     Register a new (inactive) user account, generate an activation key
     and email it to the user.
@@ -40,16 +82,10 @@ class RegistrationView(BaseRegistrationView):
     TimestampSigner, with HMAC verification on activation.
     """
     email_body_template = 'registration/activation_email_body.txt'
+    email_body_html_template = 'registration/activation_email_body.html'
     email_subject_template = 'registration/activation_email_subject.txt'
     form_class = MyRegistrationForm
     template_name = 'registration/landing.html'
-
-    def register(self, form):
-        new_user = self.create_inactive_user(form)
-        signals.user_registered.send(sender=self.__class__,
-                                 user=new_user,
-                                 request=self.request)
-        return new_user
 
     def get_success_url(self, user):
         return ('registration_complete', (), {})
@@ -66,48 +102,31 @@ class RegistrationView(BaseRegistrationView):
         self.send_activation_email(new_user)
         return new_user
 
-    def get_activation_key(self, user):
-        """
-        Generate the activation key which will be emailed to the user.
-        """
-        return signing.dumps(
-            #obj=getattr(user, user.USERNAME_FIELD),
-            obj={"username": getattr(user, user.USERNAME_FIELD),
-                 "org_id": None},
-
-            salt=REGISTRATION_SALT
-        )
-
-    def get_email_context(self, activation_key):
-        """
-        Build the template context used for the activation email.
-        """
-        context = RequestContext(self.request, 
-            {
-                'activation_key': activation_key,
-                'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
-                'site': get_current_site(self.request)
-            })
-        return context
-
     def send_activation_email(self, user):
         """
         Send the activation email. The activation key is simply the
         username, signed using TimestampSigner.
         """
         activation_key = self.get_activation_key(user)
-        context = self.get_email_context(activation_key)
+        
+        context = self.get_activation_context(activation_key)
         context.update({
             'user': user
         })
+
         subject = render_to_string(self.email_subject_template,
                                    context)
+        message = render_to_string(self.email_body_template,
+                                   context)
+        html_message = render_to_string(self.email_body_html_template, 
+                                    context)
+        
         # Force subject to a single line to avoid header-injection
         # issues.
         subject = ''.join(subject.splitlines())
-        message = render_to_string(self.email_body_template,
-                                   context)
-        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+        
+        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL, 
+                        html_message=html_message)
 
 class ActivationView(UpdateView):
     """
@@ -242,7 +261,10 @@ class ActivationView(UpdateView):
         # 1.10).
         return self.render_to_response(self.get_context_data(form=form))
 
-class InvitationView(FormView):
+
+
+class InvitationView(ActivationContextMixin, ActivationKeyMixin, 
+                    InvitationAllowedMixin, RegistrationMixin, FormView):
     """
     Register a new (inactive) user account, generate an activation key
     and email it to the user.
@@ -287,8 +309,7 @@ class InvitationView(FormView):
                 print "Registering invite: " + invite
                 new_user = self.register(invite)
                 new_user.save()
-                new_user.orgs.add(org)
-        
+                new_user.orgs.add(org)        
 
         # Allow all users with domain to register
         if form.cleaned_data['inviteEmail'] == True:
@@ -296,9 +317,7 @@ class InvitationView(FormView):
         else:
             org.email_all=False
         org.save()
-
         success_url = self.get_success_url()
-
 
         # success_url may be a simple string, or a tuple providing the
         # full argument set for redirect(). Attempting to unpack it
@@ -313,20 +332,6 @@ class InvitationView(FormView):
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
 
-    def invitation_allowed(self):
-        """
-        Override this to enable/disable user registration, either
-        globally or on a per-request basis.
-        """
-        return getattr(settings, 'INVITATION_OPEN', True)
-
-
-    def register(self, email):
-        new_user = self.create_inactive_user(email)
-        signals.user_registered.send(sender=self.__class__,
-                                     user=new_user,
-                                     request=self.request)
-        return new_user
 
     def get_success_url(self):
         return ('home', (), {})
@@ -336,47 +341,29 @@ class InvitationView(FormView):
         Create the inactive user account and send an email containing
         activation instructions.
         """
-        new_user = Account(email=email)
-        # Username set to email, must not show in ActivationForm
-        new_user.username = email
-        new_user.is_active = False
+        if Account.objects.filter(email=email).count() == 1:
+            user = Account.objects.get(email=email)
+        else:
+            user = Account(email=email)
+            # Username set to email, must not show in ActivationForm
+            user.username = email
+            user.is_active = False
+            user.save()
         # Add org to user profile
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)
-        new_user.save()
-        new_user.orgs.add(org)
-        self.send_activation_email(new_user, org)
+        user.orgs.add(org)
+        self.send_activation_email(user, org)
 
-        return new_user
-
-    def get_activation_key(self, user):
-        """
-        Generate the activation key which will be emailed to the user.
-        """
-        return signing.dumps(
-            #obj=getattr(user, user.USERNAME_FIELD),
-            obj={"username": getattr(user, user.USERNAME_FIELD),
-                 "org_pk": self.kwargs['pk']},
-            salt=REGISTRATION_SALT
-        )
-
-    def get_email_context(self, activation_key):
-        """
-        Build the template context used for the activation email.
-        """
-        return {
-            'activation_key': activation_key,
-            'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
-            'site': get_current_site(self.request)
-        }
+        return user
 
     def send_activation_email(self, user, org):
         """
         Send the activation email. The activation key is simply the
         username, signed using TimestampSigner.
         """
-        activation_key = self.get_activation_key(user)
-        context = self.get_email_context(activation_key)
+        activation_key = self.get_activation_key(user, org.id)
+        context = self.get_activation_context(activation_key)
         context.update({
             'current_user': self.request.user,
             'org': org
@@ -421,7 +408,8 @@ class GeneralInvitationView(InvitationView):
         except ValueError:
             return redirect(success_url)
 
-class ReactivateView(FormView):
+class ReactivateView(ActivationContextMixin, ActivationKeyMixin, 
+                    InvitationAllowedMixin, FormView):
     """
     Register a new (inactive) user account, generate an activation key
     and email it to the user.
@@ -474,63 +462,8 @@ class ReactivateView(FormView):
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
 
-    def invitation_allowed(self):
-        """
-        Override this to enable/disable user registration, either
-        globally or on a per-request basis.
-        """
-        return getattr(settings, 'INVITATION_OPEN', True)
-
-
-    def register(self, email):
-        new_user = self.create_inactive_user(email)
-        signals.user_registered.send(sender=self.__class__,
-                                     user=new_user,
-                                     request=self.request)
-        return new_user
-
     def get_success_url(self):
         return ('invitation_complete', (), {})
-
-    def create_inactive_user(self, email):
-        """
-        Create the inactive user account and send an email containing
-        activation instructions.
-        """
-        new_user = Account(email=email)
-        # Username set to email, must not show in ActivationForm
-        new_user.username = email
-        new_user.is_active = False
-        # Add org to user profile
-        org_pk = self.kwargs['pk']
-        org = Org.objects.get(pk=org_pk)
-        new_user.save()
-        new_user.orgs.add(org)
-
-        self.send_activation_email(new_user)
-
-        return new_user
-
-    def get_activation_key(self, user):
-        """
-        Generate the activation key which will be emailed to the user.
-        """
-        return signing.dumps(
-            #obj=getattr(user, user.USERNAME_FIELD),
-            obj={"username": getattr(user, user.USERNAME_FIELD),
-                 "org_pk": None},
-            salt=REGISTRATION_SALT
-        )
-
-    def get_email_context(self, activation_key):
-        """
-        Build the template context used for the activation email.
-        """
-        return {
-            'activation_key': activation_key,
-            'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
-            'site': get_current_site(self.request)
-        }
 
     def send_activation_email(self, user):
         """
@@ -538,7 +471,7 @@ class ReactivateView(FormView):
         username, signed using TimestampSigner.
         """
         activation_key = self.get_activation_key(user)
-        context = self.get_email_context(activation_key)
+        context = self.get_activation_context(activation_key)
         context.update({
             'user': user
         })
@@ -551,7 +484,8 @@ class ReactivateView(FormView):
                                    context)
         user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
 
-class FindOrgView(FormView):
+class FindOrgView(ActivationContextMixin, ActivationKeyMixin, 
+                InvitationAllowedMixin, RegistrationMixin, FormView):
     """
     Search for user's email domain to see if there is a team
     open to all emails from that domain. If so, soft register and
@@ -601,22 +535,6 @@ class FindOrgView(FormView):
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
 
-    def invitation_allowed(self):
-        """
-        Override this to enable/disable user registration, either
-        globally or on a per-request basis.
-        """
-        return getattr(settings, 'INVITATION_OPEN', True)
-
-
-
-    def register(self, email):
-        new_user = self.create_inactive_user(email)
-        signals.user_registered.send(sender=self.__class__,
-                                     user=new_user,
-                                     request=self.request)
-        return new_user
-
     def get_success_url(self):
         return ('find_org_complete', (), {})
 
@@ -649,40 +567,20 @@ class FindOrgView(FormView):
         self.send_activation_email(user,user_orgs)
         return user
 
-    def get_activation_key(self, user, org_id):
-        """
-        Generate the activation key which will be emailed to the user.
-        """
-        return signing.dumps(
-            #obj=getattr(user, user.USERNAME_FIELD),
-            obj={"username": getattr(user, user.USERNAME_FIELD),
-                 "org_pk": org_id},
-            salt=REGISTRATION_SALT
-        )
-
-    def get_email_context(self):
-        """
-        Build the template context used for the activation email.
-        """
-        return {
-            'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
-            'site': get_current_site(self.request)
-        }
-
     def send_activation_email(self, user, user_orgs):
         """
         Send the activation email. The activation key is simply the
         username, signed using TimestampSigner.
         """
         email_orgs = {}
-        context = self.get_email_context()
+        activation_key = self.get_activation_key(user, None)
+        context = self.get_activation_context(activation_key)
         org_count = len(user_orgs)
         for org in user_orgs:
             org_id = org.id
             activation_key = self.get_activation_key(user, org_id)
             email_orgs[activation_key] = org
 
-        new_activation_key = self.get_activation_key(user, None)
         context.update({
             'email_orgs': email_orgs,
             'new_activation_key': new_activation_key

@@ -90,7 +90,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     	# The user identified by email
     	return self.email
 
-    def email_user(self, subject, message, from_email=None):
+    def email_user(self, subject, message, from_email=None, html_message=None):
 		"""
 		Sends an email to this User.
 		"""
@@ -101,7 +101,9 @@ class Account(AbstractBaseUser, PermissionsMixin):
 		print message
 		print from_email
 		print self.email
-		send_mail(subject, message, from_email, [self.email])
+		print html_message
+		send_mail(subject, message, from_email, [self.email], 
+					fail_silently=True, html_message=html_message)
 		print "after send"
     def __unicode__(self):
     	return self.email
