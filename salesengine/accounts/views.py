@@ -56,6 +56,37 @@ class ActivationContextMixin(object):
             'site': get_current_site(self.request)
         }
 
+class ActivationEmailMixin(object):
+    def send_activation_email(self, user, org=None, current_user=None):
+        """
+        Send the activation email. The activation key is simply the
+        username, signed using TimestampSigner.
+        """
+        if org is not None:
+            activation_key = self.get_activation_key(user, org.id)
+        else:
+            activation_key = self.get_activation_key(user)
+        
+        context = self.get_activation_context(activation_key)
+        context.update({
+            'user': user,
+            'current_user': current_user,
+            'org': org
+        })
+
+        subject = render_to_string(self.email_subject_template,
+                                   context)
+        # Force subject to a single line to avoid header-injection
+        # issues.
+        subject = ''.join(subject.splitlines())
+        message = render_to_string(self.email_body_template,
+                                   context)
+        html_message = render_to_string(self.email_body_html_template, 
+                                    context)
+        
+        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL, 
+                        html_message=html_message)
+
 class InvitationAllowedMixin(object):
     def invitation_allowed(self):
         """
@@ -73,7 +104,7 @@ class RegistrationMixin(object):
         return new_user
 
 class RegistrationView(ActivationContextMixin, ActivationKeyMixin, 
-                        RegistrationMixin, BaseRegistrationView):
+                        ActivationEmailMixin, RegistrationMixin, BaseRegistrationView):
     """
     Register a new (inactive) user account, generate an activation key
     and email it to the user.
@@ -81,9 +112,9 @@ class RegistrationView(ActivationContextMixin, ActivationKeyMixin,
     the activation key is simply the username, signed using Django's
     TimestampSigner, with HMAC verification on activation.
     """
-    email_body_template = 'registration/activation_email_body.txt'
-    email_body_html_template = 'registration/activation_email_body.html'
-    email_subject_template = 'registration/activation_email_subject.txt'
+    email_body_template = 'registration/emails/activation_email_body.txt'
+    email_body_html_template = 'registration/emails/activation_email_body.html'
+    email_subject_template = 'registration/emails/activation_email_subject.txt'
     form_class = MyRegistrationForm
     template_name = 'registration/landing.html'
 
@@ -101,32 +132,6 @@ class RegistrationView(ActivationContextMixin, ActivationKeyMixin,
         new_user.save()
         self.send_activation_email(new_user)
         return new_user
-
-    def send_activation_email(self, user):
-        """
-        Send the activation email. The activation key is simply the
-        username, signed using TimestampSigner.
-        """
-        activation_key = self.get_activation_key(user)
-        
-        context = self.get_activation_context(activation_key)
-        context.update({
-            'user': user
-        })
-
-        subject = render_to_string(self.email_subject_template,
-                                   context)
-        message = render_to_string(self.email_body_template,
-                                   context)
-        html_message = render_to_string(self.email_body_html_template, 
-                                    context)
-        
-        # Force subject to a single line to avoid header-injection
-        # issues.
-        subject = ''.join(subject.splitlines())
-        
-        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL, 
-                        html_message=html_message)
 
 class ActivationView(UpdateView):
     """
@@ -264,7 +269,7 @@ class ActivationView(UpdateView):
 
 
 class InvitationView(ActivationContextMixin, ActivationKeyMixin, 
-                    InvitationAllowedMixin, RegistrationMixin, FormView):
+                    ActivationEmailMixin, InvitationAllowedMixin, RegistrationMixin, FormView):
     """
     Register a new (inactive) user account, generate an activation key
     and email it to the user.
@@ -273,8 +278,9 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
     TimestampSigner, with HMAC verification on activation.
     """
     # Must change so invited flow is different when activating, no Org creation
-    email_body_template = 'registration/invitation_email_body.txt'
-    email_subject_template = 'registration/invitation_email_subject.txt'
+    email_body_template = 'registration/emails/invitation_email_body.txt'
+    email_body_html_template = 'registration/emails/invitation_email_body.html'
+    email_subject_template = 'registration/emails/invitation_email_subject.txt'
     """
     Base class for user invitation views.
     """
@@ -353,29 +359,10 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)
         user.orgs.add(org)
-        self.send_activation_email(user, org)
+        self.send_activation_email(user, org, current_user=self.request.user)
 
         return user
 
-    def send_activation_email(self, user, org):
-        """
-        Send the activation email. The activation key is simply the
-        username, signed using TimestampSigner.
-        """
-        activation_key = self.get_activation_key(user, org.id)
-        context = self.get_activation_context(activation_key)
-        context.update({
-            'current_user': self.request.user,
-            'org': org
-        })
-        subject = render_to_string(self.email_subject_template,
-                                   context)
-        # Force subject to a single line to avoid header-injection
-        # issues.
-        subject = ''.join(subject.splitlines())
-        message = render_to_string(self.email_body_template,
-                                   context)
-        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
 
 class GeneralInvitationView(InvitationView):
     form_class = GeneralInvitationForm
@@ -409,7 +396,7 @@ class GeneralInvitationView(InvitationView):
             return redirect(success_url)
 
 class ReactivateView(ActivationContextMixin, ActivationKeyMixin, 
-                    InvitationAllowedMixin, FormView):
+                    ActivationEmailMixin, InvitationAllowedMixin, FormView):
     """
     Register a new (inactive) user account, generate an activation key
     and email it to the user.
@@ -418,8 +405,9 @@ class ReactivateView(ActivationContextMixin, ActivationKeyMixin,
     TimestampSigner, with HMAC verification on activation.
     """
     # Must change so invited flow is different when activating, no Org creation
-    email_body_template = 'registration/activation_email.txt'
-    email_subject_template = 'registration/activation_email_subject.txt'
+    email_body_template = 'registration/emails/activation_email.txt'
+    email_body_html_template = 'registration/emails/activation_email_body.html'
+    email_subject_template = 'registration/emails/activation_email_subject.txt'
     """
     Base class for user invitation views.
     """
@@ -465,24 +453,6 @@ class ReactivateView(ActivationContextMixin, ActivationKeyMixin,
     def get_success_url(self):
         return ('invitation_complete', (), {})
 
-    def send_activation_email(self, user):
-        """
-        Send the activation email. The activation key is simply the
-        username, signed using TimestampSigner.
-        """
-        activation_key = self.get_activation_key(user)
-        context = self.get_activation_context(activation_key)
-        context.update({
-            'user': user
-        })
-        subject = render_to_string(self.email_subject_template,
-                                   context)
-        # Force subject to a single line to avoid header-injection
-        # issues.
-        subject = ''.join(subject.splitlines())
-        message = render_to_string(self.email_body_template,
-                                   context)
-        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
 
 class FindOrgView(ActivationContextMixin, ActivationKeyMixin, 
                 InvitationAllowedMixin, RegistrationMixin, FormView):
@@ -492,14 +462,17 @@ class FindOrgView(ActivationContextMixin, ActivationKeyMixin,
     send authentication email. Otherwise, send sorry email
     """
     # Must change so invited flow is different when activating, no Org creation
-    join_org_email_body_template = 'registration/join_org_email_body.txt'
-    join_org_email_subject_template = 'registration/join_org_email_subject.txt'
+    join_org_email_body_template = 'registration/emails/join_org_email_body.txt'
+    join_org_email_body_html_template = 'registration/emails/join_org_email_body.html'
+    join_org_email_subject_template = 'registration/emails/join_org_email_subject.txt'
 
-    no_org_email_body_template = 'registration/no_org_email_body.txt'
-    no_org_email_subject_template = 'registration/no_org_email_subject.txt'
+    no_org_email_body_template = 'registration/emails/no_org_email_body.txt'
+    no_org_email_body_html_template = 'registration/emails/no_org_email_body.html'
+    no_org_email_subject_template = 'registration/emails/no_org_email_subject.txt'
 
-    multi_org_email_body_template = 'registration/multi_org_email_body.txt'
-    multi_org_email_subject_template = 'registration/multi_org_email_subject.txt'
+    multi_org_email_body_template = 'registration/emails/multi_org_email_body.txt'
+    multi_org_email_body_html_template = 'registration/emails/multi_org_email_body.html'
+    multi_org_email_subject_template = 'registration/emails/multi_org_email_subject.txt'
 
     disallowed_url = 'invitation_disallowed'
     form_class = FindOrgForm
@@ -573,6 +546,7 @@ class FindOrgView(ActivationContextMixin, ActivationKeyMixin,
         username, signed using TimestampSigner.
         """
         email_orgs = {}
+        # This will the key to create a new org
         activation_key = self.get_activation_key(user, None)
         context = self.get_activation_context(activation_key)
         org_count = len(user_orgs)
@@ -583,30 +557,29 @@ class FindOrgView(ActivationContextMixin, ActivationKeyMixin,
 
         context.update({
             'email_orgs': email_orgs,
-            'new_activation_key': new_activation_key
         })
         if org_count == 0:
-            subject = render_to_string(self.no_org_email_subject_template,
-                                   context)    
-            message = render_to_string(self.no_org_email_body_template,
-                                   context)
+            subject_var = self.no_org_email_subject_template
+            message_var = self.no_org_email_body_template
+            html_message_var = self.no_org_email_body_html_template
         else:
             if org_count == 1:
-                subject = render_to_string(self.join_org_email_subject_template,
-                                       context)
-                message = render_to_string(self.join_org_email_body_template,
-                                       context)
+                subject_var = self.join_org_email_subject_template
+                message_var = self.join_org_email_body_template
+                html_message_var = self.join_org_email_body_html_template                
             else:
-                subject = render_to_string(self.multi_org_email_subject_template,
-                                       context)
-                message = render_to_string(self.multi_org_email_body_template,
-                                       context)
-            # Force subject to a single line to avoid header-injection
+                subject_var = self.multi_org_email_subject_template
+                message_var = self.multi_org_email_body_template
+                html_message_var = self.multi_org_email_body_html_template
+
+        subject = render_to_string(subject_var,context)
+        message = render_to_string(message_var,context)
+        html_message = render_to_string(html_message_var,context)
+        # Force subject to a single line to avoid header-injection
             # issues.
         subject = ''.join(subject.splitlines())
-        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
-
-
+        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL, 
+                        html_message=html_message)
 
 @csrf_protect
 def register(request):
