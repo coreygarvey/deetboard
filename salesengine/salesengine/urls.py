@@ -109,6 +109,29 @@ urlpatterns = [
     
     url(r'^register/success/$', register_success),
     
+
+    url(r'^contact/$',
+        TemplateView.as_view(
+            template_name='contact.html'
+        ),
+        name='contact'
+    ),
+
+    url(r'^product/$',
+        TemplateView.as_view(
+            template_name='product.html'
+        ),
+        name='product'
+    ),
+
+    url(r'^pricing/$',
+        TemplateView.as_view(
+            template_name='pricing.html'
+        ),
+        name='pricing'
+    ),
+
+
     # After Registration
     url(r'^home/$', 
         home,

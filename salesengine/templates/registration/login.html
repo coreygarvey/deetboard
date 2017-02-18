@@ -1,21 +1,33 @@
 {% extends "base.html" %}
-{% block title %}Login{% endblock %}
-{% block head %}Login{% endblock %}
-{% block content %}
-    {% if form.errors %}
-        <p>Your email and password didn't match. Please try again.</p>
-    {% endif %}
-    <form method="post" action="">{% csrf_token %}
-        <table border="0">
-            <tr><th><label for="id_username">Email:</label></th><td>{{ form.username }}</td></tr>
-            <tr><th><label for="id_password">Password:</label></th><td>{{ form.password }}</td></tr>
-        </table>
-        <input type="submit" value="Login" />
-        <input type="hidden" name="next" value="/home" />
-    </form>
-    
-    <a href="/accounts/register">Register</a>
-    <a href="/accounts/password/reset">Reset Password</a>
 
+{% load widget_tweaks %}
+
+{% block title %}Login{% endblock %}
+
+{% block nav %}{% include "nav/front-nav.html" %}{% endblock %}
+
+{% block content %}
+    <div id="login-body">
+        <div class="title">
+            <h1>Login</h1>
+        </div>
+        {% if form.errors %}
+            <p>Your email and password didn't match. Please try again.</p>
+        {% endif %}
+        <form method="post" action="">{% csrf_token %}
+
+            {% render_field form.username placeholder="Email address" class+="form-control login-input" %}
+
+            {% render_field form.password placeholder="Password" class+="form-control login-input" %}
+
+
+            <input type="submit" class="btn btn-main" value="Login" />
+            <input type="hidden" name="next" value="/home" />
+        </form>
+        
+        <a href="/">Sign Up</a> or 
+        <a href="/accounts/password/reset">Reset Password</a>
+    
+    </div>
 
 {% endblock %}
