@@ -287,7 +287,7 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
     disallowed_url = 'invitation_disallowed'
     form_class = AdminInvitationForm
     success_url = None
-    template_name = 'registration/invitation_form.html'
+    template_name = 'registration/invitation.html'
 
 
     def dispatch(self, *args, **kwargs):
@@ -477,7 +477,7 @@ class FindOrgView(ActivationContextMixin, ActivationKeyMixin,
     disallowed_url = 'invitation_disallowed'
     form_class = FindOrgForm
     success_url = None
-    template_name = 'registration/find_org_form.html'
+    template_name = 'registration/find_org.html'
 
 
     def dispatch(self, *args, **kwargs):
