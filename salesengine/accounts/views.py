@@ -299,6 +299,15 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
             return redirect(self.disallowed_url)
         return super(InvitationView, self).dispatch(*args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context."""
+        context = super(InvitationView, self).get_context_data(**kwargs)
+        current_user = self.request.user
+        domain_search = re.search("@[\w.]+", current_user.email)
+        domain = domain_search.group()
+        context['domain'] = domain
+        return context
+
     def form_valid(self, form):
         # Need to protect for only admin of org
         org_pk = self.kwargs['pk']

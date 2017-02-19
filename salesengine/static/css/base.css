@@ -21,7 +21,7 @@ h1 {
   position: relative;
   display: block;
   color: #e5ebf6;
-  font-weight: 500;
+  font-weight: 300;
 }
 .nav-front > li > a:hover,
 .nav-front > li > a:focus {
@@ -159,4 +159,25 @@ h1 {
   width: 200px;
   margin: 5px 0;
   display: block;
+}
+
+.invite-checkbox {
+  width: 20px;
+  margin: 5px 0;
+  display: inline-block;
+  vertical-align: top;
+}
+
+#checkbox {
+  width:260px;
+}
+
+#checkbox-text {
+  width:220px;
+  display: inline-block;
+}
+
+#email-domain {
+  font-weight: bold;
+  font-style: italic;
 }

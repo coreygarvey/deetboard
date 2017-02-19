@@ -1,7 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Search Complete{% endblock %}
-{% block head %}Search Complete{% endblock %}
+
+{% load widget_tweaks %}
+
+{% block title %}Find Team Complete{% endblock %}
+
+{% block nav %}{% include "nav/front-nav.html" %}{% endblock %}
+
 {% block content %}
-    <h2>Search Complete</h2>
-    <p>We sent an email your way with teams that you can join.</p>
+    <div id="find-complete-body">
+        <div class="title">
+            <h1>Email Sent</h1>
+        </div>
+		</br>
+		<p>Check your email to activate your account.</p>
+	</div>
 {% endblock %}
