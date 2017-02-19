@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Create a Team{% endblock %}
+
+{% block nav %}{% include "nav/front-nav.html" %}{% endblock %}
+
+{% block content %}
+    <div id="find-org-body">
+        <div class="title">
+            <h1>Create Your Team</h1>
+        </div>
+
+		<form method="post" action="">{% csrf_token %}
+	        {% render_field form.title placeholder="Team name" class+="form-control create-org-input" %}
+
+	        <input type="submit" class="btn btn-main" value="Create your team" />
+	    </form>
+	    Company already on SalesEngine? Try to <a href="/find_org/">find your team</a>.
+{% endblock %}

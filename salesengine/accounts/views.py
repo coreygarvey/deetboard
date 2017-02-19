@@ -141,7 +141,7 @@ class ActivationView(UpdateView):
     """
     disallowed_url = 'registration_disallowed'
     success_url = None
-    template_name = 'registration/activation_form.html'
+    template_name = 'registration/activate.html'
     form_class = MyActivationForm
     model = Account
 

@@ -1,7 +1,26 @@
 {% extends "base.html" %}
 
+{% load widget_tweaks %}
+
+{% block title %}Activate{% endblock %}
+
+{% block nav %}{% include "nav/front-nav.html" %}{% endblock %}
+
+
+
 {% block content %}
+    <div id="activation-body">
+        <div class="title">
+            <h1>Activate</h1>
+        </div>
+	    <form method="post" action="">{% csrf_token %}
+	        {% render_field form.username placeholder="Username" class+="form-control activate-input" %}
+	        {% render_field form.role placeholder="Role" class+="form-control activate-input" %}
+	        {% render_field form.first_name placeholder="First name" class+="form-control activate-input" %}
+	        {% render_field form.last_name placeholder="Last name" class+="form-control activate-input" %}
+	        {% render_field form.password placeholder="Password" class+="form-control activate-input" %}
 
-<p>Activation failed</p>
-
+	        <input type="submit" class="btn btn-main" value="Activate" />
+	    </form>
+	</div>
 {% endblock %}

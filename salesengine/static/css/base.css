@@ -139,3 +139,24 @@ h1 {
 .btn-main {
   margin-bottom: 3px;
 }
+
+/* Activate form */
+.activate-input {
+  width: 200px;
+  margin: 5px 0;
+  display: block;
+}
+
+/* Create team */
+.create-org-input {
+  width: 200px;
+  margin: 5px 0;
+  display: inline-block;
+}
+
+/* Invite page */
+.invite-input {
+  width: 200px;
+  margin: 5px 0;
+  display: block;
+}

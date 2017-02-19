@@ -24,7 +24,7 @@ import re
 
 class OrgCreateView(LoginRequiredMixin, CreateView):
     form_class = OrgForm
-    template_name = 'orgs/org_create_form.html'
+    template_name = 'orgs/create_org.html'
     
     def form_valid(self, form):        
         form.instance.admin = self.request.user
