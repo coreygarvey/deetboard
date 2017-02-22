@@ -12,6 +12,8 @@ from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
+from django.contrib.auth.views import login
+
 from models import Account
 from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm
 from serializers import AccountSerializer
@@ -589,6 +591,13 @@ class FindOrgView(ActivationContextMixin, ActivationKeyMixin,
         subject = ''.join(subject.splitlines())
         user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL, 
                         html_message=html_message)
+
+
+def custom_login(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/home/')
+    else:
+        return login(request)
 
 @csrf_protect
 def register(request):

@@ -22,7 +22,7 @@ def home(request):
     user_orgs = current_user.orgs.all()
     admin_orgs = Org.objects.filter(admin=current_user)
     return render_to_response(
-        'home.html',
+        'home/home.html',
         { 
             'user': current_user,
             'user_orgs': user_orgs,

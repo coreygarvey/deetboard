@@ -25,7 +25,7 @@ from django.contrib.auth.views import login, password_reset_confirm, password_re
 from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm
 
 from views import home
-from accounts.views import register, register_success, logout_page
+from accounts.views import register, register_success, logout_page, custom_login
 from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, GeneralInvitationView, ReactivateView, FindOrgView
 
 from views import IndexView
@@ -36,7 +36,8 @@ urlpatterns = [
     url(r'^orgs/', include('orgs.urls'), name="org"),
 
     url(r'^api/', include('core.api'), name="api"),
-    url(r'^login/$', login),
+    #url(r'^login/$', login),
+    url(r'^login/$', custom_login),
     url(r'^logout/$', logout_page),
 
 

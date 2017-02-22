@@ -1,0 +1,24 @@
+<div id="home-body">
+    <div class="title">
+        <h1>Home</h1>
+    </div>
+
+    <p>Welcome {{ user.first_name }}  </p>
+
+    {% if user_orgs %}
+        <h2>Teams</h2>
+        {% for org in user_orgs.all %}
+            <span>{{ org.title }}</span>
+        {% endfor %}
+    {% endif %}
+
+    {% if admin_orgs %}
+        <h3>Admin Teams</h3>
+        {% for org in admin_orgs.all %}
+            <span>{{ org.title }}<span>
+        {% endfor %}
+    {% endif %}
+    
+    <a href="/logout/">Logout</a>
+
+</div>

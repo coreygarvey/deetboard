@@ -1,0 +1,34 @@
+{% extends "../home.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Home{% endblock %}
+
+{% block subnav %}{% include "../nav/home-subnav.html" %}{% endblock %}
+
+
+{% block content %}
+
+
+    
+    
+    <div class="container">
+        <div class="row">
+          
+            <div class="home-left-nav">
+                <ul>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                </ul>
+            </div>
+            
+            {% include "./home-body.html" %}
+
+        </div>
+    </div>
+
+
+
+
+    
+{% endblock %}
