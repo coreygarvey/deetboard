@@ -1,10 +1,16 @@
+boto==2.5.2
 Django==1.10.4
 django-appconf==1.0.2
 django-braces==1.10.0
 django-compressor==2.1
 django-registration==2.2
+django-storages==1.1.8
 django-widget-tweaks==1.4.1
 djangorestframework==3.5.3
+Fabric==1.4.3
+gunicorn==19.6.0
 psycopg2==2.6.2
+pycrypto==2.6
 rcssmin==1.0.6
 rjsmin==1.0.12
+ssh==1.7.14
