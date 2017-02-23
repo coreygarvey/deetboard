@@ -49,6 +49,9 @@ INSTALLED_APPS = [
 ]
 SITE_ID = 1
 
+print "in base"
+print(os.getpid())
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
