@@ -12,7 +12,7 @@ from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
-from django.contrib.auth.views import login
+from django.contrib.auth.views import login_view
 
 from models import Account
 from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm
@@ -597,7 +597,7 @@ def custom_login(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/home/')
     else:
-        return login(request)
+        return login_view(request)
 
 @csrf_protect
 def register(request):
