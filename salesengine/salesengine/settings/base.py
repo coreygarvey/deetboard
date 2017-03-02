@@ -25,7 +25,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['52.20.6.21',
+                'sales.coreygarvey.com']
 
 
 # Application definition
@@ -49,9 +50,6 @@ INSTALLED_APPS = [
 ]
 SITE_ID = 1
 
-print "in base"
-print(os.getpid())
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -63,8 +61,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'salesengine.urls'
-
-
 
 TEMPLATES = [
     {
@@ -85,10 +81,7 @@ TEMPLATES = [
 
 SITE_URL = 'salesengine.com' # this will reduce the Sites framework db call.
 
-
-
 WSGI_APPLICATION = 'salesengine.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
@@ -99,8 +92,8 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASS'),
-        'HOST': 'localhost',
-        'PORT': '',
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
