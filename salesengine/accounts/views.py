@@ -12,7 +12,7 @@ from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
-from django.contrib.auth.views import login_view
+from django.contrib.auth.views import login as login_view
 
 from models import Account
 from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm
@@ -147,12 +147,28 @@ class ActivationView(UpdateView):
     form_class = MyActivationForm
     model = Account
 
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(ActivationView, self).get_context_data(**kwargs)
+        activation_key = self.kwargs.get('activation_key')
+        activation_message = self.validate_key(activation_key)
+        username = activation_message.get("username")
+        if username is not None:
+            user = self.get_user(username)
+        context['new_user'] = user
+        return context
+
     def get_object(self):
         activation_key = self.kwargs.get('activation_key')
         activation_message = self.validate_key(activation_key)
         username = activation_message.get("username")
         if username is not None:
             user = self.get_user(username)
+            # Other options for field => Blank or email prefix
+            #user.username = ""
+            #user.save()
+            #domain_search = re.search("@[\w.]+", current_user.email)
+            #domain = domain_search.group()
             return get_object_or_404(Account, pk=user.id)
         current_user = self.request.user
         return Account.objects.get(id=current_user)
