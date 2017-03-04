@@ -120,6 +120,11 @@ class RegistrationView(ActivationContextMixin, ActivationKeyMixin,
     form_class = MyRegistrationForm
     template_name = 'registration/landing.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect('/home/')
+        return super(RegistrationView, self).dispatch(request, *args, **kwargs)
+
     def get_success_url(self, user):
         return ('registration_complete', (), {})
 

@@ -35,6 +35,10 @@ h1 {
   margin-top:-2px;
 }
 
+.navbar-front {
+  background-color: #214478;
+  background-image: none;
+}
 
 .nav-front > li > a {
   padding: 7px;
@@ -42,16 +46,19 @@ h1 {
   display: block;
   color: #e5ebf6;
   font-weight: 300;
+  border-bottom: #214478 solid 2px;
 }
 .nav-front > li > a:hover,
 .nav-front > li > a:focus {
   text-decoration: underline;
   color: #FFF;
+  text-decoration: none;
+  border-bottom: #FFF solid 2px;
 }
 
 .nav-landing > li,
 .nav-front > li {
-  margin:5px;
+  margin:10px;
 }
 
 .nav-landing > li > a {
@@ -59,32 +66,31 @@ h1 {
   position: relative;
   display: block;
   color: #214478;
-  font-weight: bold;
+  font-weight: 300;
+  border-bottom: #FFF solid 2px;
 }
+
 .nav-landing > li > a:hover,
 .nav-landing > li > a:focus {
-  text-decoration: underline;
-  color: #3771C8;
+  text-decoration: none;
+  border-bottom: #214478 solid 2px;
 }
+
 
 .btn-login-front {
   color: #fff;
-  border-color: #fff;
   border-width: 2px;
-  border-radius:9px;
 }
 
 .btn-nav-front {
   color: #fff;
-  border-width: 3px;
+  border-width: 2px;
 }
 
 .btn-login-landing {
   color: #214478;
   background-color: #fff;
-  border-color: #214478;
   border-width: 2px;
-  border-radius:9px;
 }
 
 .btn-nav-landing {
