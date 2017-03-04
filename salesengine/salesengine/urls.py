@@ -26,7 +26,7 @@ from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActiva
 
 from views import home
 from accounts.views import register, register_success, logout_page, custom_login
-from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, GeneralInvitationView, ReactivateView, FindOrgView
+from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView
 
 from views import IndexView
 from orgs.views import OrgCreateView
@@ -60,6 +60,12 @@ urlpatterns = [
     url(r'^activate/(?P<activation_key>[-:\w]+)/$',
         ActivationView.as_view(),
         name='activate',
+    ),
+
+    url(r'^create_org/',
+        OrgCreateView.as_view(
+            ),
+        name = 'new_org'
     ),
 
     url(r'^new_org/invitation/(?P<pk>\d+)/$',
@@ -139,13 +145,16 @@ urlpatterns = [
         name = 'home'
     ),
 
-    url(r'^create_org/',
-        OrgCreateView.as_view(
+    # After Registration
+    url(r'^home/profile/$', 
+        ProfileView.as_view(
             ),
-        name = 'new_org'
+        name = 'profile'
     ),
 
-    url(r'^org_create/$', OrgCreateView.as_view())
+
+    
+
     #url(r'^join_org/$', start),
 
 

@@ -14,6 +14,8 @@ h1 {
 }
 
 .navbar-home {
+  background-color: #FFF;
+  /*
   background-image: -webkit-linear-gradient(top,#3771C8 0,#3771C8 100%);
     background-image: -o-linear-gradient(top,#3771C8 0,#3771C8 100%);
     background-image: -webkit-gradient(linear,left top,left bottom,from(#3771C8),to(#3771C8));
@@ -21,9 +23,12 @@ h1 {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff337ab7', endColorstr='#ff265a88', GradientType=0);
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     background-repeat: repeat-x;
+    */
 }
 
 .subnav-home {
+  background-color: #3771C8;
+  /*
   background-image: -webkit-linear-gradient(top,#dbdbdb 0,#dbdbdb 100%);
   background-image: -o-linear-gradient(top,#dbdbdb 0,#dbdbdb 100%);
   background-image: -webkit-gradient(linear,left top,left bottom,from(#dbdbdb),to(#dbdbdb));
@@ -33,11 +38,19 @@ h1 {
   background-repeat: repeat-x;
   min-height: 30px;
   margin-top:-2px;
+  */
+
 }
 
 .navbar-front {
   background-color: #214478;
   background-image: none;
+}
+
+.nav-landing > li,
+.nav-front > li, 
+.nav-home > li {
+  margin:10px;
 }
 
 .nav-front > li > a {
@@ -50,15 +63,9 @@ h1 {
 }
 .nav-front > li > a:hover,
 .nav-front > li > a:focus {
-  text-decoration: underline;
   color: #FFF;
   text-decoration: none;
   border-bottom: #FFF solid 2px;
-}
-
-.nav-landing > li,
-.nav-front > li {
-  margin:10px;
 }
 
 .nav-landing > li > a {
@@ -72,6 +79,21 @@ h1 {
 
 .nav-landing > li > a:hover,
 .nav-landing > li > a:focus {
+  text-decoration: none;
+  border-bottom: #214478 solid 2px;
+}
+
+.nav-home > li > a {
+  padding: 7px;
+  position: relative;
+  display: block;
+  color: #214478;
+  font-weight: 300;
+  border-bottom: #FFF solid 2px;
+}
+.nav-home > li > a:hover,
+.nav-home > li > a:focus {
+  color: #214478;
   text-decoration: none;
   border-bottom: #214478 solid 2px;
 }
@@ -210,14 +232,66 @@ h1 {
 
 
 /* Home area */
+.home-teams-dropdown {
+  margin: 10px;
+}
+
+.teams-dropdown-menu {
+  min-width: 150px;
+}
+
+.teams-dropdown-menu > li > a {
+  color: #214478;
+}
+
+.btn-teams {
+  width: 150px;
+  color: #214478;
+  font-weight: 300;
+}
+
 .home-left-nav {
   width: 200px;
-  background-color: #bdbdbd;
-  height:100%;
+  margin-top: 30px;
+  padding: 20px 5px;
+  height:500px;
   display:inline-block;
   vertical-align: top;
 }
 
+.home-left-nav > ul {
+  list-style: none;
+  padding: 0px 15px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.home-left-nav > ul > li {
+  height: 30px;
+  line-height: 30px;
+  border: #fff 1px solid;
+  padding: 0px 8px;
+}
+
+.home-left-nav > ul > li:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/*
+background-color: #dedede;
+border: 1px solid #bbb;
+border-radius: 4px;
+box-shadow: 0px 0px 2px #999;
+*/
+
 #home-body {
+  padding: 20px;
+  display: inline-block;
+}
+
+/* Profile */
+#profile-body {
+  padding: 20px;
   display: inline-block;
 }
