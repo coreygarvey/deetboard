@@ -295,6 +295,7 @@ h1 {
   vertical-align: top;
   color: #2e466b;
   border-right: 1px solid rgba(0,0,0,0.12);
+  box-shadow: 1px 0px 5px #ccc;
 }
 .sidebar-nav {
   position: absolute;
@@ -357,9 +358,9 @@ box-shadow: 0px 0px 2px #999;
 
 .home-body {
   min-width: 900px;
-  width: 98%;
-  margin: 10px;
-  height: 95.5%;
+  width: 97%;
+  margin: 15px;
+  height: 94.5%;
   padding: 20px;
   background-color: #fff;
   border-radius: 4px;
