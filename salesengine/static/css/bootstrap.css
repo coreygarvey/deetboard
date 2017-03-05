@@ -1599,7 +1599,7 @@ pre code {
 }
 @media (min-width: 1200px) {
   .container {
-    width: 1170px;
+    width: 100%;
   }
 }
 .container-fluid {
@@ -3979,6 +3979,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav > li {
   position: relative;
   display: block;
+  float: left;
 }
 
 
@@ -4314,7 +4315,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-nav {
-  margin: 7.5px -15px;
+  margin: 0px;
 }
 .navbar-nav > li > a {
   padding-top: 10px;
