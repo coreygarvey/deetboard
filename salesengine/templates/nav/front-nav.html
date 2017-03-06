@@ -1,18 +1,12 @@
 {% load staticfiles %}
-<nav class="navbar navbar-front">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+<nav class="navbar navbar-front navbar-fixed-top">
+  <div class="front-nav-wrapper">
+    <div>
       <a class="navbar-brand" href="/">
          <img src="{% static 'front-nav-logo.png' %}"> 
       </a>
     </div>
-    <div id="navbar" class="collapse navbar-collapse">
+    <div id="navbar">
       <ul class="nav navbar-nav nav-front pull-right">
         <li>
           <a class="btn-nav-front" href="/product/">Product</a>
