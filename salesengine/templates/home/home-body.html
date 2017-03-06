@@ -1,24 +1,21 @@
-<div id="home-body">
+<div class="home-body">
     <div class="title">
-        <h1>Home</h1>
+        <h2>Home</h2>
     </div>
 
     <p>Welcome {{ user.first_name }}  </p>
 
-    {% if user_orgs %}
-        <h2>Teams</h2>
-        {% for org in user_orgs.all %}
-            <span>{{ org.title }}</span>
-        {% endfor %}
-    {% endif %}
+    Sales Engine is here to get your team on track.
 
-    {% if admin_orgs %}
-        <h3>Admin Teams</h3>
-        {% for org in admin_orgs.all %}
-            <span>{{ org.title }}<span>
+    {% if user_orgs %}
+    Choose your team below:
+      <ul>
+        {% for org in user_orgs.all %}
+            <li><a href="#">{{ org.title }}</a></li>
         {% endfor %}
+      </ul>
     {% endif %}
     
-    <a href="/logout/">Logout</a>
+    
 
 </div>

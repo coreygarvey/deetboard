@@ -120,6 +120,11 @@ class RegistrationView(ActivationContextMixin, ActivationKeyMixin,
     form_class = MyRegistrationForm
     template_name = 'registration/landing.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect('/home/')
+        return super(RegistrationView, self).dispatch(request, *args, **kwargs)
+
     def get_success_url(self, user):
         return ('registration_complete', (), {})
 
@@ -147,12 +152,28 @@ class ActivationView(UpdateView):
     form_class = MyActivationForm
     model = Account
 
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(ActivationView, self).get_context_data(**kwargs)
+        activation_key = self.kwargs.get('activation_key')
+        activation_message = self.validate_key(activation_key)
+        username = activation_message.get("username")
+        if username is not None:
+            user = self.get_user(username)
+        context['new_user'] = user
+        return context
+
     def get_object(self):
         activation_key = self.kwargs.get('activation_key')
         activation_message = self.validate_key(activation_key)
         username = activation_message.get("username")
         if username is not None:
             user = self.get_user(username)
+            # Other options for field => Blank or email prefix
+            #user.username = ""
+            #user.save()
+            #domain_search = re.search("@[\w.]+", current_user.email)
+            #domain = domain_search.group()
             return get_object_or_404(Account, pk=user.id)
         current_user = self.request.user
         return Account.objects.get(id=current_user)
@@ -651,3 +672,167 @@ class AccountDetailApi(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AccountSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                             IsAdminOrReadOnly,)
+
+class ProfileUpdateView(UpdateView):
+    """
+    Given a valid activation key, activate the user's
+    account. Otherwise, show an error message stating the account
+    couldn't be activated.
+    """
+    disallowed_url = 'registration_disallowed'
+    success_url = None
+    template_name = 'registration/activate.html'
+    form_class = MyActivationForm
+    model = Account
+
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(ActivationView, self).get_context_data(**kwargs)
+        user = self.request.user
+        context['user'] = user
+        return context
+
+    def get_object(self):
+        activation_key = self.kwargs.get('activation_key')
+        activation_message = self.validate_key(activation_key)
+        username = activation_message.get("username")
+        if username is not None:
+            user = self.get_user(username)
+            # Other options for field => Blank or email prefix
+            #user.username = ""
+            #user.save()
+            #domain_search = re.search("@[\w.]+", current_user.email)
+            #domain = domain_search.group()
+            return get_object_or_404(Account, pk=user.id)
+        current_user = self.request.user
+        return Account.objects.get(id=current_user)
+
+    def form_valid(self, form, *args, **kwargs):
+        # Try to activate user when form submitted is valid
+        activation_key = self.kwargs['activation_key']
+        activation_message = self.activate(activation_key)
+        username = activation_message.get('username')
+        # Obtain user with username, 
+        #   checks to make sure validation worked correctly
+        activated_user = self.get_user(username)
+        org_id = activation_message.get('org_pk')
+        if activated_user:
+            # CAN THIS BE activated_user = ??
+            updated_user = form.save(commit=False)
+            updated_user.is_active = True
+            password = form.cleaned_data['password']
+            updated_user.set_password(password)
+            updated_user.save()
+            # Connect user with org
+            if org_id is not None:
+                org = Org.objects.get(id=org_id)
+                updated_user.orgs.add(org)
+            signals.user_activated.send(
+                sender=self.__class__,
+                user=activated_user,
+                request=self.request
+            )
+            # Determine next move based on account's org
+            success_url = self.get_success_url(activated_user, org_id)
+            # Login user after updated and saved
+            login(self.request, updated_user)
+            try:
+                to, args, kwargs = success_url
+                return redirect(to, *args, **kwargs)
+            except ValueError:
+                return redirect(success_url)
+        # Return form if it doesn't activate user
+        return self.render_to_response(self.template_name, self.get_context_data(form=form))
+
+    def activate(self, activation_key):
+        # This is safe even if, somehow, there's no activation key,
+        # because unsign() will raise BadSignature rather than
+        # TypeError on a value of None.
+        print "activation_key"
+        print activation_key  
+        activation_message = self.validate_key(activation_key)
+        if activation_message is not None:
+            username = activation_message.get('username')
+            org_id = activation_message.get('org_id')
+            user = self.get_user(username)
+            if user is not None:
+                user.save()
+                return activation_message
+        return False
+
+    def get_success_url(self, user, org_id):
+        # Users without org will create new
+        if org_id is None:
+            return ('new_org', (), {})
+        else:
+            return reverse('general_invitation',args=(org_id,))
+
+
+    def get_user(self, username):        
+        #Given the verified username, look up and return the
+        #corresponding user account if it exists, or ``None`` if it
+        #doesn't.
+        User = get_user_model()
+        lookup_kwargs = {
+            User.USERNAME_FIELD: username,
+        }
+        try:
+            user = User.objects.get(**lookup_kwargs)
+            return user
+        except User.DoesNotExist:
+            return None
+
+    def form_invalid(self, form):
+        # tl;dr -- this method is implemented to work around Django
+        # ticket #25548, which is present in the Django 1.9 release
+        # (but not in Django 1.8 or 1.10).
+        #
+        # The longer explanation is that in Django 1.9,
+        # FormMixin.form_invalid() does not pass the form instance to
+        # get_context_data(). This causes get_context_data() to
+        # construct a new form instance with the same data in order to
+        # put it into the template context, and then any access to
+        # that form's ``errors`` or ``cleaned_data`` runs that form
+        # instance's validation. The end result is that validation
+        # gets run twice on an invalid form submission, which is
+        # undesirable for performance reasons.
+        #
+        # Manually implementing this method, and passing the form
+        # instance to get_context_data(), solves this issue (which was
+        # fixed in Django 1.9.1 and so is not present in Django
+        # 1.10).
+        return self.render_to_response(self.get_context_data(form=form))
+
+class ProfileView(TemplateView):
+    """
+    Given a valid activation key, activate the user's
+    account. Otherwise, show an error message stating the account
+    couldn't be activated.
+    """
+    disallowed_url = 'registration_disallowed'
+    template_name = "accounts/profile.html"
+
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        user = self.request.user
+        user_orgs = user.orgs.all()
+        context['user'] = user
+        context['user_orgs'] = user_orgs
+        return context
+
+
+
+    def get_user(self, username):        
+        #Given the verified username, look up and return the
+        #corresponding user account if it exists, or ``None`` if it
+        #doesn't.
+        User = get_user_model()
+        lookup_kwargs = {
+            User.USERNAME_FIELD: username,
+        }
+        try:
+            user = User.objects.get(**lookup_kwargs)
+            return user
+        except User.DoesNotExist:
+            return None

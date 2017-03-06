@@ -15,12 +15,15 @@
 	        {% render_field form.invite1 placeholder="Email" class+="form-control invite-input" %}
 	        {% render_field form.invite2 placeholder="Email" class+="form-control invite-input" %}
 	        {% render_field form.invite3 placeholder="Email" class+="form-control invite-input" %}
+	        
+	        {% if form.inviteEmail %}
 	        <div id="checkbox">
 	        	{% render_field form.inviteEmail class+="invite-checkbox" type+="checkbox" %}
 	        	<span id="checkbox-text">
 	        		Check box to allow anyone with <span id="email-domain">{{ domain }}</span> email address to join the team.
 	        	</span>
 	        </div>
+	        {% endif %}
 			</br>
 	       	<input type="submit" class="btn btn-main" value="Send Invites" />
 
