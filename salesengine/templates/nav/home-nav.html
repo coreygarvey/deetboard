@@ -5,15 +5,23 @@
     <div id="navbar">
       <div class="dropdown home-teams-dropdown pull-left">
         
+        
+        
         <button class="btn btn-default btn-teams" data-toggle="dropdown">
+          {% if org %}
+          {{ org.title }}
+          {% else %}
           <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
           Teams
+          {% endif %}
           <i class="fa fa-caret-down" aria-hidden="true"></i>
         </button>
+        
+
         {% if user_orgs %}
           <ul class="dropdown-menu teams-dropdown-menu" aria-labelledby="dropdownMenu1">
             {% for org in user_orgs.all %}
-                <li><a href="#">{{ org.title }}</a></li>
+                <li><a href="/home/{{ org.pk }}">{{ org.title }}</a></li>
             {% endfor %}
           </ul>
         {% else %}

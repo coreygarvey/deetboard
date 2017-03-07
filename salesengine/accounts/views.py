@@ -807,9 +807,7 @@ class ProfileUpdateView(UpdateView):
 
 class ProfileView(TemplateView):
     """
-    Given a valid activation key, activate the user's
-    account. Otherwise, show an error message stating the account
-    couldn't be activated.
+    View the User's Profile
     """
     disallowed_url = 'registration_disallowed'
     template_name = "accounts/profile.html"

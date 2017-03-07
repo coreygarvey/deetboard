@@ -372,8 +372,8 @@ box-shadow: 0px 0px 2px #999;
   overflow-x: hidden;
 }
 
-.home-body {
-  min-width: 900px;
+.home-body, .org-home-body {
+  min-width: 700px;
   width: 97%;
   margin: 15px;
   height: 94.5%;

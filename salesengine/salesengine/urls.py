@@ -29,7 +29,7 @@ from accounts.views import register, register_success, logout_page, custom_login
 from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView
 
 from views import IndexView
-from orgs.views import OrgCreateView
+from orgs.views import OrgCreateView, OrgHomeView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -152,7 +152,12 @@ urlpatterns = [
         name = 'profile'
     ),
 
-
+    # Team Home
+    url(r'^home/(?P<pk>\d+)/$$', 
+        OrgHomeView.as_view(
+            ),
+        name = 'org-home'
+    ),
     
 
     #url(r'^join_org/$', start),
