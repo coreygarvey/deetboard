@@ -43,20 +43,28 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
         })
         return kwargs
 
+
+class FrontOrgCreateView(OrgCreateView):
+    template_name = 'orgs/org-create-front.html'
+
     def get_success_url(self):
         org_pk = self.object.id
         org = Org.objects.get(pk=org_pk)
         current_user = self.request.user
         current_user.save()
         current_user.orgs.add(org)
-        return reverse('new_org_invitation',args=(self.object.id,))
-
-
-class FrontOrgCreateView(OrgCreateView):
-    template_name = 'orgs/org-create-front.html'
+        return reverse('new_org_invitation_front',args=(self.object.id,))
 
 class HomeOrgCreateView(OrgCreateView):
     template_name = 'orgs/org-create-home.html'
+
+    def get_success_url(self):
+        org_pk = self.object.id
+        org = Org.objects.get(pk=org_pk)
+        current_user = self.request.user
+        current_user.save()
+        current_user.orgs.add(org)
+        return reverse('new_org_invitation_home',args=(self.object.id,))
 
 
 

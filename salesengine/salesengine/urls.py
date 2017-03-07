@@ -26,7 +26,7 @@ from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActiva
 
 from views import home
 from accounts.views import register, register_success, logout_page, custom_login
-from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView
+from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, HomeInvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView
 
 from views import IndexView
 from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView
@@ -69,7 +69,7 @@ urlpatterns = [
 
     url(r'^new_org/invitation/(?P<pk>\d+)/$',
         InvitationView.as_view(),
-        name='new_org_invitation',
+        name='new_org_invitation_front',
     ),
 
     url(r'^invitation/(?P<pk>\d+)/$',
@@ -155,7 +155,7 @@ urlpatterns = [
     url(r'^home/(?P<pk>\d+)/$$', 
         OrgHomeView.as_view(
             ),
-        name = 'org-home'
+        name = 'org_home'
     ),
     
 
@@ -163,8 +163,15 @@ urlpatterns = [
     url(r'^home/org-create/$',
         HomeOrgCreateView.as_view(
             ),
-        name = 'org-create-home'
+        name = 'org_create_home'
     ),
+
+
+    url(r'^home/(?P<pk>\d+)/invitation/$',
+        HomeInvitationView.as_view(),
+        name='new_org_invitation_home',
+    ),
+
 
     #url(r'^join_org/$', start),
 
