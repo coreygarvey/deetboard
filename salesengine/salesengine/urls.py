@@ -29,7 +29,7 @@ from accounts.views import register, register_success, logout_page, custom_login
 from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView
 
 from views import IndexView
-from orgs.views import OrgCreateView, OrgHomeView
+from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -63,8 +63,7 @@ urlpatterns = [
     ),
 
     url(r'^create_org/',
-        OrgCreateView.as_view(
-            ),
+        FrontOrgCreateView.as_view(),
         name = 'new_org'
     ),
 
@@ -159,6 +158,13 @@ urlpatterns = [
         name = 'org-home'
     ),
     
+
+    # Create Org
+    url(r'^home/org-create/$',
+        HomeOrgCreateView.as_view(
+            ),
+        name = 'org-create-home'
+    ),
 
     #url(r'^join_org/$', start),
 

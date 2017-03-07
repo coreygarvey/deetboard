@@ -24,13 +24,13 @@ import re
 
 class OrgCreateView(LoginRequiredMixin, CreateView):
     form_class = OrgForm
-    template_name = 'orgs/create_org.html'
     
     def form_valid(self, form):        
         form.instance.admin = self.request.user
 
         email = self.request.user.email
         domain = re.search("@[\w.]+", email)
+        # Need to check domain against common domains
         form.instance.email_domain = domain.group()
 
         
@@ -50,6 +50,15 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
         current_user.save()
         current_user.orgs.add(org)
         return reverse('new_org_invitation',args=(self.object.id,))
+
+
+class FrontOrgCreateView(OrgCreateView):
+    template_name = 'orgs/org-create-front.html'
+
+class HomeOrgCreateView(OrgCreateView):
+    template_name = 'orgs/org-create-home.html'
+
+
 
 class OrgHomeView(TemplateView):
     """

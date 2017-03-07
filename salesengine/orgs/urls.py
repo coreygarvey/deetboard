@@ -5,13 +5,13 @@ Called from the project core.api, which is then passed to root:
 
 #from django.conf.urls.defaults import patterns, url
 from django.conf.urls import url
-from views import OrgCreateView
+from views import FrontOrgCreateView
 import views as org_views
 
 urlpatterns = [
 	url(
 		regex=r"^create/$",
-		view=OrgCreateView.as_view(),
+		view=FrontOrgCreateView.as_view(),
 		name="create"
 	),
 	
