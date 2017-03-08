@@ -1,0 +1,10 @@
+{% load widget_tweaks %}
+<div class="title">
+    <h1>Create a Product</h1>
+</div>
+
+<form method="post" action="">{% csrf_token %}
+    {% render_field form.title placeholder="Product name" class+="form-control create-product-input" %}
+
+    <input type="submit" class="btn btn-main" value="Create your Product" />
+</form>

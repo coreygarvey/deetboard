@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 import services
 from core.permissions import IsAdminOrReadOnly
 from forms import OrgForm
-from models import Org
 
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -81,9 +80,11 @@ class OrgHomeView(TemplateView):
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)
         user_orgs = user.orgs.all()
+        products = org.products.all()
         context['user'] = user
         context['org'] = org
         context['user_orgs'] = user_orgs
+        context['products'] = products
         return context
 
 

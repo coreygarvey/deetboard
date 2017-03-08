@@ -381,7 +381,7 @@ box-shadow: 0px 0px 2px #999;
   overflow-x: hidden;
 }
 
-.home-body, .org-home-body {
+.home-body, .org-home-body, .product-home-body {
   min-width: 700px;
   width: 97%;
   margin: 15px;
@@ -395,5 +395,13 @@ box-shadow: 0px 0px 2px #999;
 /* Profile */
 #profile-body {
   padding: 20px;
+  display: inline-block;
+}
+
+
+/* Create Product */
+.create-product-input {
+  width: 200px;
+  margin: 5px 0;
   display: inline-block;
 }

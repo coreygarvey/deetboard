@@ -30,6 +30,7 @@ from accounts.views import RegistrationTypeView, RegistrationView, ActivationVie
 
 from views import IndexView
 from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView
+from products.views import ProductCreateView, ProductHomeView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -160,7 +161,7 @@ urlpatterns = [
     
 
     # Create Org
-    url(r'^home/org-create/$',
+    url(r'^home/create-team/$',
         HomeOrgCreateView.as_view(
             ),
         name = 'org_create_home'
@@ -170,6 +171,16 @@ urlpatterns = [
     url(r'^home/(?P<pk>\d+)/invitation/$',
         HomeInvitationView.as_view(),
         name='new_org_invitation_home',
+    ),
+
+    url(r'^home/(?P<pk>\d+)/create-product/$',
+        ProductCreateView.as_view(),
+        name='product_create_home',
+    ),
+
+    url(r'^home/(?P<opk>\d+)/(?P<ppk>\d+)/$',
+        ProductHomeView.as_view(),
+        name='product_home',
     ),
 
 

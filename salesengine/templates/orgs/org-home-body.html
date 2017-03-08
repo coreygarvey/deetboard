@@ -7,5 +7,20 @@
 
     Sales Engine is here to get your team on track.
 
+    {% if products %}
+    Choose one of your team's products:
+      <ul>
+        {% for user_org in user_orgs.all %}
+            <li><a href="/home/{{ user_org.pk }}">{{ user_org.title }}</a></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+	</br>
+	</br>
+    <div>
+    	<a href="/home/{{ org.pk }}/create-product/">Create a new product</a>
+    </div>
+    {% endif %}
+
 
 </div>

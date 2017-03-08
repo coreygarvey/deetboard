@@ -1,0 +1,17 @@
+{% extends "../home.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Create a Team{% endblock %}
+
+{% block content %}
+    
+        <div class="row">
+          
+            {% include "../orgs/org-left-nav.html" %}
+            
+            {% include "./product-create-body.html" %}
+
+        </div>
+    
+{% endblock %}
