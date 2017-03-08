@@ -350,6 +350,15 @@ h1 {
   border-top: 1px solid rgba(0,0,0,0.12);
 }
 
+.sidebar-nav > li > a, a:hover, a:active, a:focus {
+  color: #2e466b;
+}
+
+.sidebar-nav > li > a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
 /*
 background-color: #dedede;
 border: 1px solid #bbb;
