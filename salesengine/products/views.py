@@ -19,6 +19,20 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductForm
     template_name = 'products/product-create-home.html'
     
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(ProductCreateView, self).get_context_data(**kwargs)
+        user = self.request.user
+        org_pk = self.kwargs['pk']
+        org = Org.objects.get(pk=org_pk)
+        user_orgs = user.orgs.all()
+        products = org.products.all()
+        context['user'] = user
+        context['org'] = org
+        context['user_orgs'] = user_orgs
+        context['org_products'] = products
+        return context
+
     def form_valid(self, form):        
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)

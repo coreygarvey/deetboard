@@ -264,7 +264,7 @@ h1 {
 
 /* Home area */
 .home-teams-dropdown {
-  margin: 10px -5px;
+  margin: 10px;
 }
 
 .teams-dropdown-menu {
@@ -272,6 +272,14 @@ h1 {
 }
 
 .teams-dropdown-menu > li > a {
+  color: #214478;
+}
+
+.products-dropdown-menu {
+  min-width: 150px;
+}
+
+.products-dropdown-menu > li > a {
   color: #214478;
 }
 
@@ -294,6 +302,30 @@ h1 {
 }
 
 .btn-teams:hover, .btn-teams:active, .btn-teams:active:focus, .btn-teams:focus  {
+  background-color: #dadfe7;
+  color: #214478;
+  border: none;
+}
+
+.btn-products {
+  width: 150px;
+  color: #214478;
+  font-size: 20px;
+  font-weight: 300;
+  text-align:left;
+  padding: 6px 5px;
+  background-color: transparent;
+  border: none;
+  border-radius:3px;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+  /* ...and now for the proper property */
+  transition:.5s;
+}
+
+.btn-products:hover, .btn-products:active, .btn-products:active:focus, .btn-products:focus  {
   background-color: #dadfe7;
   color: #214478;
   border: none;
