@@ -13,8 +13,6 @@ from django.views import View
 import services
 
 
-
-
 class ProductCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductForm
     template_name = 'products/product-create-home.html'
@@ -36,10 +34,12 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):        
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)
-
         form.instance.org = org
-
         
+        product = form.save(commit=False)
+        product.save()
+        product.admins.add(self.request.user)
+
         return super(ProductCreateView, self).form_valid(form)
 
     def get_form_kwargs(self):
