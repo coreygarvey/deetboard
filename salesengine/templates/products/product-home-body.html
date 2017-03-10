@@ -1,14 +1,31 @@
 <div class="product-home-body">
     <div class="title">
-        <h2>{{ org.title }} - {{ product.title }}</h2>
+        <h2>{{ product.title }}</h2>
     </div>
 
     <p>Welcome {{ user.first_name }} to {{ product.title }}</p>
 
     <p>This is the Product Home page</p>
 	
-	<p>
-		<a href="/home/{{org.pk}}/{{product.pk}}/create-feature">Create a new feature</a>
-	</p> 
+
+	{% if prod_features %}
+    </br>
+    Choose a feature or create a new one:
+	<ul>
+	    {% for feature in prod_features.all %}
+	        <li><a href="/home/{{ org.pk }}/{{ product.pk }}/{{ feature.pk}}">{{ feature.title }}</a></li>
+	    {% endfor %}
+	</ul>
+     </br>
+    <div>
+    	<a href="/home/{{org.pk}}/{{product.pk}}/create-feature">Create a new feature</a>
+    </div>
+    {% else %}
+    </br>
+	</br>
+    <div>
+    	<a href="/home/{{org.pk}}/{{product.pk}}/create-feature">Create a new feature</a>
+    </div>
+    {% endif %}
 
 </div>

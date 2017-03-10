@@ -391,6 +391,30 @@ h1 {
   cursor: pointer;
 }
 
+
+.dropdown-menu > li {
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  padding: 0px 20px;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+  /* ...and now for the proper property */
+  transition:.5s;
+}
+
+.dropdown-menu > li:hover, li:active, li:active:focus, li:focus  {
+  background-color: #dadfe7;
+  color: #214478;
+  cursor: pointer;
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+
+
 /*
 background-color: #dedede;
 border: 1px solid #bbb;

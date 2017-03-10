@@ -68,10 +68,12 @@ class ProductView(TemplateView):
         product = Product.objects.get(pk=product_pk)
         user_orgs = user.orgs.all()
         org_products = org.products.all()
+        prod_features = product.features.all()
         context['user'] = user
         context['org'] = org
         context['product'] = product
         context['user_orgs'] = user_orgs
+        context['prod_features'] = prod_features
         context['org_products'] = org_products
         return context
 
@@ -101,16 +103,16 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         org_pk = self.kwargs['opk']
         org = Org.objects.get(pk=org_pk)
         user_orgs = user.orgs.all()
-        products = org.products.all()
+        org_products = org.products.all()
         product_pk = self.kwargs['ppk']
         product = Product.objects.get(pk=product_pk)
-        features = product.features.all()
+        prod_features = product.features.all()
         context['user'] = user
         context['org'] = org
         context['product'] = product
         context['user_orgs'] = user_orgs
-        context['org_products'] = products
-        context['prod_features'] = features
+        context['org_products'] = org_products
+        context['prod_features'] = prod_features
         return context
 
     def form_valid(self, form):        
