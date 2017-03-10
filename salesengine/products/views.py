@@ -5,7 +5,7 @@ from serializers import ProductSerializer, FeatureSerializer, LinkSerializer
 from rest_framework import generics
 from django.views.generic import CreateView, TemplateView
 from braces.views import LoginRequiredMixin
-from forms import ProductForm
+from forms import ProductForm, FeatureForm
 from orgs.models import Org
 
 from django.http import HttpResponse
@@ -52,7 +52,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('product_home', args=(self.object.org.id,self.object.id))
 
-class ProductHomeView(TemplateView):
+class ProductView(TemplateView):
     """
     
     """
@@ -60,7 +60,7 @@ class ProductHomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
-        context = super(ProductHomeView, self).get_context_data(**kwargs)
+        context = super(ProductView, self).get_context_data(**kwargs)
         user = self.request.user
         org_pk = self.kwargs['opk']
         org = Org.objects.get(pk=org_pk)
@@ -88,6 +88,94 @@ class ProductHomeView(TemplateView):
             return user
         except User.DoesNotExist:
             return None
+
+
+class FeatureCreateView(LoginRequiredMixin, CreateView):
+    form_class = FeatureForm
+    template_name = 'features/feature-create-home.html'
+    
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(FeatureCreateView, self).get_context_data(**kwargs)
+        user = self.request.user
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        user_orgs = user.orgs.all()
+        products = org.products.all()
+        product_pk = self.kwargs['ppk']
+        product = Product.objects.get(pk=product_pk)
+        features = product.features.all()
+        context['user'] = user
+        context['org'] = org
+        context['product'] = product
+        context['user_orgs'] = user_orgs
+        context['org_products'] = products
+        context['prod_features'] = features
+        return context
+
+    def form_valid(self, form):        
+        product_pk = self.kwargs['ppk']
+        product = Product.objects.get(pk=product_pk)
+        form.instance.product = product
+        
+        feature = form.save(commit=False)
+        product.save()
+        product.admins.add(self.request.user)
+
+        return super(FeatureCreateView, self).form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super(FeatureCreateView, self).get_form_kwargs()
+        kwargs.update({
+            'request' : self.request
+        })
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('product_home', args=(self.object.product.org.id,self.object.product.id))
+
+class FeatureView(TemplateView):
+    """
+    
+    """
+    template_name = "features/feature-home.html"
+
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(FeatureView, self).get_context_data(**kwargs)
+        user = self.request.user
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        product_pk = self.kwargs['ppk']
+        product = Product.objects.get(pk=product_pk)
+        feature_pk = self.kwargs['fpk']
+        feature = Feature.objects.get(pk=feature_pk)
+        user_orgs = user.orgs.all()
+        org_products = org.products.all()
+        product_features = product.features.all()
+        context['user'] = user
+        context['org'] = org
+        context['product'] = product
+        context['feature'] = feature
+        context['user_orgs'] = user_orgs
+        context['org_products'] = org_products
+        context['product_features'] = product_features
+        return context
+
+    def get_user(self, username):        
+        #Given the verified username, look up and return the
+        #corresponding user account if it exists, or ``None`` if it
+        #doesn't.
+        User = get_user_model()
+        lookup_kwargs = {
+            User.USERNAME_FIELD: username,
+        }
+        try:
+            user = User.objects.get(**lookup_kwargs)
+            return user
+        except User.DoesNotExist:
+            return None
+
 
 
 

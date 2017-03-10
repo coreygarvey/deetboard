@@ -308,12 +308,12 @@ h1 {
 }
 
 .btn-products {
-  width: 150px;
+  min-width: 150px;
   color: #214478;
   font-size: 20px;
   font-weight: 300;
   text-align:left;
-  padding: 6px 5px;
+  padding: 6px 8px;
   background-color: transparent;
   border: none;
   border-radius:3px;
