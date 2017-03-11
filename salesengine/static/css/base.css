@@ -267,20 +267,35 @@ h1 {
   margin: 10px;
 }
 
-.teams-dropdown-menu {
+.products-dropdown-menu, 
+.teams-dropdown-menu, 
+.features-dropdown-menu {
   min-width: 150px;
 }
 
-.teams-dropdown-menu > li > a {
+.products-dropdown-menu > li > a,
+.teams-dropdown-menu > li > a,
+.features-dropdown-menu > li > a {
   color: #214478;
+  display: inline;
+  white-space: nowrap;
 }
 
-.products-dropdown-menu {
-  min-width: 150px;
+.products-dropdown-menu > li > a:hover, 
+.products-dropdown-menu > li > a:focus,
+.teams-dropdown-menu > li > a:hover, 
+.teams-dropdown-menu > li > a:focus,
+.features-dropdown-menu > li > a:hover, 
+.features-dropdown-menu > li > a:focus {
+  color: #214478;
+  text-decoration: none;
+  background-color: transparent;
 }
 
-.products-dropdown-menu > li > a {
-  color: #214478;
+.dropdown-toggle {
+  display: block;
+  height: 100%;
+  width: 100%;
 }
 
 .btn-teams {
