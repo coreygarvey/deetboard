@@ -1,0 +1,17 @@
+{% extends "../home.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}{{product.title}} - {{feature.title}}{% endblock %}
+
+{% block content %}
+    
+        <div class="row">
+          
+            {% include "../orgs/org-left-nav.html" %}
+            
+            {% include "./question-home-body.html" %}
+
+        </div>
+    
+{% endblock %}

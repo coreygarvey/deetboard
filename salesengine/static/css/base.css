@@ -360,6 +360,15 @@ h1 {
   border-right: 1px solid rgba(0,0,0,0.12);
   box-shadow: 1px 0px 5px #ccc;
 }
+
+.home-link {
+  display: inline-block;
+  color: #214478;
+  position: absolute;
+  left: 50%;
+  margin-top: 15px;
+}
+
 .sidebar-nav {
   position: absolute;
   top: 0;
