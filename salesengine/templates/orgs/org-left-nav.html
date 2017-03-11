@@ -1,19 +1,23 @@
 <div class="home-left-nav">
 	<ul class="sidebar-nav">
 		<li>
-			<i class="fa fa-binoculars" aria-hidden="true"></i>
-			Features
+			<a href="/home/{{ org.pk }}/{{ product.pk }}">Home</a>
 		</li>
-		<li class="dropdown">
-          <span class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i> Dropdown <span class="caret"></span></span>
-          <ul class="dropdown-menu features-dropdown-menu" role="menu">
-            <li class="dropdown-header">Dropdown heading</li>
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li><a href="#">Separated link</a></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
+		{% if prod_features %}
+			<li class="dropdown">
+	        	<span class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i> Features <span class="caret"></span></span>
+	        	<ul class="dropdown-menu features-dropdown-menu" role="menu">
+	 		 	
+		            {% for feature in prod_features.all %}
+		                <li>
+		                	<a href="/home/{{ feature.product.org.pk }}/{{ feature.product.pk }}/{{ feature.pk }}">{{ feature.title }}</a>
+		                </li>
+		            {% endfor %}
+	       		{% else %}
+
+	            
+	          	</ul>
+        	</li>
+        {% endif %}
 	</ul>
 </div>

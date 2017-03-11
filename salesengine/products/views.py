@@ -161,7 +161,7 @@ class FeatureView(TemplateView):
         context['feature'] = feature
         context['user_orgs'] = user_orgs
         context['org_products'] = org_products
-        context['product_features'] = product_features
+        context['prod_features'] = product_features
         return context
 
     def get_user(self, username):        
