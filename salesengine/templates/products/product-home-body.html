@@ -13,18 +13,18 @@
     Choose a feature or create a new one:
 	<ul>
 	    {% for feature in prod_features.all %}
-	        <li><a href="/home/{{ org.pk }}/{{ product.pk }}/{{ feature.pk}}">{{ feature.title }}</a></li>
+	        <li><a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk}}">{{ feature.title }}</a></li>
 	    {% endfor %}
 	</ul>
      </br>
     <div>
-    	<a href="/home/{{org.pk}}/{{product.pk}}/create-feature">Create a new feature</a>
+    	<a href="/home/team/{{org.pk}}/prod/{{product.pk}}/create-feature">Create a new feature</a>
     </div>
     {% else %}
     </br>
 	</br>
     <div>
-    	<a href="/home/{{org.pk}}/{{product.pk}}/create-feature">Create a new feature</a>
+    	<a href="/home/team/{{org.pk}}/prod/{{product.pk}}/create-feature">Create a new feature</a>
     </div>
     {% endif %}
 

@@ -12,16 +12,16 @@
     Choose one of your team's products:
       <ul>
         {% for product in org_products.all %}
-            <li><a href="/home/{{ org.pk }}/{{ product.pk }}">{{ product.title }}</a></li>
+            <li><a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">{{ product.title }}</a></li>
         {% endfor %}
       </ul>
       <br>
-      <a href="/home/{{ org.pk }}/create-product/">Create a new product</a>
+      <a href="/home/team/{{ org.pk }}/create-product/">Create a new product</a>
     {% else %}
 	</br>
 	</br>
     <div>
-    	<a href="/home/{{ org.pk }}/create-product/">Create a new product</a>
+    	<a href="/home/team/{{ org.pk }}/create-product/">Create a new product</a>
     </div>
     {% endif %}
 

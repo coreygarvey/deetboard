@@ -154,7 +154,7 @@ urlpatterns = [
     ),
 
     # Team Home
-    url(r'^home/(?P<pk>\d+)/$$', 
+    url(r'^home/team/(?P<pk>\d+)/$$', 
         OrgHomeView.as_view(
             ),
         name = 'org_home'
@@ -169,37 +169,37 @@ urlpatterns = [
     ),
 
 
-    url(r'^home/(?P<pk>\d+)/invitation/$',
+    url(r'^home/team/(?P<pk>\d+)/invitation/$',
         HomeInvitationView.as_view(),
         name='new_org_invitation_home',
     ),
 
-    url(r'^home/(?P<pk>\d+)/create-product/$',
+    url(r'^home/team/(?P<pk>\d+)/create-product/$',
         ProductCreateView.as_view(),
         name='product_create_home',
     ),
 
-    url(r'^home/(?P<opk>\d+)/(?P<ppk>\d+)/$',
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/$',
         ProductView.as_view(),
         name='product_home',
     ),
 
-    url(r'^home/(?P<opk>\d+)/(?P<ppk>\d+)/create-feature/$',
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/create-feature/$',
         FeatureCreateView.as_view(),
         name='feature_create_home',
     ),
 
-    url(r'^home/(?P<opk>\d+)/(?P<ppk>\d+)/(?P<fpk>\d+)/$',
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<fpk>\d+)/$',
         FeatureView.as_view(),
         name='feature_home',
     ),
 
-    url(r'^home/(?P<opk>\d+)/(?P<ppk>\d+)/(?P<fpk>\d+)/ask-a-question/$',
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<fpk>\d+)/ask-a-question/$',
         QuestionCreateView.as_view(),
         name='question_create_home',
     ),
 
-    url(r'^home/(?P<opk>\d+)/(?P<ppk>\d+)/question/(?P<qpk>\d+)/$',
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/question/(?P<qpk>\d+)/$',
         QuestionView.as_view(),
         name='question_home',
     ),

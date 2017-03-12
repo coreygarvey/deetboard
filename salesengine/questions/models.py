@@ -13,7 +13,7 @@ class Question(TimeStampedModel):
     skills = models.ManyToManyField('orgs.Skill', related_name='questions')
     
     def __str__(self):
-        return "%s" % (self.title)
+        return "%s" % (self.text)
     
     class Meta:
         ordering = ('created',)

@@ -10,7 +10,7 @@
 	 		 	
 		            {% for feature in prod_features.all %}
 		                <li>
-		                	<a href="/home/{{ feature.product.org.pk }}/{{ feature.product.pk }}/{{ feature.pk }}">{{ feature.title }}</a>
+		                	<a href="/home/team/{{ feature.product.org.pk }}/prod/{{ feature.product.pk }}/feature/{{ feature.pk }}">{{ feature.title }}</a>
 		                </li>
 		            {% endfor %}
 	       		{% else %}

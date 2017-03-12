@@ -7,6 +7,7 @@ from django.views.generic import CreateView, TemplateView
 from braces.views import LoginRequiredMixin
 from forms import ProductForm, FeatureForm
 from orgs.models import Org
+from questions.models import Question
 
 from django.http import HttpResponse
 from django.views import View
@@ -155,6 +156,8 @@ class FeatureView(TemplateView):
         user_orgs = user.orgs.all()
         org_products = org.products.all()
         product_features = product.features.all()
+        
+        questions = Question.objects.filter(features=feature)
         context['user'] = user
         context['org'] = org
         context['product'] = product
@@ -162,6 +165,7 @@ class FeatureView(TemplateView):
         context['user_orgs'] = user_orgs
         context['org_products'] = org_products
         context['prod_features'] = product_features
+        context['questions'] = questions
         return context
 
     def get_user(self, username):        

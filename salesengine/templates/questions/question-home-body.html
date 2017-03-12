@@ -1,6 +1,15 @@
 <div class="product-home-body">
+    
     <div class="title">
         <h2>{{ question.text }}</h2>
     </div>
+
+	<div>
+	{% for feature in question_features.all %}
+		<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">{{ feature.title }}</a>
+	{% endfor %}
+	</div>
+
+
 
 </div>

@@ -92,6 +92,7 @@ class QuestionView(TemplateView):
         prod_features = product.features.all()
         question_pk = self.kwargs['qpk']
         question = Question.objects.get(pk=question_pk)
+        question_features = question.features.all()
         context['user'] = user
         context['org'] = org
         context['product'] = product
@@ -99,6 +100,8 @@ class QuestionView(TemplateView):
         context['prod_features'] = prod_features
         context['org_products'] = org_products
         context['question'] = question
+        context['question_features'] = question_features
+        print context
         return context
 
 class QuestionList(generics.ListCreateAPIView):
