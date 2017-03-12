@@ -29,15 +29,16 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         product_pk = self.kwargs['ppk']
         product = Product.objects.get(pk=product_pk)
         features = product.features.all()
-        feature_pk = self.kwargs['fpk']
-        feature = Feature.objects.get(pk=feature_pk)
         context['user'] = user
         context['org'] = org
         context['user_orgs'] = user_orgs
         context['org_products'] = products
         context['product'] = product
         context['prod_features'] = features
-        context['feature'] = feature
+        if 'fpk' in self.kwargs:
+            feature_pk = self.kwargs['fpk']
+            feature = Feature.objects.get(pk=feature_pk)
+            context['feature'] = feature
         return context
 
     def form_valid(self, form):        
@@ -62,9 +63,10 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
     	question_pk = self.object.id
         question = Question.objects.get(pk=question_pk)
-        feature_pk = self.kwargs['fpk']
-        feature = Feature.objects.get(pk=feature_pk)
-        question.features.add(feature)
+        if 'fpk' in self.kwargs:
+            feature_pk = self.kwargs['fpk']
+            feature = Feature.objects.get(pk=feature_pk)
+            question.features.add(feature)
         return reverse('question_home', 
         			args=(
         				self.object.product.org.id,

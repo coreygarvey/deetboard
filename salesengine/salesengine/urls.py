@@ -201,7 +201,12 @@ urlpatterns = [
 
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<fpk>\d+)/ask-a-question/$',
         QuestionCreateView.as_view(),
-        name='question_create_home',
+        name='feature_create_question',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/ask-a-question/$',
+        QuestionCreateView.as_view(),
+        name='product_question_create',
     ),
 
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/question/(?P<qpk>\d+)/$',
