@@ -263,7 +263,7 @@ h1 {
 
 
 /* Home area */
-.home-teams-dropdown {
+.home-dropdown {
   margin: 10px;
 }
 
@@ -271,6 +271,7 @@ h1 {
 .teams-dropdown-menu, 
 .products-collapse-menu,
 .features-collapse-menu {
+  padding: 0px 0px;
   min-width: 150px;
 }
 
@@ -298,8 +299,12 @@ h1 {
 
 .dropdown-toggle {
   display: block;
-  height: 100%;
-  width: 100%;
+  text-decoration: none;
+}
+
+.dropdown-toggle {
+  display: block;
+  text-decoration: none;
 }
 
 .btn-teams {
@@ -410,8 +415,46 @@ h1 {
   border-top: 1px solid rgba(0,0,0,0.12);
 }
 
+.dropdown .dropdown-menu {
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+
+  max-height: 0;
+  display: block;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.dropdown.open .dropdown-menu {
+    max-height: 200px;
+    opacity: 1;
+}
+
+.home-dropdown > ul > li {
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  padding: 0px 20px;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+  /* ...and now for the proper property */
+  transition:.5s;
+}
+
+.home-dropdown > ul > li:hover, li:active, li:active:focus, li:focus  {
+  background-color: #dadfe7;
+  color: #214478;
+  cursor: pointer;
+}
+
 .sidebar-nav > li > a, a:hover, a:active, a:focus {
   color: #2e466b;
+  text-decoration: none;
 }
 
 .sidebar-nav > li > a:hover {
@@ -431,7 +474,7 @@ h1 {
   height: 50px;
   line-height: 50px;
   font-size: 16px;
-  padding: 0px 20px;
+  padding: 0px 35px;
   border-top: 1px solid rgba(0,0,0,0.12);
   -o-transition:.5s;
   -ms-transition:.5s;
@@ -479,7 +522,10 @@ box-shadow: 0px 0px 2px #999;
   overflow-x: hidden;
 }
 
-.home-body, .org-home-body, .product-home-body {
+.home-body, 
+.org-home-body, 
+.product-home-body, 
+.question-home-body {
   min-width: 700px;
   width: 97%;
   margin: 15px;

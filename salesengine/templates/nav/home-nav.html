@@ -3,7 +3,7 @@
 <nav class="navbar navbar-home navbar-fixed-top">
   <div class="home-nav-wrapper">
     <div id="navbar">
-      <div class="dropdown home-teams-dropdown pull-left">
+      <div class="dropdown home-dropdown pull-left">
         <button class="btn btn-default btn-teams" data-toggle="dropdown">
           {% if org %}
             {{ org.title }}
@@ -31,7 +31,7 @@
 
 
       {% if org %}
-        <div class="dropdown home-teams-dropdown pull-left">
+        <div class="dropdown home-dropdown pull-left">
           <button class="btn btn-default btn-products" data-toggle="dropdown">
             {% if product %}
               {{ product.title }}
