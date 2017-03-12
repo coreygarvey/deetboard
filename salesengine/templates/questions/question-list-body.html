@@ -1,0 +1,14 @@
+<div class="product-home-body">
+    
+	<h2>Questions about {{ product.title }}</h2>
+	<div>
+	{% for question in prod_questions.all %}
+		<li>
+			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/question/{{ question.pk }}">{{ question.text }}</a>
+		</li>
+	{% endfor %}
+	</div>
+
+
+
+</div>

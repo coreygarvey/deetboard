@@ -1,9 +1,8 @@
-
 {% extends "../home.html" %}
 
 {% load widget_tweaks %}
 
-{% block title %}Ask a Question{% endblock %}
+{% block title %}{{product.title}} - Questions{% endblock %}
 
 {% block content %}
     
@@ -11,7 +10,7 @@
           
             {% include "../nav/prod-left-nav.html" %}
             
-            {% include "./question-create-body.html" %}
+            {% include "./question-list-body.html" %}
 
         </div>
     

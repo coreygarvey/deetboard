@@ -31,7 +31,7 @@ from accounts.views import RegistrationTypeView, RegistrationView, ActivationVie
 from views import IndexView
 from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView
 from products.views import ProductCreateView, ProductView, FeatureCreateView, FeatureView
-from questions.views import QuestionCreateView, QuestionView
+from questions.views import QuestionCreateView, QuestionView, QuestionListView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -192,6 +192,11 @@ urlpatterns = [
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<fpk>\d+)/$',
         FeatureView.as_view(),
         name='feature_home',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/questions/$',
+        QuestionListView.as_view(),
+        name='question_list_home',
     ),
 
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<fpk>\d+)/ask-a-question/$',

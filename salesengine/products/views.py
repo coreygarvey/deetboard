@@ -76,6 +76,7 @@ class ProductView(TemplateView):
         context['user_orgs'] = user_orgs
         context['prod_features'] = prod_features
         context['org_products'] = org_products
+        print context
         return context
 
     def get_user(self, username):        
@@ -156,7 +157,6 @@ class FeatureView(TemplateView):
         user_orgs = user.orgs.all()
         org_products = org.products.all()
         product_features = product.features.all()
-        
         questions = Question.objects.filter(features=feature)
         context['user'] = user
         context['org'] = org
