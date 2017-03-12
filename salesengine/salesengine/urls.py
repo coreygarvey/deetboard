@@ -153,6 +153,13 @@ urlpatterns = [
         name = 'profile'
     ),
 
+    # After Registration
+    url(r'^home/profile/update/$', 
+        ProfileUpdateView.as_view(
+            ),
+        name = 'profile_update'
+    ),
+
     # Team Home
     url(r'^home/team/(?P<pk>\d+)/$$', 
         OrgHomeView.as_view(

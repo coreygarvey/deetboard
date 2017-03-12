@@ -46,7 +46,7 @@
 				</a>
 			</li>
 			<div class="collapse" id="feature_collapse">
-	        	<ul class="features-dropdown-menu">
+	        	<ul class="features-collapse-menu">
 		            {% for feature in prod_features.all %}
 		                <li>
 		                	<a href="/home/team/{{ feature.product.org.pk }}/prod/{{ feature.product.pk }}/feature/{{ feature.pk }}">{{ feature.title }}</a>

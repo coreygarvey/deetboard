@@ -108,6 +108,32 @@ class MyActivationForm(ModelForm):
             'password',
         ]
 
+class ProfileUpdateForm(ModelForm):
+    """
+    Form for registering a new user account.
+    Validates that the requested username is not already in use, and
+    requires the password to be entered twice to catch typos.
+    Subclasses should feel free to add any additional validation they
+    need, but should take care when overriding ``save()`` to respect
+    the ``commit=False`` argument, as several registration workflows
+    will make use of it to create inactive user accounts.
+    """
+    password = forms.CharField(widget=forms.PasswordInput)
+    
+    def __init__(self, *args, **kwargs):
+        super(ProfileUpdateForm, self).__init__(*args, **kwargs)
+        #eeeself.fields['username'].widget.attrs['placeholder'] = "testing"
+
+    class Meta:
+        model = Account
+        fields = [
+            'username',
+            'role',
+            'first_name',
+            'last_name',
+            'password',
+        ]
+
 
 class AdminInvitationForm(Form):
     invite1 = forms.EmailField(required=False)

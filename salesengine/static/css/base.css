@@ -269,13 +269,15 @@ h1 {
 
 .products-dropdown-menu, 
 .teams-dropdown-menu, 
-.features-dropdown-menu {
+.products-collapse-menu,
+.features-collapse-menu {
   min-width: 150px;
 }
 
 .products-dropdown-menu > li > a,
 .teams-dropdown-menu > li > a,
-.features-dropdown-menu > li > a {
+.products-collapse-menu > li > a,
+.features-collapse-menu > li > a {
   color: #214478;
   display: inline;
   white-space: nowrap;
@@ -285,8 +287,10 @@ h1 {
 .products-dropdown-menu > li > a:focus,
 .teams-dropdown-menu > li > a:hover, 
 .teams-dropdown-menu > li > a:focus,
-.features-dropdown-menu > li > a:hover, 
-.features-dropdown-menu > li > a:focus {
+.products-collapse-menu > li > a:hover, 
+.products-collapse-menu > li > a:focus,
+.features-collapse-menu > li > a:hover, 
+.features-collapse-menu > li > a:focus {
   color: #214478;
   text-decoration: none;
   background-color: transparent;
@@ -415,13 +419,15 @@ h1 {
   cursor: pointer;
 }
 
-.features-dropdown-menu {
+.products-collapse-menu,
+.features-collapse-menu {
   list-style: none;
   padding: 0px;
   overflow:hidden;
 }
 
-.features-dropdown-menu > li {
+.products-collapse-menu > li,
+.features-collapse-menu > li {
   height: 50px;
   line-height: 50px;
   font-size: 16px;
@@ -435,7 +441,14 @@ h1 {
   transition:.5s;
 }
 
-.features-dropdown-menu > li:hover, li:active, li:active:focus, li:focus  {
+.features-collapse-menu > li:hover, li:active, li:active:focus, li:focus  {
+  background-color: #dadfe7;
+  color: #214478;
+  cursor: pointer;
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+.products-collapse-menu > li:hover, li:active, li:active:focus, li:focus  {
   background-color: #dadfe7;
   color: #214478;
   cursor: pointer;
