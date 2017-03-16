@@ -408,7 +408,10 @@ h1 {
   transition:.5s;
 }
 
-.home-left-nav > ul > li:hover, li:active, li:active:focus, li:focus  {
+.home-left-nav > ul > li:hover, 
+.home-left-nav > ul > li:active, 
+.home-left-nav > ul > li:active:focus, 
+.home-left-nav > ul > li:focus  {
   background-color: #dadfe7;
   color: #214478;
   cursor: pointer;
@@ -446,13 +449,19 @@ h1 {
   transition:.5s;
 }
 
-.home-dropdown > ul > li:hover, li:active, li:active:focus, li:focus  {
+.home-dropdown > ul > li:hover, 
+.home-dropdown > ul > li:active, 
+.home-dropdown > ul > li:active:focus, 
+.home-dropdown > ul > li:focus  {
   background-color: #dadfe7;
   color: #214478;
   cursor: pointer;
 }
 
-.sidebar-nav > li > a, a:hover, a:active, a:focus {
+.sidebar-nav > li > a, 
+.sidebar-nav > li > a:hover, 
+.sidebar-nav > li > a:active, 
+.sidebar-nav > li > a:focus {
   color: #2e466b;
   text-decoration: none;
 }
@@ -484,14 +493,20 @@ h1 {
   transition:.5s;
 }
 
-.features-collapse-menu > li:hover, li:active, li:active:focus, li:focus  {
+.features-collapse-menu > li:hover, 
+.features-collapse-menu > li:active, 
+.features-collapse-menu > li:active:focus, 
+.features-collapse-menu > li:focus  {
   background-color: #dadfe7;
   color: #214478;
   cursor: pointer;
   border-top: 1px solid rgba(0,0,0,0.12);
 }
 
-.products-collapse-menu > li:hover, li:active, li:active:focus, li:focus  {
+.products-collapse-menu > li:hover, 
+.products-collapse-menu > li:active, 
+.products-collapse-menu > li:active:focus, 
+.products-collapse-menu > li:focus  {
   background-color: #dadfe7;
   color: #214478;
   cursor: pointer;
@@ -562,4 +577,13 @@ box-shadow: 0px 0px 2px #999;
   width: 400px;
   margin: 5px 0;
   display: inline-block;
+}
+
+/* Features form on Question page */
+.question-features-form > ul {
+  list-style: none;
+}
+
+.question-features-form label {
+  font-weight:normal;
 }

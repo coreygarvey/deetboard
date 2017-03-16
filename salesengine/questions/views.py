@@ -3,7 +3,7 @@ from models import Question, Response
 from serializers import QuestionSerializer, ResponseSerializer
 from rest_framework import generics
 from django.views.generic import CreateView, TemplateView
-
+from django.views.generic.edit import UpdateView
 from django.http import HttpResponse
 from django.views import View
 import services
@@ -75,12 +75,13 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         				)
         			)
 
-class QuestionView(CreateView):
+class QuestionView(LoginRequiredMixin, UpdateView):
     """
     
     """
     form_class = QuestionFeaturesForm
     template_name = "questions/question-home.html"
+    model = Question
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
@@ -104,8 +105,21 @@ class QuestionView(CreateView):
         context['org_products'] = org_products
         context['question'] = question
         context['question_features'] = question_features
+        context['form'].fields['features'].queryset = Feature.objects.filter(product=product)
+
         print context
+
+        
+
+
         return context
+
+    def get_object(self):
+        question_pk = self.kwargs['qpk']
+        question = Question.objects.get(pk=question_pk)
+        print "Question!"
+        print question
+        return question
 
     def form_valid(self, form):        
         question = form.save(commit=False)

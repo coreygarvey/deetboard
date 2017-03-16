@@ -11,10 +11,10 @@
 	{% endfor %}
 	
 
-	<h2>Add Features</h2>
+	<h3>Add Features</h3>
 
-	<form method="post" action="">{% csrf_token %}
-	    {% render_field form.features class+="form-control question-features-input" %}
+	<form method="post" class="question-features-form">{% csrf_token %}
+	    {% render_field form.features class+="question-features-input" %}
 	    <input type="submit" class="btn btn-main" value="Add Features" />
 	</form>
 
