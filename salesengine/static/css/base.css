@@ -540,6 +540,7 @@ box-shadow: 0px 0px 2px #999;
 .home-body, 
 .org-home-body, 
 .product-home-body, 
+.feature-home-body, 
 .question-home-body {
   min-width: 700px;
   width: 97%;

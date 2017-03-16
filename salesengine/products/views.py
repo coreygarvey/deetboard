@@ -123,8 +123,8 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         form.instance.product = product
         
         feature = form.save(commit=False)
-        product.save()
-        product.admins.add(self.request.user)
+        feature.save()
+        feature.admins.add(self.request.user)
 
         return super(FeatureCreateView, self).form_valid(form)
 

@@ -1,11 +1,13 @@
 {% load widget_tweaks %}
-<div class="title">
-    <h1>Create a Feature</h1>
+<div class="feature-home-body">
+	<div class="title">
+	    <h1>Create a Feature</h1>
+	</div>
+
+	<form method="post" action="">{% csrf_token %}
+	    {% render_field form.title placeholder="Feature name" class+="form-control create-feature-input" %}
+	    {% render_field form.description placeholder="Feature description" class+="form-control create-feature-input" %}
+
+	    <input type="submit" class="btn btn-main" value="Create the Feature" />
+	</form>
 </div>
-
-<form method="post" action="">{% csrf_token %}
-    {% render_field form.title placeholder="Feature name" class+="form-control create-feature-input" %}
-    {% render_field form.description placeholder="Feature description" class+="form-control create-feature-input" %}
-
-    <input type="submit" class="btn btn-main" value="Create the Feature" />
-</form>
