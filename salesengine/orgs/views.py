@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 import services
 from core.permissions import IsAdminOrReadOnly
 from forms import OrgForm
-from models import Org
 
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -17,20 +16,20 @@ from rest_framework.views import APIView
 
 from django.views.decorators.csrf import csrf_protect
 
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 from braces.views import LoginRequiredMixin
 
 import re
 
 class OrgCreateView(LoginRequiredMixin, CreateView):
     form_class = OrgForm
-    template_name = 'orgs/create_org.html'
     
     def form_valid(self, form):        
         form.instance.admin = self.request.user
 
         email = self.request.user.email
         domain = re.search("@[\w.]+", email)
+        # Need to check domain against common domains
         form.instance.email_domain = domain.group()
 
         
@@ -43,13 +42,67 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
         })
         return kwargs
 
+
+class FrontOrgCreateView(OrgCreateView):
+    template_name = 'orgs/org-create-front.html'
+
     def get_success_url(self):
         org_pk = self.object.id
         org = Org.objects.get(pk=org_pk)
         current_user = self.request.user
         current_user.save()
         current_user.orgs.add(org)
-        return reverse('new_org_invitation',args=(self.object.id,))
+        return reverse('new_org_invitation_front',args=(self.object.id,))
+
+class HomeOrgCreateView(OrgCreateView):
+    template_name = 'orgs/org-create-home.html'
+
+    def get_success_url(self):
+        org_pk = self.object.id
+        org = Org.objects.get(pk=org_pk)
+        current_user = self.request.user
+        current_user.save()
+        current_user.orgs.add(org)
+        return reverse('new_org_invitation_home',args=(self.object.id,))
+
+
+
+class OrgHomeView(TemplateView):
+    """
+    
+    """
+    template_name = "orgs/org-home.html"
+
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(OrgHomeView, self).get_context_data(**kwargs)
+        user = self.request.user
+        org_pk = self.kwargs['pk']
+        org = Org.objects.get(pk=org_pk)
+        user_orgs = user.orgs.all()
+        products = org.products.all()
+        context['user'] = user
+        context['org'] = org
+        context['user_orgs'] = user_orgs
+        context['org_products'] = products
+        return context
+
+
+
+    def get_user(self, username):        
+        #Given the verified username, look up and return the
+        #corresponding user account if it exists, or ``None`` if it
+        #doesn't.
+        User = get_user_model()
+        lookup_kwargs = {
+            User.USERNAME_FIELD: username,
+        }
+        try:
+            user = User.objects.get(**lookup_kwargs)
+            return user
+        except User.DoesNotExist:
+            return None
+
 
 
 class OrgList(generics.ListCreateAPIView):

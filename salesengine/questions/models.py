@@ -7,12 +7,13 @@ class Question(TimeStampedModel):
     admin = models.ForeignKey('accounts.Account', related_name='questions_admin')
     title = models.CharField(max_length=100)
     text = models.TextField()
+    product = models.ForeignKey('products.Product', related_name='questions')
     features = models.ManyToManyField('products.Feature', related_name='questions')
     user_asking = models.ForeignKey('accounts.Account', related_name='questions_asked')
     skills = models.ManyToManyField('orgs.Skill', related_name='questions')
     
     def __str__(self):
-        return "%s" % (self.title)
+        return "%s" % (self.text)
     
     class Meta:
         ordering = ('created',)

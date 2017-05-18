@@ -11,9 +11,13 @@
     Choose your team below:
       <ul>
         {% for org in user_orgs.all %}
-            <li><a href="#">{{ org.title }}</a></li>
+            <li><a href="/home/team/{{ org.pk }}">{{ org.title }}</a></li>
         {% endfor %}
       </ul>
+        <br>
+       <a href="/home/create-team">Create a new team</a>
+    {% else %}
+    <a href="/home/create-team">Create a new team</a>
     {% endif %}
     
     

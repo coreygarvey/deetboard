@@ -1,0 +1,95 @@
+<!--
+<div class="home-left-nav">
+	<ul class="sidebar-nav">
+		<li>
+			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">
+				
+				<i class="fa fa-home" aria-hidden="true"></i>
+				{{ product.title }}
+			</a>
+		</li>
+		{% if prod_features %}
+			<li class="dropdown">
+	        	<span class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i> Features <span class="caret"></span></span>
+	        	<ul class="dropdown-menu features-dropdown-menu" role="menu">
+		            {% for feature in prod_features.all %}
+		                <li>
+		                	<a href="/home/team/{{ feature.product.org.pk }}/prod/{{ feature.product.pk }}/feature/{{ feature.pk }}">{{ feature.title }}</a>
+		                </li>
+		            {% endfor %}
+	          	</ul>
+        	</li>
+        {% else %}
+        {% endif %}
+        <li>
+			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/questions">Questions</a>
+		</li>
+	</ul>
+</div>
+-->
+
+<div class="home-left-nav">
+	<ul id="MainMenu" class="sidebar-nav">
+		<li>
+			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">
+				
+				<i class="fa fa-fw fa-home" aria-hidden="true"></i>
+				{{ product.title }}
+			</a>
+		</li>
+		{% if prod_features %}
+			<li>
+				<a href="#feature_collapse" class="dropdown-toggle" data-toggle="collapse">
+					<i class="fa fa-fw fa-plus"></i> 
+					Features 
+					<span class="caret"></span>
+				</a>
+			</li>
+			<div class="collapse" id="feature_collapse">
+	        	<ul class="features-collapse-menu">
+		            {% for feature in prod_features.all %}
+		                <li>
+		                	<a href="/home/team/{{ feature.product.org.pk }}/prod/{{ feature.product.pk }}/feature/{{ feature.pk }}">{{ feature.title }}</a>
+		                </li>
+		            {% endfor %}
+	          	</ul>
+        	</div>
+        {% else %}
+        {% endif %}
+        <li>
+			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/questions">Questions</a>
+		</li>
+	</ul>
+</div>
+
+
+<!--
+<div id="MainMenu">
+  <div class="list-group panel">
+    <a href="#demo3" class="list-group-item list-group-item-success" data-toggle="collapse" data-parent="#MainMenu">Item 3</a>
+    <div class="collapse" id="demo3">
+      <a href="#SubMenu1" class="list-group-item" data-toggle="collapse" data-parent="#SubMenu1">Subitem 1 <i class="fa fa-caret-down"></i></a>
+    
+      <div class="collapse list-group-submenu" id="SubMenu1">
+        <a href="#" class="list-group-item" data-parent="#SubMenu1">Subitem 1 a</a>
+        <a href="#" class="list-group-item" data-parent="#SubMenu1">Subitem 2 b</a>
+        <a href="#SubSubMenu1" class="list-group-item" data-toggle="collapse" data-parent="#SubSubMenu1">Subitem 3 c <i class="fa fa-caret-down"></i></a>
+        <div class="collapse list-group-submenu list-group-submenu-1" id="SubSubMenu1">
+          <a href="#" class="list-group-item" data-parent="#SubSubMenu1">Sub sub item 1</a>
+          <a href="#" class="list-group-item" data-parent="#SubSubMenu1">Sub sub item 2</a>
+        </div>
+        <a href="#" class="list-group-item" data-parent="#SubMenu1">Subitem 4 d</a>
+      </div>
+  	
+      <a href="javascript:;" class="list-group-item">Subitem 2</a>
+      <a href="javascript:;" class="list-group-item">Subitem 3</a>
+    </div>
+    <a href="#demo4" class="list-group-item list-group-item-success" data-toggle="collapse" data-parent="#MainMenu">Item 4</a>
+    <div class="collapse" id="demo4">
+      <a href="" class="list-group-item">Subitem 1</a>
+      <a href="" class="list-group-item">Subitem 2</a>
+      <a href="" class="list-group-item">Subitem 3</a>
+    </div>
+  </div>
+</div>
+-->

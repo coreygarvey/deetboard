@@ -15,9 +15,10 @@ from django.template import RequestContext
 from django.contrib.auth.views import login as login_view
 
 from models import Account
-from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm
+from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, ProfileUpdateForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm
 from serializers import AccountSerializer
 from orgs.models import Org
+from braces.views import LoginRequiredMixin
 
 from rest_framework import generics, permissions
 from core.permissions import IsAdminOrReadOnly
@@ -310,7 +311,7 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
     disallowed_url = 'invitation_disallowed'
     form_class = AdminInvitationForm
     success_url = None
-    template_name = 'registration/invitation.html'
+    template_name = 'registration/invitation-front.html'
 
 
     def dispatch(self, *args, **kwargs):
@@ -395,7 +396,6 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
 
         return user
 
-
 class GeneralInvitationView(InvitationView):
     form_class = GeneralInvitationForm
 
@@ -426,6 +426,9 @@ class GeneralInvitationView(InvitationView):
             return redirect(to, *args, **kwargs)
         except ValueError:
             return redirect(success_url)
+
+class HomeInvitationView(GeneralInvitationView):
+    template_name = 'accounts/invitation.html'
 
 class ReactivateView(ActivationContextMixin, ActivationKeyMixin, 
                     ActivationEmailMixin, InvitationAllowedMixin, FormView):
@@ -673,7 +676,7 @@ class AccountDetailApi(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                             IsAdminOrReadOnly,)
 
-class ProfileUpdateView(UpdateView):
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """
     Given a valid activation key, activate the user's
     account. Otherwise, show an error message stating the account
@@ -681,91 +684,51 @@ class ProfileUpdateView(UpdateView):
     """
     disallowed_url = 'registration_disallowed'
     success_url = None
-    template_name = 'registration/activate.html'
-    form_class = MyActivationForm
+    template_name = "accounts/profile-update.html"
+    form_class = ProfileUpdateForm
     model = Account
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
-        context = super(ActivationView, self).get_context_data(**kwargs)
+        context = super(ProfileUpdateView, self).get_context_data(**kwargs)
         user = self.request.user
         context['user'] = user
         return context
 
     def get_object(self):
-        activation_key = self.kwargs.get('activation_key')
-        activation_message = self.validate_key(activation_key)
-        username = activation_message.get("username")
-        if username is not None:
-            user = self.get_user(username)
-            # Other options for field => Blank or email prefix
-            #user.username = ""
-            #user.save()
-            #domain_search = re.search("@[\w.]+", current_user.email)
-            #domain = domain_search.group()
-            return get_object_or_404(Account, pk=user.id)
         current_user = self.request.user
-        return Account.objects.get(id=current_user)
+        return current_user
 
     def form_valid(self, form, *args, **kwargs):
-        # Try to activate user when form submitted is valid
-        activation_key = self.kwargs['activation_key']
-        activation_message = self.activate(activation_key)
-        username = activation_message.get('username')
-        # Obtain user with username, 
-        #   checks to make sure validation worked correctly
-        activated_user = self.get_user(username)
-        org_id = activation_message.get('org_pk')
-        if activated_user:
-            # CAN THIS BE activated_user = ??
-            updated_user = form.save(commit=False)
-            updated_user.is_active = True
-            password = form.cleaned_data['password']
-            updated_user.set_password(password)
-            updated_user.save()
-            # Connect user with org
-            if org_id is not None:
-                org = Org.objects.get(id=org_id)
-                updated_user.orgs.add(org)
-            signals.user_activated.send(
-                sender=self.__class__,
-                user=activated_user,
-                request=self.request
-            )
-            # Determine next move based on account's org
-            success_url = self.get_success_url(activated_user, org_id)
-            # Login user after updated and saved
-            login(self.request, updated_user)
-            try:
-                to, args, kwargs = success_url
-                return redirect(to, *args, **kwargs)
-            except ValueError:
-                return redirect(success_url)
-        # Return form if it doesn't activate user
-        return self.render_to_response(self.template_name, self.get_context_data(form=form))
+        updated_user = form.save(commit=False)
+        password = form.cleaned_data['password']
+        updated_user.set_password(password)
+        updated_user.save()
+        # Connect user with org
+        """
+        if org_id is not None:
+            org = Org.objects.get(id=org_id)
+            updated_user.orgs.add(org)
+        signals.user_activated.send(
+            sender=self.__class__,
+            user=activated_user,
+            request=self.request
+        )
+        """
+        # Determine next move based on account's org
+        success_url = self.get_success_url()
+        print "current_user"
+        print self.request.user
+        login(self.request, updated_user)
+        try:
+            to, args, kwargs = success_url
+            return redirect(to, *args, **kwargs)
+        except ValueError:
+            return redirect(success_url)
+        
 
-    def activate(self, activation_key):
-        # This is safe even if, somehow, there's no activation key,
-        # because unsign() will raise BadSignature rather than
-        # TypeError on a value of None.
-        print "activation_key"
-        print activation_key  
-        activation_message = self.validate_key(activation_key)
-        if activation_message is not None:
-            username = activation_message.get('username')
-            org_id = activation_message.get('org_id')
-            user = self.get_user(username)
-            if user is not None:
-                user.save()
-                return activation_message
-        return False
-
-    def get_success_url(self, user, org_id):
-        # Users without org will create new
-        if org_id is None:
-            return ('new_org', (), {})
-        else:
-            return reverse('general_invitation',args=(org_id,))
+    def get_success_url(self):
+        return reverse('profile',args=())
 
 
     def get_user(self, username):        
@@ -805,9 +768,7 @@ class ProfileUpdateView(UpdateView):
 
 class ProfileView(TemplateView):
     """
-    Given a valid activation key, activate the user's
-    account. Otherwise, show an error message stating the account
-    couldn't be activated.
+    View the User's Profile
     """
     disallowed_url = 'registration_disallowed'
     template_name = "accounts/profile.html"
@@ -816,6 +777,8 @@ class ProfileView(TemplateView):
         """Use this to add extra context (the user)."""
         context = super(ProfileView, self).get_context_data(**kwargs)
         user = self.request.user
+        print "user after new page"
+        print user
         user_orgs = user.orgs.all()
         context['user'] = user
         context['user_orgs'] = user_orgs

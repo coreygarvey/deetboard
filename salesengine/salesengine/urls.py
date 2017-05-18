@@ -26,10 +26,12 @@ from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActiva
 
 from views import home
 from accounts.views import register, register_success, logout_page, custom_login
-from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView
+from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, HomeInvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView
 
 from views import IndexView
-from orgs.views import OrgCreateView
+from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView
+from products.views import ProductCreateView, ProductView, FeatureCreateView, FeatureView
+from questions.views import QuestionCreateView, QuestionView, QuestionListView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -63,14 +65,13 @@ urlpatterns = [
     ),
 
     url(r'^create_org/',
-        OrgCreateView.as_view(
-            ),
+        FrontOrgCreateView.as_view(),
         name = 'new_org'
     ),
 
     url(r'^new_org/invitation/(?P<pk>\d+)/$',
         InvitationView.as_view(),
-        name='new_org_invitation',
+        name='new_org_invitation_front',
     ),
 
     url(r'^invitation/(?P<pk>\d+)/$',
@@ -152,8 +153,73 @@ urlpatterns = [
         name = 'profile'
     ),
 
+    # After Registration
+    url(r'^home/profile/update/$', 
+        ProfileUpdateView.as_view(
+            ),
+        name = 'profile_update'
+    ),
 
+    # Team Home
+    url(r'^home/team/(?P<pk>\d+)/$$', 
+        OrgHomeView.as_view(
+            ),
+        name = 'org_home'
+    ),
     
+
+    # Create Org
+    url(r'^home/create-team/$',
+        HomeOrgCreateView.as_view(
+            ),
+        name = 'org_create_home'
+    ),
+
+
+    url(r'^home/team/(?P<pk>\d+)/invitation/$',
+        HomeInvitationView.as_view(),
+        name='new_org_invitation_home',
+    ),
+
+    url(r'^home/team/(?P<pk>\d+)/create-product/$',
+        ProductCreateView.as_view(),
+        name='product_create_home',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/$',
+        ProductView.as_view(),
+        name='product_home',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/create-feature/$',
+        FeatureCreateView.as_view(),
+        name='feature_create_home',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<fpk>\d+)/$',
+        FeatureView.as_view(),
+        name='feature_home',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/questions/$',
+        QuestionListView.as_view(),
+        name='question_list_home',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<fpk>\d+)/ask-a-question/$',
+        QuestionCreateView.as_view(),
+        name='feature_create_question',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/ask-a-question/$',
+        QuestionCreateView.as_view(),
+        name='product_question_create',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/question/(?P<qpk>\d+)/$',
+        QuestionView.as_view(),
+        name='question_home',
+    ),
 
     #url(r'^join_org/$', start),
 

@@ -263,16 +263,48 @@ h1 {
 
 
 /* Home area */
-.home-teams-dropdown {
-  margin: 10px -5px;
+.home-dropdown {
+  margin: 10px;
 }
 
-.teams-dropdown-menu {
+.products-dropdown-menu, 
+.teams-dropdown-menu, 
+.products-collapse-menu,
+.features-collapse-menu {
+  padding: 0px 0px;
   min-width: 150px;
 }
 
-.teams-dropdown-menu > li > a {
+.products-dropdown-menu > li > a,
+.teams-dropdown-menu > li > a,
+.products-collapse-menu > li > a,
+.features-collapse-menu > li > a {
   color: #214478;
+  display: inline;
+  white-space: nowrap;
+}
+
+.products-dropdown-menu > li > a:hover, 
+.products-dropdown-menu > li > a:focus,
+.teams-dropdown-menu > li > a:hover, 
+.teams-dropdown-menu > li > a:focus,
+.products-collapse-menu > li > a:hover, 
+.products-collapse-menu > li > a:focus,
+.features-collapse-menu > li > a:hover, 
+.features-collapse-menu > li > a:focus {
+  color: #214478;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.dropdown-toggle {
+  display: block;
+  text-decoration: none;
+}
+
+.dropdown-toggle {
+  display: block;
+  text-decoration: none;
 }
 
 .btn-teams {
@@ -299,6 +331,30 @@ h1 {
   border: none;
 }
 
+.btn-products {
+  min-width: 150px;
+  color: #214478;
+  font-size: 20px;
+  font-weight: 300;
+  text-align:left;
+  padding: 6px 8px;
+  background-color: transparent;
+  border: none;
+  border-radius:3px;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+  /* ...and now for the proper property */
+  transition:.5s;
+}
+
+.btn-products:hover, .btn-products:active, .btn-products:active:focus, .btn-products:focus  {
+  background-color: #dadfe7;
+  color: #214478;
+  border: none;
+}
+
 .home-left-nav {
   width: 220px;
   margin-left: -220px;
@@ -313,6 +369,15 @@ h1 {
   border-right: 1px solid rgba(0,0,0,0.12);
   box-shadow: 1px 0px 5px #ccc;
 }
+
+.home-link {
+  display: inline-block;
+  color: #214478;
+  position: absolute;
+  left: 50%;
+  margin-top: 15px;
+}
+
 .sidebar-nav {
   position: absolute;
   top: 0;
@@ -343,12 +408,112 @@ h1 {
   transition:.5s;
 }
 
-.home-left-nav > ul > li:hover, li:active, li:active:focus, li:focus  {
+.home-left-nav > ul > li:hover, 
+.home-left-nav > ul > li:active, 
+.home-left-nav > ul > li:active:focus, 
+.home-left-nav > ul > li:focus  {
   background-color: #dadfe7;
   color: #214478;
   cursor: pointer;
   border-top: 1px solid rgba(0,0,0,0.12);
 }
+
+.dropdown .dropdown-menu {
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+
+  max-height: 0;
+  display: block;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.dropdown.open .dropdown-menu {
+    max-height: 200px;
+    opacity: 1;
+}
+
+.home-dropdown > ul > li {
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  padding: 0px 20px;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+  /* ...and now for the proper property */
+  transition:.5s;
+}
+
+.home-dropdown > ul > li:hover, 
+.home-dropdown > ul > li:active, 
+.home-dropdown > ul > li:active:focus, 
+.home-dropdown > ul > li:focus  {
+  background-color: #dadfe7;
+  color: #214478;
+  cursor: pointer;
+}
+
+.sidebar-nav > li > a, 
+.sidebar-nav > li > a:hover, 
+.sidebar-nav > li > a:active, 
+.sidebar-nav > li > a:focus {
+  color: #2e466b;
+  text-decoration: none;
+}
+
+.sidebar-nav > li > a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.products-collapse-menu,
+.features-collapse-menu {
+  list-style: none;
+  padding: 0px;
+  overflow:hidden;
+}
+
+.products-collapse-menu > li,
+.features-collapse-menu > li {
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  padding: 0px 35px;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+  /* ...and now for the proper property */
+  transition:.5s;
+}
+
+.features-collapse-menu > li:hover, 
+.features-collapse-menu > li:active, 
+.features-collapse-menu > li:active:focus, 
+.features-collapse-menu > li:focus  {
+  background-color: #dadfe7;
+  color: #214478;
+  cursor: pointer;
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+.products-collapse-menu > li:hover, 
+.products-collapse-menu > li:active, 
+.products-collapse-menu > li:active:focus, 
+.products-collapse-menu > li:focus  {
+  background-color: #dadfe7;
+  color: #214478;
+  cursor: pointer;
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+
 
 /*
 background-color: #dedede;
@@ -372,8 +537,12 @@ box-shadow: 0px 0px 2px #999;
   overflow-x: hidden;
 }
 
-.home-body {
-  min-width: 900px;
+.home-body, 
+.org-home-body, 
+.product-home-body, 
+.feature-home-body, 
+.question-home-body {
+  min-width: 700px;
   width: 97%;
   margin: 15px;
   height: 94.5%;
@@ -387,4 +556,35 @@ box-shadow: 0px 0px 2px #999;
 #profile-body {
   padding: 20px;
   display: inline-block;
+}
+
+
+/* Create Product */
+.create-product-input {
+  width: 200px;
+  margin: 5px 0;
+  display: inline-block;
+}
+
+/* Create Feature */
+.create-feature-input {
+  width: 200px;
+  margin: 5px 0;
+  display: inline-block;
+}
+
+/* Create Question */
+.create-question-input {
+  width: 400px;
+  margin: 5px 0;
+  display: inline-block;
+}
+
+/* Features form on Question page */
+.question-features-form > ul {
+  list-style: none;
+}
+
+.question-features-form label {
+  font-weight:normal;
 }
