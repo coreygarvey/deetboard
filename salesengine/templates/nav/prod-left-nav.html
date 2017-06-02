@@ -1,35 +1,6 @@
-<!--
-<div class="home-left-nav">
-	<ul class="sidebar-nav">
-		<li>
-			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">
-				
-				<i class="fa fa-home" aria-hidden="true"></i>
-				{{ product.title }}
-			</a>
-		</li>
-		{% if prod_features %}
-			<li class="dropdown">
-	        	<span class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i> Features <span class="caret"></span></span>
-	        	<ul class="dropdown-menu features-dropdown-menu" role="menu">
-		            {% for feature in prod_features.all %}
-		                <li>
-		                	<a href="/home/team/{{ feature.product.org.pk }}/prod/{{ feature.product.pk }}/feature/{{ feature.pk }}">{{ feature.title }}</a>
-		                </li>
-		            {% endfor %}
-	          	</ul>
-        	</li>
-        {% else %}
-        {% endif %}
-        <li>
-			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/questions">Questions</a>
-		</li>
-	</ul>
-</div>
--->
-
 <div class="home-left-nav">
 	<ul id="MainMenu" class="sidebar-nav">
+		<!--
 		<li>
 			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">
 				
@@ -37,10 +8,11 @@
 				{{ product.title }}
 			</a>
 		</li>
+		-->
 		{% if prod_features %}
 			<li>
 				<a href="#feature_collapse" class="dropdown-toggle" data-toggle="collapse">
-					<i class="fa fa-fw fa-plus"></i> 
+					<i class="fa fa-fw fa-rocket"></i> 
 					Features 
 					<span class="caret"></span>
 				</a>
@@ -49,7 +21,9 @@
 	        	<ul class="features-collapse-menu">
 		            {% for feature in prod_features.all %}
 		                <li>
-		                	<a href="/home/team/{{ feature.product.org.pk }}/prod/{{ feature.product.pk }}/feature/{{ feature.pk }}">{{ feature.title }}</a>
+		                	<a href="/home/team/{{ feature.product.org.pk }}/prod/{{ feature.product.pk }}/feature/{{ feature.pk }}">
+		                		{{ feature.title }}
+		                	</a>
 		                </li>
 		            {% endfor %}
 	          	</ul>
@@ -57,7 +31,10 @@
         {% else %}
         {% endif %}
         <li>
-			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/questions">Questions</a>
+			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/questions">
+	        	<i class="fa fa-fw fa-question"></i> 
+				Questions
+			</a>
 		</li>
 	</ul>
 </div>

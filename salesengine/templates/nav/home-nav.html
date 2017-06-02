@@ -3,50 +3,41 @@
 <nav class="navbar navbar-home navbar-fixed-top">
   <div class="home-nav-wrapper">
     <div id="navbar">
-      <div class="dropdown home-dropdown pull-left">
-        <button class="btn btn-default btn-teams" data-toggle="dropdown">
-          {% if org %}
-            {{ org.title }}
-          {% else %}
-            <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-            Teams
-          {% endif %}
-          <i class="fa fa-caret-down" aria-hidden="true"></i>
-        </button>
-
-        {% if user_orgs %}
-          <ul class="dropdown-menu teams-dropdown-menu" aria-labelledby="dropdownMenu1">
-            {% for org in user_orgs.all %}
-                <li><a href="/home/team/{{ org.pk }}">{{ org.title }}</a></li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <ul class="dropdown-menu teams-dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="#"><i class="fa fa-plus" aria-hidden="true"></i>  New Team</a></li>
-                <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i>  Find a Team</a></li>
-          </ul>
-        {% endif %}
-      </div>
-
-
-
+      <span class="home-nav-icon">
+        <i class="fa fa-cubes" aria-hidden="true"></i>
+      </span>
+      <!-- Products Dropdown -->
       {% if org %}
         <div class="dropdown home-dropdown pull-left">
           <button class="btn btn-default btn-products" data-toggle="dropdown">
-            {% if product %}
-              {{ product.title }}
-            {% else %}
-              <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-              Products
-            {% endif %}
-            <i class="fa fa-caret-down" aria-hidden="true"></i>
+            <!---->
+            <div class="btn-text-column">
+              <span class="btn-products-team">
+                {{org.title}}
+              </span>
+              <br>
+              <span class="btn-products-product">
+                {% if product %}
+                  {{ product.title }}
+                {% else %}
+                  Products
+                {% endif %}
+              </span>
+            </div>
+            <div class="btn-caret-column">
+              <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </div>
           </button>
           
           
           <ul class="dropdown-menu products-dropdown-menu" aria-labelledby="dropdownMenu1">
             {% if org_products %}
               {% for product in org_products.all %}
-                  <li><a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">{{ product.title }}</a></li>
+                  <li>
+                    <a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">
+                      {{ product.title }}
+                    </a>
+                  </li>
               {% endfor %}
             {% endif %}
                   <li>
@@ -56,6 +47,31 @@
                     </a>
                   </li>
             </ul>
+        </div>
+      {% else %}
+      <!-- Teams Dropdown -->
+        <div class="dropdown home-dropdown pull-left">
+          <button class="btn btn-default btn-teams" data-toggle="dropdown">
+            {% if org %}
+              {{ org.title }}
+            {% else %}
+              Teams
+            {% endif %}
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
+          </button>
+
+          {% if user_orgs %}
+            <ul class="dropdown-menu teams-dropdown-menu" aria-labelledby="dropdownMenu1">
+              {% for org in user_orgs.all %}
+                  <li><a href="/home/team/{{ org.pk }}">{{ org.title }}</a></li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <ul class="dropdown-menu teams-dropdown-menu" aria-labelledby="dropdownMenu1">
+                  <li><a href="#"><i class="fa fa-plus" aria-hidden="true"></i>  New Team</a></li>
+                  <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i>  Find a Team</a></li>
+            </ul>
+          {% endif %}
         </div>
       {% endif %}
 
