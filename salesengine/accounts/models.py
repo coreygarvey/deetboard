@@ -95,13 +95,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
 		Sends an email to this User.
 		"""
 		email = self.email
-		print "email: "
-		print email
-		print subject
-		print message
-		print from_email
-		print self.email
-		print html_message
 		send_mail(subject, message, from_email, [self.email], 
 					fail_silently=True, html_message=html_message)
 		print "after send"

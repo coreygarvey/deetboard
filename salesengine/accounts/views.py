@@ -676,8 +676,6 @@ class AccountDetailApi(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                             IsAdminOrReadOnly,)
 
-
-
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """
     Given a valid activation key, activate the user's
