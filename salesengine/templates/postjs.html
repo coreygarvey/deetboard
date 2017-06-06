@@ -6,3 +6,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript" src="{% static '/js/annotorious.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/js/anno-psql-plugin.js' %}"></script>
+<script>
+    anno.addPlugin('PSQL', { base_url: 'http://127.0.0.1:8000/annotations/' });
+</script>

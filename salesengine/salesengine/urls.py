@@ -33,6 +33,8 @@ from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView
 from products.views import ProductCreateView, ProductView, FeatureCreateView, FeatureView
 from questions.views import QuestionCreateView, QuestionView, QuestionListView
 
+from annotations.views import annotations
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^orgs/', include('orgs.urls'), name="org"),
@@ -222,6 +224,11 @@ urlpatterns = [
     ),
 
     #url(r'^join_org/$', start),
+    # Annotations
+    url(r'^annotations/annotation/$', 
+        annotations,
+        name = 'annotations'
+    ),
 
 
 ]

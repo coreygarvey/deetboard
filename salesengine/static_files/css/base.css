@@ -265,7 +265,11 @@ h1 {
 
 
 /* Home area */
-.home-dropdown {
+.home-dropdown-teams {
+  margin: 10px;
+}
+
+.home-dropdown-products {
   margin: 4px 10px;
 }
 
@@ -273,7 +277,7 @@ h1 {
   float:left;
   font-size: 26px;
   height: 55px;
-  padding: 20px 0 0 5px;;
+  padding: 18px 0 0 5px;;
 }
 
 .products-dropdown-menu, 

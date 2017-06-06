@@ -8,7 +8,7 @@
       </span>
       <!-- Products Dropdown -->
       {% if org %}
-        <div class="dropdown home-dropdown pull-left">
+        <div class="dropdown home-dropdown home-dropdown-products pull-left">
           <button class="btn btn-default btn-products" data-toggle="dropdown">
             <!---->
             <div class="btn-text-column">
@@ -50,7 +50,7 @@
         </div>
       {% else %}
       <!-- Teams Dropdown -->
-        <div class="dropdown home-dropdown pull-left">
+        <div class="dropdown home-dropdown home-dropdown-teams pull-left">
           <button class="btn btn-default btn-teams" data-toggle="dropdown">
             {% if org %}
               {{ org.title }}
