@@ -3,7 +3,7 @@
 ## Objective
 SalesEngine connects salespeople with those within their company that are knowledgable about the software.
 
-To use, head to sales.coreygarvey.com and create a new team. Create a product, add features, and upload screenshots to improve the discussion.
+Head to [sales.coreygarvey.com](http://sales.coreygarvey.com) and create a new team. Create a product, add features, and upload screenshots to improve the discussion.
 
 ## Technologies
 * Django
