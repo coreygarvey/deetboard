@@ -151,7 +151,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 
-
-STATICFILES_DIRS = (os.path.join(BASE, "static"),)
+STATICFILES_DIRS = (os.path.join(BASE, "static_files"),)
+STATIC_ROOT = "/home/ec2-user/salesengine/salesengine/static/"
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 STATIC_URL = "/static/"
