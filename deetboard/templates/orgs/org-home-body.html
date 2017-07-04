@@ -1,0 +1,29 @@
+<div class="org-home-body">
+    <div class="title">
+        <h2>{{ org.title }}</h2>
+    </div>
+
+    <p>Welcome {{ user.first_name }} to {{ org.title }}</p>
+
+    Sales Engine is here to get your team on track.
+
+    {% if org_products %}
+    </br>
+    Choose one of your team's products:
+      <ul>
+        {% for product in org_products.all %}
+            <li><a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">{{ product.title }}</a></li>
+        {% endfor %}
+      </ul>
+      <br>
+      <a href="/home/team/{{ org.pk }}/create-product/">Create a new product</a>
+    {% else %}
+	</br>
+	</br>
+    <div>
+    	<a href="/home/team/{{ org.pk }}/create-product/">Create a new product</a>
+    </div>
+    {% endif %}
+
+
+</div>

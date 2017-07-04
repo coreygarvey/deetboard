@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Send Invitations{% endblock %}
+
+{% block nav %}{% include "nav/front-nav.html" %}{% endblock %}
+
+{% block content %}
+    <div id="send-invites-body">
+	    <div class="title">
+            <h1>Invitations</h1>
+        </div>
+	    <form method="post" action="">{% csrf_token %}
+	        {% render_field form.invite1 placeholder="Email" class+="form-control invite-input" %}
+	        {% render_field form.invite2 placeholder="Email" class+="form-control invite-input" %}
+	        {% render_field form.invite3 placeholder="Email" class+="form-control invite-input" %}
+	        
+	        {% if form.inviteEmail %}
+	        <div id="checkbox">
+	        	{% render_field form.inviteEmail class+="invite-checkbox" type+="checkbox" %}
+	        	<span id="checkbox-text">
+	        		Check box to allow anyone with <span id="email-domain">{{ domain }}</span> email address to join the team.
+	        	</span>
+	        </div>
+	        {% endif %}
+			</br>
+	       	<input type="submit" class="btn btn-main" value="Send Invites" />
+
+	    </form>
+	    <a href="/home">Skip >> </a>
+	</div>
+{% endblock %}

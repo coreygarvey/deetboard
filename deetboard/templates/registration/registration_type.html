@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Registration Type{% endblock %}
+
+{% block nav %}{% include "nav/front-nav.html" %}{% endblock %}
+
+{% block content %}
+    <h3>Select Registration Type</h3>
+    <table>
+    	<tr>
+    		<td>New Organization</td>
+    		<td>Join Organization</td>
+    	</tr>
+    	<tr>
+    		<td>
+    			<a href="/new_org/">New Org</a>
+    		</td>
+    		<td>
+    			<a href="/find_org/">Find Org</a>
+    		</td>
+    	</tr>
+    </table>
+{% endblock %}

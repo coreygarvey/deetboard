@@ -1,0 +1,26 @@
+{% load widget_tweaks %}
+<div class="question-home-body">
+    
+    <div class="title">
+        <h2>{{ question.text }}</h2>
+    </div>
+
+	<div>
+	{% for feature in question_features.all %}
+		<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">{{ feature.title }}</a>
+	{% endfor %}
+	
+
+	<h3>Add Features</h3>
+
+	<form method="post" class="question-features-form">{% csrf_token %}
+	    {% render_field form.features class+="question-features-input" %}
+	    <input type="submit" class="btn btn-main" value="Update Features" />
+	</form>
+
+
+	</div>
+
+
+
+</div>

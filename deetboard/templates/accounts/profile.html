@@ -1,0 +1,29 @@
+{% extends "../home.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Profile{% endblock %}
+
+{% block subnav %}{% endblock %}
+
+
+{% block content %}
+
+
+    
+    
+    <div class="container">
+        <div class="row">
+
+            {% include "./profile-left-nav.html" %}
+            
+            {% include "./profile-body.html" %}
+
+        </div>
+    </div>
+
+
+
+
+    
+{% endblock %}
