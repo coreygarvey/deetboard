@@ -1,0 +1,3 @@
+We couldn't find your team, but you can sign up by clicking the link below.
+
+http://{{ site.domain }}{% url 'activate' activation_key %}

@@ -1,0 +1,28 @@
+<div class="home-left-nav">
+	<ul class="sidebar-nav">
+		<li>
+			<!--<i class="fa fa-users" aria-hidden="true"></i>-->
+			<a href="/home/team/{{ org.pk }}">{{ org.title }}</a>
+		</li>
+		{% if org_products %}
+			<li>
+				<a href="#feature_collapse" class="dropdown-toggle" data-toggle="collapse">
+					<!--<i class="fa fa-fw fa-cubes"></i>-->
+					Products 
+					<span class="caret"></span>
+				</a>
+			</li>
+			<div class="collapse" id="feature_collapse">
+	        	<ul class="products-collapse-menu">
+		            {% for product in org_products.all %}
+		                <li>
+		                	<a href="/home/team/{{ product.org.pk }}/prod/{{ product.pk }}">{{ product.title }}</a>
+		                </li>
+		            {% endfor %}
+	          	</ul>
+        	</div>
+        {% else %}
+        {% endif %}
+
+	</ul>
+</div>

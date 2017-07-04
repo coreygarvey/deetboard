@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Registration Complete{% endblock %}
+
+{% block nav %}{% include "nav/front-nav.html" %}{% endblock %}
+
+{% block content %}
+    <div id="email-sent-body">
+        <div class="title">
+            <h1>Email Sent</h1>
+        </div>
+	    <a href="/product/">Learn more about DeetBoard</a>
+	</div>
+{% endblock %}
