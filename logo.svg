@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="193.46489"
-     inkscape:cy="814.66534"
+     inkscape:zoom="3.959798"
+     inkscape:cx="158.88639"
+     inkscape:cy="808.6577"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -55,26 +55,41 @@
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:30.72229958px;line-height:80.00000119%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#e5ebf6;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+       style="font-style:normal;font-weight:normal;font-size:30.72229958px;line-height:80.00000119%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#e5ebf6;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="93.20726"
        y="277.15186"
        id="text3336"
        sodipodi:linespacing="80.000001%"
-       inkscape:export-filename="/Users/coreygarvey/Documents/Projects/salesengine_project/salesengine/static/home-nav-logo.png"
+       inkscape:export-filename="/Users/coreygarvey/Documents/Projects/salesengine_project/deetboard/static_files/landing-nav-logo-db.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3338"
          x="93.20726"
          y="277.15186"
-         style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:26.88171959px;line-height:80.00000119%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;letter-spacing:-0.91429567px;writing-mode:lr-tb;text-anchor:start;fill:#e5ebf6;fill-opacity:1;"><tspan
-           style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:26.88171959px;line-height:80.00000119%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;letter-spacing:-0.91429567px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1"
-           id="tspan3350">S<tspan
-   style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:20.00021744px;line-height:80.00000119%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1"
-   id="tspan3377">ALES</tspan></tspan><tspan
-           style="fill:#afc6e9"
-           id="tspan4182">E</tspan><tspan
-           style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:20.00021744px;line-height:80.00000119%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#afc6e9;fill-opacity:1"
-           id="tspan3379">NGINE</tspan></tspan></text>
+         style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:26.88171959px;line-height:80.00000119%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;letter-spacing:-0.91429567px;writing-mode:lr-tb;text-anchor:start;fill:#3771c8;fill-opacity:1"><tspan
+           style="fill:#214478;fill-opacity:1"
+           id="tspan4141">Deet</tspan><tspan
+           style="fill:#4b7fce;fill-opacity:1"
+           id="tspan4146">Board</tspan></tspan></text>
+    <text
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/Users/coreygarvey/Documents/Projects/salesengine_project/deetboard/static_files/landing-nav-logo-db.png"
+       sodipodi:linespacing="80.000001%"
+       id="text4143"
+       y="225.63408"
+       x="99.520714"
+       style="font-style:normal;font-weight:normal;font-size:30.72229958px;line-height:80.00000119%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#e5ebf6;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:26.88171959px;line-height:80.00000119%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;letter-spacing:-0.91429567px;writing-mode:lr-tb;text-anchor:start;fill:#e5ebf6;fill-opacity:1"
+         y="225.63408"
+         x="99.520714"
+         id="tspan4145"
+         sodipodi:role="line"><tspan
+           style="fill:#ffffff;fill-opacity:0.94117647"
+           id="tspan4147">Deet</tspan><tspan
+           id="tspan4149"
+           style="fill:#afc6e9">Board</tspan></tspan></text>
   </g>
 </svg>
