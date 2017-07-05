@@ -60,6 +60,10 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     date_joined = models.DateTimeField(auto_now_add=True)
     orgs = models.ManyToManyField('orgs.Org', related_name='accounts')
+
+    primary_org = models.ForeignKey('orgs.Org', on_delete=models.CASCADE, null=True)
+
+
     email = models.EmailField(
     	verbose_name="email address",
     	max_length=255,
