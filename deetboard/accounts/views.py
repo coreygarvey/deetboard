@@ -199,6 +199,9 @@ class ActivationView(UpdateView):
             if org_id is not None:
                 org = Org.objects.get(id=org_id)
                 updated_user.orgs.add(org)
+                updated_user.primary_org = org
+                print "primary_org set"
+                updated_user.save()
             signals.user_activated.send(
                 sender=self.__class__,
                 user=activated_user,
