@@ -52,6 +52,10 @@ class FrontOrgCreateView(OrgCreateView):
         current_user = self.request.user
         current_user.save()
         current_user.orgs.add(org)
+        #print current_user.orgs.count()
+        if current_user.primary_org is None:
+            current_user.primary_org = org
+            current_user.save()
         return reverse('new_org_invitation_front',args=(self.object.id,))
 
 class HomeOrgCreateView(OrgCreateView):

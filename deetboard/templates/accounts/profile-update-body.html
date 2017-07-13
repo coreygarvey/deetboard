@@ -10,6 +10,8 @@
 	</br>
 	<form method="post" action="">
 		{% csrf_token %}
+		
+		{% render_field form.primary_org placeholder="Primary Org" class+="form-control activate-input" %}
 
 	    {% render_field form.username placeholder="Username" class+="form-control activate-input" %}
 

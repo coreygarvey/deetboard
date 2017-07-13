@@ -110,7 +110,7 @@ class MyActivationForm(ModelForm):
 
 class ProfileUpdateForm(ModelForm):
     """
-    Form for registering a new user account.
+    Form for updating a user profile.
     Validates that the requested username is not already in use, and
     requires the password to be entered twice to catch typos.
     Subclasses should feel free to add any additional validation they
@@ -132,6 +132,7 @@ class ProfileUpdateForm(ModelForm):
             'first_name',
             'last_name',
             'password',
+            'primary_org',
         ]
 
 
