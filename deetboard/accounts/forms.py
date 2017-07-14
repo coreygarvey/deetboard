@@ -8,6 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm, Form
 
 from models import Account
+from orgs.models import *
 
 from . import validators
 
@@ -119,10 +120,13 @@ class ProfileUpdateForm(ModelForm):
     will make use of it to create inactive user accounts.
     """
     password = forms.CharField(widget=forms.PasswordInput)
-    
+
+
     def __init__(self, *args, **kwargs):
         super(ProfileUpdateForm, self).__init__(*args, **kwargs)
         #eeeself.fields['username'].widget.attrs['placeholder'] = "testing"
+        if self.instance:
+            self.fields['primary_org'].queryset = Org.objects.filter(accounts = self.instance)
 
     class Meta:
         model = Account
