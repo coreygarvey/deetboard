@@ -69,8 +69,11 @@ annotorious.plugin.PSQL.prototype._loadAnnotations = function(anno) {
   var self = this;
   jQuery.getJSON(this._STORE_URI + '_search?query=*:*&size=1000', function(data) {
     try {
+      
       jQuery.each(data.hits.hits, function(idx, hit) {
         var annotation = hit['_source'];
+        console.log("Load em up baby");
+        console.log(annotation);
         annotation.id = hit['_id'];
         
         if (jQuery.inArray(annotation.id, self._annotations) < 0) {
@@ -97,6 +100,8 @@ annotorious.plugin.PSQL.prototype._create = function(annotation) {
   var self = this;
   console.log("_create");
   console.log(this);
+  console.log("Another!");
+  console.log(JSON.stringify(annotation));
   jQuery.post(this._STORE_URI + 'annotation/',  JSON.stringify(annotation), function(response) {
     console.log("response");
     console.log(response);

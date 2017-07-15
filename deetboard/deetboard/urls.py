@@ -33,7 +33,7 @@ from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView
 from products.views import ProductCreateView, ProductView, FeatureCreateView, FeatureView
 from questions.views import QuestionCreateView, QuestionView, QuestionListView
 
-from annotations.views import annotations
+from annotations.views import annotations, annotation_search
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -228,6 +228,11 @@ urlpatterns = [
     url(r'^annotations/annotation/$', 
         annotations,
         name = 'annotations'
+    ),
+
+    url(r'^annotations/_search$', 
+        annotation_search,
+        name = 'annotation_search'
     ),
 
 

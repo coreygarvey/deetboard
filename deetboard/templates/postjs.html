@@ -9,4 +9,24 @@
 <script type="text/javascript" src="{% static '/js/anno-psql-plugin.js' %}"></script>
 <script>
     anno.addPlugin('PSQL', { base_url: 'http://127.0.0.1:8000/annotations/' });
+
+    
+    var myAnnotation = {
+	    /** The URL of the image where the annotation should go **/
+	    src : "http://127.0.0.1:8000/static/photos/YosemiteProfile.jpg",
+
+	    /** The annotation text **/
+	    text : 'My annotation',
+
+	    /** The annotation shape **/
+	    shapes : [{
+	        /** The shape type **/
+	        type : 'rect',
+
+	        /** The shape geometry (relative coordinates) **/
+	        geometry : { x : 0.5, y: 0.4, width : 0.4, height: 0.3 }
+	    }]
+	}
+	console.log(myAnnotation);
+	anno.addAnnotation(myAnnotation);
 </script>
