@@ -156,3 +156,6 @@ STATIC_ROOT = "/home/ec2-user/salesengine/salesengine/static/"
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 STATIC_URL = "/static/"
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE, 'media')

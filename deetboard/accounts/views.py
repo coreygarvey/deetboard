@@ -706,6 +706,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         password = form.cleaned_data['password']
         updated_user.set_password(password)
         updated_user.save()
+
         # Connect user with org
         """
         if org_id is not None:
@@ -721,6 +722,9 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         success_url = self.get_success_url()
         print "current_user"
         print self.request.user
+
+        print self.request.FILES['profile_pic']
+
         login(self.request, updated_user)
         try:
             to, args, kwargs = success_url

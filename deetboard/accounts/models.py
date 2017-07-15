@@ -80,6 +80,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
+    profile_pic = models.FileField(upload_to='profile_pics/')
+
     objects = AccountManager()
 
     USERNAME_FIELD = 'email'

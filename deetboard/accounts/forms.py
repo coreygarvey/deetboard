@@ -120,7 +120,7 @@ class ProfileUpdateForm(ModelForm):
     will make use of it to create inactive user accounts.
     """
     password = forms.CharField(widget=forms.PasswordInput)
-
+    profile_pic = forms.FileField()
 
     def __init__(self, *args, **kwargs):
         super(ProfileUpdateForm, self).__init__(*args, **kwargs)
@@ -137,6 +137,7 @@ class ProfileUpdateForm(ModelForm):
             'last_name',
             'password',
             'primary_org',
+            'profile_pic',
         ]
 
 
