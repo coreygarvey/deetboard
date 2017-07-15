@@ -1,6 +1,12 @@
+html{
+  position: relative;
+  height: 100%;
+}
+
 body {
   background-color: rgb(250,250,250);
   padding-top:61px;
+  min-height:100%;
 }
 
 h1 {
@@ -221,11 +227,26 @@ h1 {
   margin-bottom: 3px;
 }
 
-/* Activate form */
+/* Activate Form */
 .activate-input {
   width: 200px;
   margin: 5px 0;
   display: block;
+}
+
+/* Update Profile Form */
+.update-input {
+  width: 200px;
+  margin: 5px 0;
+  display: inline-block;
+}
+
+.update-label{
+  width: 20%;
+}
+
+.update-field{
+
 }
 
 /* Create team */
@@ -583,6 +604,7 @@ box-shadow: 0px 0px 2px #999;
 .home-wrapper {
   padding-left: 220px;
   overflow-x: hidden;
+  height:100%;
 }
 
 .home-body, 
@@ -592,12 +614,17 @@ box-shadow: 0px 0px 2px #999;
 .question-home-body {
   min-width: 700px;
   width: 97%;
+  min-height: 94.5%;
   margin: 15px;
-  height: 94.5%;
   padding: 20px;
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0px 2px 6px #ccc;
+  flex-grow: 1;
+}
+
+.home-body-row{
+  height:100%;
 }
 
 /* Profile */
@@ -606,6 +633,13 @@ box-shadow: 0px 0px 2px #999;
   display: inline-block;
 }
 
+/* Update Profile */
+.profile-update{
+  height:100%;
+}
+.profile-update-submit{
+  margin: 20px 0 0 20%;
+}
 
 /* Create Product */
 .create-product-input {
