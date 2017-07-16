@@ -190,16 +190,17 @@ class FeatureView(TemplateView):
 
         # Get annotations for the first screenshot
         # TODO: Enable multiple screenshots and pass all anotations
-        screenshot = feature_screenshots[0]
-        annotations = []
-        annotationsSet = Annotation.objects.filter(screenshot = screenshot)
-        # Serialize each annotation
-        for annotation in annotationsSet:
-            serializedAnno = serializers.serialize('json', [ annotation, ])
-            annotations.append(serializedAnno)
-        # Json encoding
-        annotations_json = json.dumps(annotations, cls=DjangoJSONEncoder)
-        context['annotations'] = annotations_json
+        if(len(feature_screenshots) > 0):
+            screenshot = feature_screenshots[0]
+            annotations = []
+            annotationsSet = Annotation.objects.filter(screenshot = screenshot)
+            # Serialize each annotation
+            for annotation in annotationsSet:
+                serializedAnno = serializers.serialize('json', [ annotation, ])
+                annotations.append(serializedAnno)
+            # Json encoding
+            annotations_json = json.dumps(annotations, cls=DjangoJSONEncoder)
+            context['annotations'] = annotations_json
 
         return context
 
