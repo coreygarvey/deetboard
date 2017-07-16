@@ -9,10 +9,14 @@ from forms import ProductForm, FeatureForm, FeatureScreenshotForm
 from orgs.models import Org
 from questions.models import Question
 from screenshots.models import Screenshot
+from annotations.models import Annotation
 
 from django.http import HttpResponse
 from django.views import View
 import services
+
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -181,6 +185,26 @@ class FeatureView(TemplateView):
         context['prod_features'] = product_features
         context['questions'] = questions
         context['screenshots'] = feature_screenshots
+
+        annotations = []
+        print "in FeatureView"
+        print feature_screenshots
+        for screenshot in feature_screenshots:
+            print screenshot.image
+            print screenshot.admins
+            annotations.append(screenshot.title)
+
+
+
+        annotationObject = Annotation.objects.filter(screenshot = screenshot).values_list('src', 'text', 'context', 'shapeType', 'style', 'x_val', 'y_val', 'width', 'height')
+        print annotationObject
+        annotation_json = json.dumps(list(annotationObject), cls=DjangoJSONEncoder)
+        print annotation_json
+
+
+        #Price.objects.filter(product=product).values_list('price','valid_from')
+        #prices_json = json.dumps(list(prices), cls=DjangoJSONEncoder)
+
         return context
 
     def get_user(self, username):        
