@@ -803,3 +803,38 @@ class ProfileView(TemplateView):
             return user
         except User.DoesNotExist:
             return None
+
+class ProfilePublicView(TemplateView):
+    """
+    View any User's Profile
+    """
+    disallowed_url = 'registration_disallowed'
+    template_name = "accounts/profile-public.html"
+
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(ProfilePublicView, self).get_context_data(**kwargs)
+        
+        user = self.request.user
+        profile_user_pk = self.kwargs['pk']
+        profile_user = Account.objects.get(pk=profile_user_pk)
+
+        profile_user_orgs = profile_user.orgs.all()
+        context['user'] = user
+        context['profile_user'] = profile_user
+        context['profile_user_orgs'] = profile_user_orgs
+        return context
+
+    def get_user(self, username):        
+        #Given the verified username, look up and return the
+        #corresponding user account if it exists, or ``None`` if it
+        #doesn't.
+        User = get_user_model()
+        lookup_kwargs = {
+            User.USERNAME_FIELD: username,
+        }
+        try:
+            user = User.objects.get(**lookup_kwargs)
+            return user
+        except User.DoesNotExist:
+            return None

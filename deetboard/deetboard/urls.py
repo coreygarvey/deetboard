@@ -26,7 +26,7 @@ from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActiva
 
 from views import home
 from accounts.views import register, register_success, logout_page, custom_login
-from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, HomeInvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView
+from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, HomeInvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView, ProfilePublicView
 
 from views import IndexView
 from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView
@@ -162,8 +162,14 @@ urlpatterns = [
         name = 'profile_update'
     ),
 
+    url(r'^home/profile/(?P<pk>\d+)/$', 
+        ProfilePublicView.as_view(
+            ),
+        name = 'profile_public'
+    ),
+
     # Team Home
-    url(r'^home/team/(?P<pk>\d+)/$$', 
+    url(r'^home/team/(?P<pk>\d+)/$', 
         OrgHomeView.as_view(
             ),
         name = 'org_home'

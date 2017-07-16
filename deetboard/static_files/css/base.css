@@ -640,10 +640,22 @@ box-shadow: 0px 0px 2px #999;
 
 }
 
-.profile-details{
+
+.profile-label{
+  font-size: 12px;
+  font-weight: normal;
+  color: #777;
+}
+
+.profile-details-table{
   padding: 10px;
   font-size: 14px;
-  color: #333;
+  font-weight: bold;
+  color: #444;
+}
+.profile-details-table td{
+  padding: 3px;
+  padding-left: 5px;
 }
 
 /* Update Profile */
