@@ -632,6 +632,19 @@ box-shadow: 0px 0px 2px #999;
   padding: 20px;
   display: inline-block;
 }
+.profile-image{
+  padding-top:2%;
+}
+
+.profile-title{
+
+}
+
+.profile-details{
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+}
 
 /* Update Profile */
 .profile-update{

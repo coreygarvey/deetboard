@@ -1,14 +1,23 @@
 {% load static %}
 
 <div class="home-body">
-    <div class="title">
-        <h2>{{ user.username }}</h2>
-    </div>
+    <div class="container">
+		<div class="row">
+			<div class="col-md-3 profile-image">
+				<img src="{% get_media_prefix %}{{ user.profile_pic }}" style="height:150px; width:150px;">
+				<br>
+    			<a href="/home/profile/update">Update Your Profile</a>
+			</div>
+			<div class="col-md-4 profile-title">
+				<h2>{{ user.first_name }} {{ user.last_name }}</h2>
+        		
+        		<div class="profile-details">
+					{{ user.username }}
+        		</div>
+			</div>
+		</div>
+	</div>
 
-    <p>Welcome {{ user.first_name }}  </p>
-    <img src="{% get_media_prefix %}{{ user.profile_pic }}" style="height:150px; width:150px;">
     
-    <br>
-    <a href="/home/profile/update">Update Your Profile</a>
 
 </div>

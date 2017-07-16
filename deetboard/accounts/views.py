@@ -722,10 +722,6 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         """
         # Determine next move based on account's org
         success_url = self.get_success_url()
-        print "current_user"
-        print self.request.user
-
-        print self.request.FILES['profile_pic']
 
         login(self.request, updated_user)
         try:
