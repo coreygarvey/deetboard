@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'feature_lists',
     'screenshots',
     'questions',
+    'annotations',
 ]
 SITE_ID = 1
 
