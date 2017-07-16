@@ -11,6 +11,7 @@ class Question(TimeStampedModel):
     features = models.ManyToManyField('products.Feature', related_name='questions')
     user_asking = models.ForeignKey('accounts.Account', related_name='questions_asked')
     skills = models.ManyToManyField('orgs.Skill', related_name='questions')
+    screenshots = models.ManyToManyField('screenshots.Screenshot', related_name='questions')
     
     def __str__(self):
         return "%s" % (self.text)

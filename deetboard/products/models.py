@@ -23,8 +23,7 @@ class Feature(models.Model):
     engagement_lists = models.ManyToManyField('feature_lists.EngagementList', related_name='features')
     top_lists = models.ManyToManyField('feature_lists.TopList', related_name='features')
     skills = models.ManyToManyField('orgs.Skill', related_name='features')
-
-    screenshots = models.ManyToManyField('screenshots.Screenshot', related_name='screenshots')
+    screenshots = models.ManyToManyField('screenshots.Screenshot', related_name='features')
 
 
     def __unicode__(self):
