@@ -5,6 +5,7 @@ import json
 import re
 from models import Annotation
 from screenshots.models import Screenshot
+from django.utils.safestring import mark_safe
 
 # Create your views here.
 @csrf_exempt
@@ -111,6 +112,7 @@ def annotation_search(request):
 		hits = {};
 		hits['hits'] = annotations;
 		returnData['hits'] = hits;
+		#returnData['hits'] = []
 		print returnData;
 		return JsonResponse(returnData);
 		

@@ -1,17 +1,19 @@
 /**
- * A simple storage connector plugin to the ElasticSearch REST interface.
+ * A simple storage connector plugin to the PSQL.
  *
  * Note: the plugin requires jQuery to be linked into the host page.
  *
- * THIS PLUGIN IS FOR DEMO PURPOSES ONLY - DON'T USE IN A PRODUCTION
- * ENVIRONMENT.
  */
 annotorious.plugin.PSQL = function(opt_config_options) {
   /** @private **/
   this._STORE_URI = opt_config_options['base_url'];
 
+  this._MEDIA_URI = opt_config_options['media_url'];
+
   /** @private **/
-  this._annotations = [];
+  //this._annotations = [];
+
+  this._annotations = opt_config_options['annotations']
   
   /** @private **/
   this._loadIndicators = [];
@@ -31,7 +33,7 @@ annotorious.plugin.PSQL.prototype.initPlugin = function(anno) {
   anno.addHandler('onAnnotationRemoved', function(annotation) {
     self._delete(annotation);
   });
-  
+
   self._loadAnnotations(anno);
 }
 
@@ -67,6 +69,57 @@ annotorious.plugin.PSQL.prototype._showError = function(error) {
 annotorious.plugin.PSQL.prototype._loadAnnotations = function(anno) {
   // TODO need to restrict search to the URL of the annotated
   var self = this;
+
+  console.log("in _loadAnnotations")
+  for (i = 0; i < self._annotations.length; i++) { 
+    var keyNames = Object.keys(self._annotations[i]);
+    for (var i in keyNames) {
+         console.log(i);
+    }
+  }
+  console.log("Build annotation")
+  
+  var annotationFields = self._annotations[0]["fields"]
+  console.log("annotation fields")
+  console.log(annotationFields)
+  var shapes = [];
+  var shape1 = {};
+  shape1['type'] = annotationFields["shapeType"];
+  
+  rectGeometry = {};
+  rectGeometry["x"] = annotationFields["x_val"];
+  rectGeometry["y"] = annotationFields["y_val"];;
+  rectGeometry["width"] = annotationFields["width"];;
+  rectGeometry["height"] = annotationFields["height"];;
+  
+  shape1['geometry'] = rectGeometry;
+  
+  shape1['style'] = annotationFields["style"];;
+  shapes.push(shape1);
+  console.log(shapes);
+  returnData = {};
+  
+  annotation1 = {};
+  annotation1['src'] = this._MEDIA_URI + annotationFields["src"];;
+  annotation1['shapes'] = shapes;
+  annotation1['context'] = annotationFields["context"];;
+  annotation1['text'] = annotationFields["text"];;
+
+  annotation1Object = {};
+  annotation1Object['_id'] = 1;
+  annotation1Object['_source'] = annotation1;
+
+  annotations=[];
+  annotations.push(annotation1Object);
+  hits = {};
+  hits['hits'] = annotations;
+  returnData['hits'] = hits;
+  console.log("annotations for use: ");
+  console.log(annotation1);
+  anno.addAnnotation(annotation1);
+  
+  
+
   jQuery.getJSON(this._STORE_URI + '_search?query=*:*&size=1000', function(data) {
     try {
       
@@ -92,6 +145,8 @@ annotorious.plugin.PSQL.prototype._loadAnnotations = function(anno) {
     });
   });
 }
+
+
 
 /**
  * @private

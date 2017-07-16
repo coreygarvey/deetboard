@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
+from django.utils.safestring import mark_safe
 from models import Product, Feature, Link
 from serializers import ProductSerializer, FeatureSerializer, LinkSerializer
 from rest_framework import generics
@@ -17,6 +18,7 @@ import services
 
 import json
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core import serializers
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -187,23 +189,27 @@ class FeatureView(TemplateView):
         context['screenshots'] = feature_screenshots
 
         annotations = []
-        print "in FeatureView"
-        print feature_screenshots
-        for screenshot in feature_screenshots:
-            print screenshot.image
-            print screenshot.admins
-            annotations.append(screenshot.title)
+        
+        screenshot = feature_screenshots[0]
 
+        annotationsSet = Annotation.objects.filter(screenshot = screenshot)
 
+        for annotation in annotationsSet:
+            serializedAnno = serializers.serialize('json', [ annotation, ])
+            print "SERIALIZED!"
+            print serializedAnno
+            annotations.append(serializedAnno)
 
-        annotationObject = Annotation.objects.filter(screenshot = screenshot).values_list('src', 'text', 'context', 'shapeType', 'style', 'x_val', 'y_val', 'width', 'height')
-        print annotationObject
-        annotation_json = json.dumps(list(annotationObject), cls=DjangoJSONEncoder)
-        print annotation_json
+        print "Annotations list"
+        print annotations
+        #annotationObject = Annotation.objects.filter(screenshot = screenshot).values_list('src', 'text', 'context', 'shapeType', 'style', 'x_val', 'y_val', 'width', 'height')
+        #print annotationObject
+        annotation_json = json.dumps(serializedAnno, cls=DjangoJSONEncoder)
+        #print annotation_json
+        annotation_safe = mark_safe(annotation_json)
+        #print annotation_safe
+        context['annotations'] = annotation_safe
 
-
-        #Price.objects.filter(product=product).values_list('price','valid_from')
-        #prices_json = json.dumps(list(prices), cls=DjangoJSONEncoder)
 
         return context
 

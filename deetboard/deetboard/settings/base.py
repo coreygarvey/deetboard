@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'screenshots',
     'questions',
     'annotations',
+    'jsonify',
 ]
 SITE_ID = 1
 
