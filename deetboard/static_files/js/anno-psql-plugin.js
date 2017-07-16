@@ -71,52 +71,50 @@ annotorious.plugin.PSQL.prototype._loadAnnotations = function(anno) {
   var self = this;
 
   console.log("in _loadAnnotations")
+  console.log(self._annotations.length)
   for (i = 0; i < self._annotations.length; i++) { 
-    var keyNames = Object.keys(self._annotations[i]);
-    for (var i in keyNames) {
-         console.log(i);
-    }
+    console.log("Build annotation")
+    console.log(self._annotations[i][0])
+    var annotationFields = self._annotations[i][0]["fields"]
+    console.log("annotation fields")
+    console.log(annotationFields)
+    var shapes = [];
+    var shape1 = {};
+    shape1['type'] = annotationFields["shapeType"];
+    
+    rectGeometry = {};
+    rectGeometry["x"] = annotationFields["x_val"];
+    rectGeometry["y"] = annotationFields["y_val"];;
+    rectGeometry["width"] = annotationFields["width"];;
+    rectGeometry["height"] = annotationFields["height"];;
+    
+    shape1['geometry'] = rectGeometry;
+    
+    shape1['style'] = annotationFields["style"];;
+    shapes.push(shape1);
+    console.log(shapes);
+    returnData = {};
+    
+    annotation1 = {};
+    annotation1['src'] = this._MEDIA_URI + annotationFields["src"];;
+    annotation1['shapes'] = shapes;
+    annotation1['context'] = annotationFields["context"];;
+    annotation1['text'] = annotationFields["text"];;
+
+    annotation1Object = {};
+    annotation1Object['_id'] = 1;
+    annotation1Object['_source'] = annotation1;
+
+    annotations=[];
+    annotations.push(annotation1Object);
+    hits = {};
+    hits['hits'] = annotations;
+    returnData['hits'] = hits;
+    console.log("annotations for use: ");
+    console.log(annotation1);
+    anno.addAnnotation(annotation1);
   }
-  console.log("Build annotation")
   
-  var annotationFields = self._annotations[0]["fields"]
-  console.log("annotation fields")
-  console.log(annotationFields)
-  var shapes = [];
-  var shape1 = {};
-  shape1['type'] = annotationFields["shapeType"];
-  
-  rectGeometry = {};
-  rectGeometry["x"] = annotationFields["x_val"];
-  rectGeometry["y"] = annotationFields["y_val"];;
-  rectGeometry["width"] = annotationFields["width"];;
-  rectGeometry["height"] = annotationFields["height"];;
-  
-  shape1['geometry'] = rectGeometry;
-  
-  shape1['style'] = annotationFields["style"];;
-  shapes.push(shape1);
-  console.log(shapes);
-  returnData = {};
-  
-  annotation1 = {};
-  annotation1['src'] = this._MEDIA_URI + annotationFields["src"];;
-  annotation1['shapes'] = shapes;
-  annotation1['context'] = annotationFields["context"];;
-  annotation1['text'] = annotationFields["text"];;
-
-  annotation1Object = {};
-  annotation1Object['_id'] = 1;
-  annotation1Object['_source'] = annotation1;
-
-  annotations=[];
-  annotations.push(annotation1Object);
-  hits = {};
-  hits['hits'] = annotations;
-  returnData['hits'] = hits;
-  console.log("annotations for use: ");
-  console.log(annotation1);
-  anno.addAnnotation(annotation1);
   
   
 

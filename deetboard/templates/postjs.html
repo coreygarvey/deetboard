@@ -14,13 +14,21 @@
     console.log("After the first")
     var annotations = "{{annotations|jsonify|escapejs}}"	
     
-
+    var annotationsList = []
     var json_string = unescape("{{annotations | safe | escapejs}}");
 	var json_data = JSON.parse(json_string)
+    console.log("JSON STRING: ")
     console.log(json_string)
-    console.log(json_data)
-	var json_parsed = JSON.parse(json_data);
-	console.log(json_parsed)
+    console.log("JSON DATA: ")
+    console.log(json_data.length)
+    for(i=0; i<json_data.length; i++){
+    	console.log(json_data[i]);
+    	var json_parsed = JSON.parse(json_data[i]);
+    	annotationsList.push(json_parsed);
+    }
+	
+	console.log("JSON Parsed: ")
+	console.log(annotationsList)
 
     
     
@@ -30,7 +38,7 @@
     console.log("Parsed")
     console.log(annotations_json)
 
-    psql_thing = anno.addPlugin('PSQL', { base_url: 'http://127.0.0.1:8000/annotations/', media_url: 'http://127.0.0.1:8000/media/', annotations: json_parsed });
+    psql_thing = anno.addPlugin('PSQL', { base_url: 'http://127.0.0.1:8000/annotations/', media_url: 'http://127.0.0.1:8000/media/', annotations: annotationsList });
     
     var myAnnotation = {
 	    /** The URL of the image where the annotation should go **/

@@ -205,10 +205,16 @@ class FeatureView(TemplateView):
         #annotationObject = Annotation.objects.filter(screenshot = screenshot).values_list('src', 'text', 'context', 'shapeType', 'style', 'x_val', 'y_val', 'width', 'height')
         #print annotationObject
         annotation_json = json.dumps(serializedAnno, cls=DjangoJSONEncoder)
-        #print annotation_json
+        annotation_json2 = json.dumps(annotations, cls=DjangoJSONEncoder)
+        print "Annotation json"
+        print annotation_json
+        print annotation_json2
         annotation_safe = mark_safe(annotation_json)
-        #print annotation_safe
-        context['annotations'] = annotation_safe
+        annotation_safe2 = mark_safe(annotation_json2)
+        print "Annotation safe"
+        print annotation_safe
+        print annotation_safe2
+        context['annotations'] = annotation_safe2
 
 
         return context
