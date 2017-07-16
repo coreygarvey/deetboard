@@ -9,53 +9,16 @@
 <script type="text/javascript" src="{% static '/js/annotorious.min.js' %}"></script>
 <script type="text/javascript" src="{% static '/js/anno-psql-plugin.js' %}"></script>
 <script>
-    
-
-    console.log("After the first")
-    var annotations = "{{annotations|jsonify|escapejs}}"	
-    
+        
     var annotationsList = []
-    var json_string = unescape("{{annotations | safe | escapejs}}");
-	var json_data = JSON.parse(json_string)
-    console.log("JSON STRING: ")
-    console.log(json_string)
-    console.log("JSON DATA: ")
-    console.log(json_data.length)
-    for(i=0; i<json_data.length; i++){
-    	console.log(json_data[i]);
-    	var json_parsed = JSON.parse(json_data[i]);
-    	annotationsList.push(json_parsed);
+    var annotationsJsonString = unescape("{{annotations | safe | escapejs}}");
+	var annotationsJson = JSON.parse(annotationsJsonString)
+
+    for(i=0; i<annotationsJson.length; i++){
+    	var annotationParsed = JSON.parse(annotationsJson[i]);
+    	annotationsList.push(annotationParsed);
     }
-	
-	console.log("JSON Parsed: ")
-	console.log(annotationsList)
 
+    anno.addPlugin('PSQL', { base_url: 'http://127.0.0.1:8000/annotations/', media_url: 'http://127.0.0.1:8000/media/', annotations: annotationsList });
     
-    
-    console.log("Here they are hopefully: ")
-    console.log(annotations)
-    var annotations_json = JSON.parse(annotations);
-    console.log("Parsed")
-    console.log(annotations_json)
-
-    psql_thing = anno.addPlugin('PSQL', { base_url: 'http://127.0.0.1:8000/annotations/', media_url: 'http://127.0.0.1:8000/media/', annotations: annotationsList });
-    
-    var myAnnotation = {
-	    /** The URL of the image where the annotation should go **/
-	    src : "http://127.0.0.1:8000/static/photos/YosemiteProfile.jpg",
-
-	    /** The annotation text **/
-	    text : 'My annotation',
-
-	    /** The annotation shape **/
-	    shapes : [{
-	        /** The shape type **/
-	        type : 'rect',
-
-	        /** The shape geometry (relative coordinates) **/
-	        geometry : { x : 0.5, y: 0.4, width : 0.4, height: 0.3 }
-	    }]
-	}
-	console.log(myAnnotation);
-	anno.addAnnotation(myAnnotation);
 </script>
