@@ -1,9 +1,15 @@
+{% load static %}
+
 <div class="feature-home-body">
     <div class="title">
         <h2>{{ feature.title }}</h2>
     </div>
 
     <p>{{ feature.description }}</p>
+    
+    {% for screenshot in screenshots.all %}
+    <img src="{% get_media_prefix %}{{ screenshot.image }}" style="height:300px; width:400px;" class="annotatable">
+    {% endfor %}
 
     {% if questions %}
 	 	<ul>

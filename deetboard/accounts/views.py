@@ -26,6 +26,8 @@ from core.permissions import IsAdminOrReadOnly
 from registration import signals
 from registration.views import RegistrationView as BaseRegistrationView
 
+from PIL import Image
+
 import re
 
 

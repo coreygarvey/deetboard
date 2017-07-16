@@ -649,10 +649,17 @@ box-shadow: 0px 0px 2px #999;
 }
 
 /* Create Feature */
+.create-feature-form{
+  width: 40%;
+}
 .create-feature-input {
-  width: 200px;
+  /*width: 200px;
+  display: block;*/
   margin: 5px 0;
-  display: inline-block;
+  
+}
+.feature-create-btn{
+  margin: 20px 0 0 20%;
 }
 
 /* Create Question */

@@ -27,10 +27,11 @@ class ProductForm(forms.ModelForm):
 
 class FeatureForm(forms.ModelForm):
 	title = forms.CharField(required=False, widget=forms.TextInput(attrs=dict(required=False, max_length=30)), label=_("Name"))
-	description = forms.CharField(required=False, widget=forms.TextInput(attrs=dict(required=False, max_length=200)), label=_("Description"))
+	description = forms.CharField(required=False, widget=forms.Textarea(attrs=dict(required=False, max_length=100,rows=8, cols=12)), label=_("Description"))
+
 	class Meta:
 		model = Feature
-		fields = ['title', 'description']
+		fields = ['title', 'description',]
 	
 	def __init__(self, *args, **kwargs):
 		self.request = kwargs.pop('request', None)
@@ -47,4 +48,12 @@ class FeatureForm(forms.ModelForm):
 			pass
 
 		super(FeatureForm, self).clean()
+
+class FeatureScreenshotForm(FeatureForm):
+	screenshot = forms.ImageField()
+
+	class Meta(FeatureForm.Meta):
+		fields = FeatureForm.Meta.fields + ['screenshot']
+
+
 

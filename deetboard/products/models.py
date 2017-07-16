@@ -24,6 +24,9 @@ class Feature(models.Model):
     top_lists = models.ManyToManyField('feature_lists.TopList', related_name='features')
     skills = models.ManyToManyField('orgs.Skill', related_name='features')
 
+    screenshots = models.ManyToManyField('screenshots.Screenshot', related_name='screenshots')
+
+
     def __unicode__(self):
         return u'{0}'.format(self.title)
 

@@ -5,9 +5,10 @@ from serializers import ProductSerializer, FeatureSerializer, LinkSerializer
 from rest_framework import generics
 from django.views.generic import CreateView, TemplateView
 from braces.views import LoginRequiredMixin
-from forms import ProductForm, FeatureForm
+from forms import ProductForm, FeatureForm, FeatureScreenshotForm
 from orgs.models import Org
 from questions.models import Question
+from screenshots.models import Screenshot
 
 from django.http import HttpResponse
 from django.views import View
@@ -95,7 +96,7 @@ class ProductView(TemplateView):
 
 
 class FeatureCreateView(LoginRequiredMixin, CreateView):
-    form_class = FeatureForm
+    form_class = FeatureScreenshotForm
     template_name = 'features/feature-create-home.html'
     
     def get_context_data(self, **kwargs):
@@ -125,6 +126,16 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         feature = form.save(commit=False)
         feature.save()
         feature.admins.add(self.request.user)
+
+        print "current_user"
+        print self.request.user
+        print self.request.FILES['screenshot']
+
+        screenshot = Screenshot(image=self.request.FILES['screenshot'])
+        screenshot.title = self.request.FILES['screenshot']
+        screenshot.save()
+        screenshot.admins.add(self.request.user)
+        feature.screenshots.add(screenshot)
 
         return super(FeatureCreateView, self).form_valid(form)
 
@@ -157,6 +168,9 @@ class FeatureView(TemplateView):
         user_orgs = user.orgs.all()
         org_products = org.products.all()
         product_features = product.features.all()
+
+        feature_screenshots = feature.screenshots.all()
+
         questions = Question.objects.filter(features=feature)
         context['user'] = user
         context['org'] = org
@@ -166,6 +180,7 @@ class FeatureView(TemplateView):
         context['org_products'] = org_products
         context['prod_features'] = product_features
         context['questions'] = questions
+        context['screenshots'] = feature_screenshots
         return context
 
     def get_user(self, username):        
