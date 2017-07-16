@@ -19,7 +19,7 @@ class Feature(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField()
     product = models.ForeignKey(Product, related_name='features')
-    experts = models.ManyToManyField('orgs.Expert', related_name='expert_features')
+    experts = models.ManyToManyField('accounts.Account', related_name='expert_features')
     engagement_lists = models.ManyToManyField('feature_lists.EngagementList', related_name='features')
     top_lists = models.ManyToManyField('feature_lists.TopList', related_name='features')
     skills = models.ManyToManyField('orgs.Skill', related_name='features')

@@ -154,7 +154,7 @@ USE_TZ = True
 
 
 STATICFILES_DIRS = (os.path.join(BASE, "static_files"),)
-STATIC_ROOT = "/home/ec2-user/salesengine/salesengine/static/"
+STATIC_ROOT = "/home/ec2-user/deetboard/deetboard/static/"
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 STATIC_URL = "/static/"

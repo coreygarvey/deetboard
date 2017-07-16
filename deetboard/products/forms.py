@@ -2,6 +2,7 @@ from django import forms
 from models import Product, Feature
 from django.utils.translation import ugettext_lazy as _
 import re
+from accounts.models import Account
 
 class ProductForm(forms.ModelForm):
 	title = forms.CharField(required=False, widget=forms.TextInput(attrs=dict(required=False, max_length=30)), label=_("Name"))
@@ -28,15 +29,21 @@ class ProductForm(forms.ModelForm):
 class FeatureForm(forms.ModelForm):
 	title = forms.CharField(required=False, widget=forms.TextInput(attrs=dict(required=False, max_length=30)), label=_("Name"))
 	description = forms.CharField(required=False, widget=forms.Textarea(attrs=dict(required=False, max_length=100,rows=8, cols=12)), label=_("Description"))
-
+	experts = forms.ModelMultipleChoiceField(queryset=Account.objects.all(), widget=forms.CheckboxSelectMultiple())
+	#.filter(product__name='product_name')
 	class Meta:
 		model = Feature
-		fields = ['title', 'description',]
+		fields = ['title', 'description', 'experts',]
 	
 	def __init__(self, *args, **kwargs):
 		self.request = kwargs.pop('request', None)
+		
+		# Get org_accounts to set expert choices
+		org_accounts = kwargs.pop('org_accounts', None)
+		
 		super(FeatureForm, self).__init__(*args, **kwargs)
-		print kwargs
+		
+		self.fields['experts'].queryset = org_accounts
 
 
 	def clean(self):

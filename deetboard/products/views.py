@@ -122,6 +122,13 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         context['user_orgs'] = user_orgs
         context['org_products'] = org_products
         context['prod_features'] = prod_features
+
+        all_org_accounts = org.accounts.all()
+        #print "all_org_accounts"
+        #print all_org_accounts
+        #form_class.fields["experts"].queryset = all_org_accounts
+        
+
         return context
 
     def form_valid(self, form):        
@@ -136,6 +143,8 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         print "current_user"
         print self.request.user
         print self.request.FILES['screenshot']
+        print form
+        print self.request
 
         screenshot = Screenshot(image=self.request.FILES['screenshot'])
         screenshot.title = self.request.FILES['screenshot']
@@ -147,8 +156,15 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(FeatureCreateView, self).get_form_kwargs()
+        
+        # Pass org accounts to form for experts choice
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        org_accounts = org.accounts.all()
+        
         kwargs.update({
-            'request' : self.request
+            'request' : self.request,
+            'org_accounts' : org_accounts
         })
         return kwargs
 
