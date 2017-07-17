@@ -6,7 +6,10 @@ from core.models import TimeStampedModel
 class Product(TimeStampedModel):
     admins = models.ManyToManyField('accounts.Account', related_name='products_admin')
     title = models.CharField(max_length=50)
+    description = models.TextField()
     org = models.ForeignKey('orgs.Org', related_name='products')
+
+    image = models.FileField(upload_to='product_pics/')
 
     def __str__(self):
         return "%s" % (self.title)

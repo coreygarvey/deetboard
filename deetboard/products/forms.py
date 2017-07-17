@@ -9,7 +9,10 @@ class ProductForm(forms.ModelForm):
 	title = forms.CharField(required=False, widget=forms.TextInput(attrs=dict(required=False, max_length=30)), label=_("Name"))
 	class Meta:
 		model = Product
-		fields = ['title']
+		fields = ['title', 'description', 'image']
+		widgets = {
+          'description': forms.Textarea(attrs={'rows':4}),
+        }
 	
 	def __init__(self, *args, **kwargs):
 		self.request = kwargs.pop('request', None)

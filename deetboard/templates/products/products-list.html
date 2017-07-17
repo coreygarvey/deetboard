@@ -3,15 +3,11 @@
 		
 		<div class="products-list-item">
 			<a href="/home/team/{{ org.pk }}/create-product/">
-				
-				
-				
 				<h3>
-					
-						New Product
-					
+					New Product	
 				</h3>
-				<div class="products-list-screenshot">
+
+				<div class="products-list-image">
 					<i class="fa fa-plus-square-o fa-3x" aria-hidden="true"></i>
 				</div>
 				<!--<p>{{ product.description }}</p>-->
@@ -21,18 +17,18 @@
 		{% for product in products.all %}
 		
 			<div class="products-list-item">
-				<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">
-					<!--
-					<div class="products-list-screenshot">
-						<img src="{% get_media_prefix %}{{ product.screenshot }}">
-					</div>
-					-->
+				<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">					
 					<h3>
-						
-						{{ product.title }}
-						
+						{{ product.title }}		
 					</h3>
-					<!--<p>{{ product.description }}</p>-->
+
+					<div class="products-list-image">
+						<img src="{% get_media_prefix %}{{ product.image }}">
+					</div>
+					
+					<p class="products-list-description">
+						{{ product.description }}
+					</p>
 
 				</a>
 			</div>
