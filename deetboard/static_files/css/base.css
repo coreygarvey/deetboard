@@ -738,7 +738,6 @@ box-shadow: 0px 0px 2px #999;
   height: 100%;
 }
 
-
 .products-list-item > a:hover {
   text-decoration: none;
   cursor: pointer;
@@ -748,7 +747,7 @@ box-shadow: 0px 0px 2px #999;
   margin:0 auto;
   text-align:center;
   color: #333;
-  margin: 3% 0 7%;
+  margin: 12% 0 7%;
 }
 
 .products-list-image > img{
@@ -759,14 +758,71 @@ box-shadow: 0px 0px 2px #999;
 }
 
 
-.student-view {
-    
-    margin: 10px 1.5%;
-    
-    
-    
-    
+/* Features List */
+.features-list h3{
+  color: #333;
+  font-size: 20px;
+  margin-top: 5px;
+  text-align: center;
+  font-weight: bold;
+}
 
+.features-list-item {
+  color: #333;
+  text-decoration: none;
+  font-size: 15px;
+  position: relative;
+  width: 28%;
+  float: left;
+  padding: 1% 3% 3%;
+  height: 250px;
+  background: #fff;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  box-shadow: 0px 2px 4px #ccc;
+  margin: 3% 2%;
+  transition: .5s;
+}
+
+.features-list-item:hover {
+  box-shadow: 0px 1px 4px 3px #829fc9;
+  cursor: pointer;
+}
+
+.features-list-item > a,
+.features-list-item > a:hover, 
+.features-list-item > a:active, 
+.features-list-item > a:focus {
+  color: #555;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+
+.features-list-item > a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.features-list-image{
+  margin:0 auto;
+  text-align:center;
+  color: #333;
+  margin: 12% 0 7%;
+}
+
+.features-list-image > img{
+  height: 100px;
+  width: 100px;
+  border-radius: 3px;
+  box-shadow: 0px 0px 6px #ccc;
+}
+
+.features-list-description{
+  text-align: left;
 }
 
 

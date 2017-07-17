@@ -1,0 +1,44 @@
+{% load static %}
+    <div class="row equal features-list">
+		
+		<div class="features-list-item">
+			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/create-feature/">
+				<h3>
+					New Feature
+				</h3>
+
+				<div class="features-list-image">
+					<i class="fa fa-plus-square-o fa-5x" aria-hidden="true"></i>
+				</div>
+				
+				<p class="features-list-description">
+					Upload screenshots, ask questions, and get knowledge through product features.
+				</p>
+			</a>
+		</div>
+
+		{% for feature in prod_features.all %}
+		
+			<div class="features-list-item">
+				<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">					
+					<h3>
+						{{ feature.title }}		
+					</h3>
+						
+					
+					<div class="features-list-image">
+						<img src="{% get_media_prefix %}{{ feature.screenshots.all.0.image }}">
+					</div>
+					
+					
+
+					<p class="features-list-description">
+						{{ feature.description }}
+					</p>
+
+				</a>
+			</div>
+
+		{% endfor %}
+	</div>
+
