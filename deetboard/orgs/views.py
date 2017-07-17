@@ -107,6 +107,42 @@ class OrgHomeView(TemplateView):
         except User.DoesNotExist:
             return None
 
+class OrgProductsView(TemplateView):
+    """
+    
+    """
+    template_name = "orgs/org-products.html"
+
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(OrgProductsView, self).get_context_data(**kwargs)
+        user = self.request.user
+        org_pk = self.kwargs['pk']
+        org = Org.objects.get(pk=org_pk)
+        user_orgs = user.orgs.all()
+        products = org.products.all()
+        context['user'] = user
+        context['org'] = org
+        context['user_orgs'] = user_orgs
+        context['org_products'] = products
+        return context
+
+
+
+    def get_user(self, username):        
+        #Given the verified username, look up and return the
+        #corresponding user account if it exists, or ``None`` if it
+        #doesn't.
+        User = get_user_model()
+        lookup_kwargs = {
+            User.USERNAME_FIELD: username,
+        }
+        try:
+            user = User.objects.get(**lookup_kwargs)
+            return user
+        except User.DoesNotExist:
+            return None
+
 
 
 class OrgList(generics.ListCreateAPIView):

@@ -29,8 +29,8 @@ from accounts.views import register, register_success, logout_page, custom_login
 from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, HomeInvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView, ProfilePublicView
 
 from views import IndexView
-from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView
-from products.views import ProductCreateView, ProductView, FeatureCreateView, FeatureView
+from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView, OrgProductsView
+from products.views import ProductCreateView, ProductView, FeatureCreateView, FeatureView, FeatureListView
 from questions.views import QuestionCreateView, QuestionView, QuestionListView
 
 from annotations.views import annotations, annotation_search
@@ -175,6 +175,12 @@ urlpatterns = [
         name = 'org_home'
     ),
     
+    url(r'^home/team/(?P<pk>\d+)/products/$', 
+        OrgProductsView.as_view(
+            ),
+        name = 'org_products'
+    ),
+    
 
     # Create Org
     url(r'^home/create-team/$',
@@ -207,6 +213,11 @@ urlpatterns = [
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<fpk>\d+)/$',
         FeatureView.as_view(),
         name='feature_home',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/features/$',
+        FeatureListView.as_view(),
+        name='feature_list_home',
     ),
 
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/questions/$',

@@ -7,7 +7,7 @@
         <i class="fa fa-cubes" aria-hidden="true"></i>
       </span>
       <!-- Products Dropdown -->
-      {% if org %}
+      {% if product %}
         <div class="dropdown home-dropdown home-dropdown-products pull-left">
           <button class="btn btn-default btn-products" data-toggle="dropdown">
             <!---->
@@ -17,11 +17,7 @@
               </span>
               <br>
               <span class="btn-products-product">
-                {% if product %}
                   {{ product.title }}
-                {% else %}
-                  Products
-                {% endif %}
               </span>
             </div>
             <div class="btn-caret-column">

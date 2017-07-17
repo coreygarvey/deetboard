@@ -1,0 +1,15 @@
+{% extends "../home.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}{{org.title}}{% endblock %}
+
+{% block content %}
+    
+          
+            {% include "../nav/org-left-nav.html" %}
+            
+            {% include "./org-products-body.html" %}
+
+    
+{% endblock %}

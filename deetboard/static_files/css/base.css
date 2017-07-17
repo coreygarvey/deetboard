@@ -301,6 +301,8 @@ h1 {
   padding: 18px 0 0 5px;;
 }
 
+
+
 .products-dropdown-menu, 
 .teams-dropdown-menu, 
 .products-collapse-menu,
@@ -480,6 +482,20 @@ h1 {
 .home-left-nav > ul > li:active, 
 .home-left-nav > ul > li:active:focus, 
 .home-left-nav > ul > li:focus  {
+  background-color: #dadfe7;
+  color: #214478;
+  cursor: pointer;
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+.left-nav-title{
+    font-weight: 450;
+}
+
+.left-nav-title > ul > li:hover, 
+.left-nav-title > ul > li:active, 
+.left-nav-title > ul > li:active:focus, 
+.left-nav-title > ul > li:focus  {
   background-color: #dadfe7;
   color: #214478;
   cursor: pointer;

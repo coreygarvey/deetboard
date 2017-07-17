@@ -1,36 +1,30 @@
 <div class="home-left-nav">
 	<ul id="MainMenu" class="sidebar-nav">
-		<!--
-		<li>
-			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">
+		<li class="left-nav-title">
+			<a href="/home/team/{{ org.pk }}">
 				
 				<i class="fa fa-fw fa-home" aria-hidden="true"></i>
+				{{ org.title }}
+			</a>
+		</li>
+		
+		<li class="left-nav-title">
+			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">
+				
+				<i class="fa fa-fw fa-cubes" aria-hidden="true"></i>
 				{{ product.title }}
 			</a>
 		</li>
-		-->
-		{% if prod_features %}
-			<li>
-				<a href="#feature_collapse" class="dropdown-toggle" data-toggle="collapse">
-					<i class="fa fa-fw fa-rocket"></i> 
-					Features 
-					<span class="caret"></span>
-				</a>
-			</li>
-			<div class="collapse" id="feature_collapse">
-	        	<ul class="features-collapse-menu">
-		            {% for feature in prod_features.all %}
-		                <li>
-		                	<a href="/home/team/{{ feature.product.org.pk }}/prod/{{ feature.product.pk }}/feature/{{ feature.pk }}">
-		                		{{ feature.title }}
-		                	</a>
-		                </li>
-		            {% endfor %}
-	          	</ul>
-        	</div>
-        {% else %}
-        {% endif %}
-        <li>
+		
+		
+		<li class="left-nav-title">
+			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/features" class="dropdown-toggle">
+				<i class="fa fa-fw fa-cube"></i> 
+				Features 
+			</a>
+		</li>
+
+        <li class="left-nav-title">
 			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/questions">
 	        	<i class="fa fa-fw fa-question"></i> 
 				Questions

@@ -2,14 +2,14 @@
 
 {% load widget_tweaks %}
 
-{% block title %}{{product.title}} - Questions{% endblock %}
+{% block title %}{{org.title}} - {{product.title}}{% endblock %}
 
 {% block content %}
-    
+
           
             {% include "../nav/prod-left-nav.html" %}
             
-            {% include "./question-home-body.html" %}
+            {% include "./feature-list-body.html" %}
 
     
 {% endblock %}

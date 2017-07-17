@@ -101,6 +101,47 @@ class ProductView(TemplateView):
             return None
 
 
+class FeatureListView(TemplateView):
+    """
+    
+    """
+    template_name = "features/feature-list-home.html"
+
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(FeatureListView, self).get_context_data(**kwargs)
+        user = self.request.user
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        product_pk = self.kwargs['ppk']
+        product = Product.objects.get(pk=product_pk)
+        user_orgs = user.orgs.all()
+        org_products = org.products.all()
+        prod_features = product.features.all()
+        context['user'] = user
+        context['org'] = org
+        context['product'] = product
+        context['user_orgs'] = user_orgs
+        context['prod_features'] = prod_features
+        context['org_products'] = org_products
+        #print context
+        return context
+
+    def get_user(self, username):        
+        #Given the verified username, look up and return the
+        #corresponding user account if it exists, or ``None`` if it
+        #doesn't.
+        User = get_user_model()
+        lookup_kwargs = {
+            User.USERNAME_FIELD: username,
+        }
+        try:
+            user = User.objects.get(**lookup_kwargs)
+            return user
+        except User.DoesNotExist:
+            return None
+
+
 class FeatureCreateView(LoginRequiredMixin, CreateView):
     form_class = FeatureScreenshotForm
     template_name = 'features/feature-create-home.html'

@@ -1,0 +1,24 @@
+<div class="product-home-body">
+    <div class="title">
+        <h2>{{ product.title }} - Features</h2>
+    </div>
+
+    
+	
+
+	{% if prod_features %}
+    <h4>Features</h4>
+	<ul>
+	    {% for feature in prod_features.all %}
+	        <li><a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk}}">{{ feature.title }}</a></li>
+	    {% endfor %}
+	</ul>
+    {% endif %}
+    </br>
+	</br>
+    <div>
+    	<a href="/home/team/{{org.pk}}/prod/{{product.pk}}/create-feature">Create a new feature</a>
+    </div>
+    
+
+</div>
