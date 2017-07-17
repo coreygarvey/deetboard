@@ -1,23 +1,15 @@
+
+
 <div class="org-home-body">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-2 col-md-offset-4">
             <h2>{{ org.title }}</h2>
-            <br>
-            {% if org_products %}
-                {% for product in org_products.all %}
-                    <h4><a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">{{ product.title }}</a></h4>
-                {% endfor %}
-
-                <br>
-
-            {% endif %}
-            <div>
-                <a href="/home/team/{{ org.pk }}/create-product/">Create a new product</a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            
-
         </div>
     </div>
+    {% if products %}
+            
+        {% include "../products/products-list.html" %}
+
+    {% endif %}
+
 </div>

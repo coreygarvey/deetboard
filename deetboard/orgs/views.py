@@ -88,7 +88,7 @@ class OrgHomeView(TemplateView):
         context['user'] = user
         context['org'] = org
         context['user_orgs'] = user_orgs
-        context['org_products'] = products
+        context['products'] = products
         return context
 
 
