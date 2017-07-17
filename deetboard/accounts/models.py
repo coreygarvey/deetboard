@@ -90,7 +90,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def get_full_name(self):
     	# The user identified by their email
     	#	and role
-    	return "%s %s is %s" % (self.first_name, self.last_name, self.role)
+    	return "%s %s" % (self.first_name, self.last_name)
+
+    def get_full_name_role(self):
+    	# The user identified by their email
+    	#	and role
+    	return "%s %s - %s" % (self.first_name, self.last_name, self.role)
 
     def get_short_name(self):
     	# The user identified by email

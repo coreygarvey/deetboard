@@ -22,3 +22,18 @@
     anno.addPlugin('PSQL', { base_url: 'http://127.0.0.1:8000/annotations/', media_url: 'http://127.0.0.1:8000/media/', annotations: annotationsList });
     
 </script>
+
+<script>
+
+$("form input[name='screenshot']").change(function () { 
+    // Handle the click event here
+    
+    var fullPath = $(this).val();
+    
+    var filename = fullPath.replace(/^.*[\\\/]/, '');
+
+    $("#upload-file-info").html(filename);
+});
+
+
+</script>

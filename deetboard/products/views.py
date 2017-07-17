@@ -21,6 +21,10 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
 
 
+from django.views.generic import DeleteView
+from django.http import Http404
+
+
 class ProductCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductForm
     template_name = 'products/product-create-home.html'
@@ -201,7 +205,7 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         # Pass org accounts to form for experts choice
         org_pk = self.kwargs['opk']
         org = Org.objects.get(pk=org_pk)
-        org_accounts = org.accounts.all()
+        org_accounts = org.accounts.all().only('first_name', 'last_name')
         
         kwargs.update({
             'request' : self.request,
@@ -210,7 +214,7 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def get_success_url(self):
-        return reverse('product_home', args=(self.object.product.org.id,self.object.product.id))
+        return reverse('feature_home', args=(self.object.product.org.id,self.object.product.id,self.object.id))
 
 class FeatureView(TemplateView):
     """
@@ -233,6 +237,7 @@ class FeatureView(TemplateView):
         product_features = product.features.all()
 
         feature_screenshots = feature.screenshots.all()
+        feature_experts = feature.experts.all()
 
         questions = Question.objects.filter(features=feature)
         context['user'] = user
@@ -244,6 +249,7 @@ class FeatureView(TemplateView):
         context['prod_features'] = product_features
         context['questions'] = questions
         context['screenshots'] = feature_screenshots
+        context['experts'] = feature_experts
 
         # Get annotations for the first screenshot
         # TODO: Enable multiple screenshots and pass all anotations
@@ -275,6 +281,35 @@ class FeatureView(TemplateView):
         except User.DoesNotExist:
             return None
 
+class FeatureDeleteView(DeleteView):
+    model=Feature
+    template_name = 'features/feature-delete-confirm.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(FeatureDeleteView, self).get_context_data(**kwargs)
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        product_pk = self.kwargs['ppk']
+        product = Product.objects.get(pk=product_pk)
+        context['org'] = org
+        context['product'] = product
+
+        return context
+    
+    def get_object(self, queryset=None):
+
+        """ Hook to ensure object is owned by request.user. """
+        obj = super(FeatureDeleteView, self).get_object()
+        #success_url = self.get_success_url
+        if not obj.admins.filter(pk=self.request.user.id).exists():
+            raise Http404
+        return obj
+
+    def get_success_url(self):
+        print "GET SUCCESS URL"
+        success_url = reverse('product_home', args=(self.object.product.org.id,self.object.product.id))
+        return success_url
+        
 
 
 

@@ -626,8 +626,9 @@ box-shadow: 0px 0px 2px #999;
 .home-body, 
 .org-home-body, 
 .product-home-body, 
-.feature-home-body, 
-.question-home-body {
+.feature-home-body,
+.feature-delete-body,
+.question-home-body{
   min-width: 700px;
   width: 97%;
   min-height: 94.5%;
@@ -689,9 +690,16 @@ box-shadow: 0px 0px 2px #999;
   display: inline-block;
 }
 
+/* Features List */
+.features-list{
+  list-style: none;
+  padding: 0;
+}
+
+
 /* Create Feature */
 .create-feature-form{
-  width: 40%;
+  width: 100%;
 }
 .create-feature-input {
   /*width: 200px;
@@ -700,15 +708,45 @@ box-shadow: 0px 0px 2px #999;
   
 }
 
-.feature-field > ul {
+.create-feature-form ul {
+  padding: 0;
   list-style: none;
 }
-.feature-field label {
+.create-feature-form label {
   font-weight:normal;
 }
+.create-feature-form label > input{
+  margin-right: 5px;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file .file-upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+
 
 .feature-create-btn{
-  margin: 20px 0 0 20%;
+  margin: 20px 0 0 0;
+}
+
+.feature-delete-body{
+  text-align: center;
 }
 
 /* Create Question */

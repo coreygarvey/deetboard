@@ -8,32 +8,39 @@
 	<form method="post" action="" enctype="multipart/form-data" class="create-feature-form">
 
 		{% csrf_token %}
+	
+		<div class="row">
+			<div class="col-md-6">
+				<h2>Details</h2>
+				{% render_field form.title placeholder="Feature name" class+="form-control create-feature-input" %}
+				{% render_field form.description placeholder="Feature description" class+="form-control create-feature-input" %}
+			</div>
+			<div class="col-md-6">
+				<h2>Experts</h2>
+				{% render_field form.experts placeholder="Feature experts" class+="create-feature-input feature-field" %}
+
+				<h2>Screenshot</h2>
+				
+				<label class="btn btn-default btn-file" for="feature-screenshot-selector">
+					Choose File...
+					{% render_field form.screenshot id="feature-screenshot-selector" style="display: none;" class+="file-upload" %}
+				</label>
+				
+				<div id="upload-file-info">
+					
+				</div>
+			</div>
+		</div>
+		<br>
+		
+		<div class="row">
+			<div class="col-md-6 col-md-offset-4">
+				<input type="submit" class="btn btn-main feature-create-btn" value="Create the Feature" />
+			</div>
+			
+		</div>
+		
 	    
-	    <table style="width:100%">
-	    	<tr>
-				<td class="feature-field">
-					{% render_field form.title placeholder="Feature name" class+="form-control create-feature-input" %}
-				</td> 
-			</tr>
-			<tr>
-				<td class="feature-field">
-					{% render_field form.description placeholder="Feature description" class+="form-control create-feature-input" %}
-				</td> 
-			</tr>
-
-			<tr>
-				<td class="feature-field">
-					{% render_field form.experts placeholder="Feature experts" class+="create-feature-input" %}
-				</td> 
-			</tr>
-
-			<tr>
-				<td class="feature-field">
-					{% render_field form.screenshot placeholder="Screenshot" class+="form-control update-input" %}
-				</td> 
-			</tr>
-	    </table>
-	    <input type="submit" class="btn btn-main feature-create-btn" value="Create the Feature" />
 	</form>
 
 </div>

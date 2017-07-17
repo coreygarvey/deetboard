@@ -11,7 +11,7 @@
 	{% if prod_features %}
     </br>
     Choose a feature or create a new one:
-	<ul>
+	<ul class="features-list">
 	    {% for feature in prod_features.all %}
 	        <li><a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk}}">{{ feature.title }}</a></li>
 	    {% endfor %}
