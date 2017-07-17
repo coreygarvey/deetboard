@@ -1,13 +1,41 @@
 {% load widget_tweaks %}
 <div class="question-home-body">
-	<div class="title">
-	    <h1>What's on your mind?</h1>
-	</div>
+	{% if feature %}
+		<a class="back-btn btn btn-default btn-xs" href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">
+			<i class="fa fa-arrow-left" aria-hidden="true"></i>
+			<b>{{feature.title}}</b>
+		</a>
+	{% endif %}
+	<div class="row">
+        <div class="col-md-9 col-md-offset-1">
+            <div class="new-question-title">
+			    <h1>What's on your mind?</h1>
+			</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-2">
+            {% if feature %}
+				<div class="create-question-feature">
+					Question about <b>"{{ feature.title }}"</b>?
+					<br>
+					Don't be shy, go for it
+				</div>
+			{% endif %}
+        </div>
+    </div>
+    <div class="row">
+    	<div class="col-md-6 col-md-offset-2">
+	    	<form class="question-form" method="post" action="">{% csrf_token %}
+				<textarea class="form-control create-question-input" id="id_text" max_length="30" name="text" placeholder="Question"></textarea>
+				<br>
 
-	<form method="post" action="">{% csrf_token %}
-		<textarea class="form-control create-question-input" id="id_text" max_length="30" name="text" placeholder="Question"></textarea>
+			    <input type="submit" class="btn btn-main" value="Ask!" />
+			</form>
+		</div>
+    </div>
 
-
-	    <input type="submit" class="btn btn-main" value="Ask!" />
-	</form>
+	
+	
+	
 </div>

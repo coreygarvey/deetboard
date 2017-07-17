@@ -6,8 +6,10 @@
     </div>
 
 	<div>
-	{% for feature in question_features.all %}
-		<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">{{ feature.title }}</a>
+	{% for feature in question_features.all %}	
+		<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">
+			{{ feature.title }}
+		</a>
 	{% endfor %}
 	
 
