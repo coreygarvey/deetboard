@@ -28,8 +28,19 @@
 				{% endfor %}
 			</div>
 
-			<div class="feature-questions">
-				<h4>Questions</h4>
+			<div class="feature-questions" style="height:auto;">
+				<div class="feature-questions-header">
+					<h4>Questions</h4>
+					<div class="question-ask-btn">
+					    <a class="btn btn-default btn-xs" href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/ask-a-question/">
+						{% if questions %}
+							Ask
+						{% else %}
+							Ask
+						{% endif %}
+						</a>
+					</div>
+				</div>
 				{% for question in questions.all %}
 			        <div class="feature-question">
 				        <a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/question/{{ question.pk }}">
@@ -38,15 +49,7 @@
 				    </div>
 			    {% endfor %}
 			</div>  
-		    <div class="question-ask-btn">
-			    <a class="btn btn-default btn-xs" href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/ask-a-question/">
-				{% if questions %}
-					Ask a question
-				{% else %}
-					Ask the first question
-				{% endif %}
-				</a>
-			</div>
+		    
 			
 		</div>
     </div>
