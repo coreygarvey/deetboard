@@ -16,8 +16,9 @@ from rest_framework.views import APIView
 
 from django.views.decorators.csrf import csrf_protect
 
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, DetailView
 from braces.views import LoginRequiredMixin
+from guardian.mixins import PermissionRequiredMixin
 
 import re
 
@@ -71,11 +72,13 @@ class HomeOrgCreateView(OrgCreateView):
 
 
 
-class OrgHomeView(TemplateView):
+class OrgHomeView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     """
     
     """
+    model = Org
     template_name = "orgs/org-home.html"
+    permission_required = 'orgs.view_org'
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""

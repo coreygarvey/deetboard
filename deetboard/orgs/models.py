@@ -17,6 +17,9 @@ class Org(TimeStampedModel):
     
     class Meta:
         ordering = ('title',)
+        permissions = (
+            ("view_org", "View org"),
+        )
 
 
 class Expert(TimeStampedModel):

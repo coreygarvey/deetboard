@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'questions',
     'annotations',
     'jsonify',
+    'guardian',
 ]
 SITE_ID = 1
 
@@ -114,6 +115,11 @@ EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
 
+# Adding guardian
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # this is default
+    'guardian.backends.ObjectPermissionBackend',
+)
 
 
 # Password validation
