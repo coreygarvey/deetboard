@@ -269,6 +269,8 @@ class FeatureView(TemplateView):
                     other_annotations.append(serializedAnno)
             annotations.append(expert_annotations)
             annotations.append(other_annotations)
+            print "annotations: "
+            print annotations
             # Json encoding
             annotations_json = json.dumps(annotations, cls=DjangoJSONEncoder)
             context['annotations'] = annotations_json
