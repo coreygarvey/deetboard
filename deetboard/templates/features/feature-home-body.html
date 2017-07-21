@@ -14,23 +14,27 @@
 	            <h2>{{ feature.title }}</h2>
 	            <p>{{ feature.description }}</p>
             </div>
+            <div class="btn-group" role="group" aria-label="Annotation Selection">
+			  <button type="button" id="allAnnos" class="btn btn-default">All</button>
+			  <button type="button" id="expertAnnos" class="btn btn-default">Experts</button>
+			  <button type="button" id="otherAnnos" class="btn btn-default">Others</button>
+			</div>
 			<div class="feature-screenshot">
 				<img src="{% get_media_prefix %}{{ screenshots.all.0.image }}" class="annotatable">
 			</div>
-
-
         </div>
+
         <div class="col-md-4">
 			<div class="feature-experts">
 				<h4>Experts</h4>
 				{% for expert in experts.all %}
-					<img src="{% get_media_prefix %}{{ expert.profile_pic }}" style="height:50px; width:50px;" class="expert-image" data-toggle="tooltip" title="{{ expert.first_name }} {{ expert.last_name }} - {{ expert.role }}">
+					<img src="{% get_media_prefix %}{{ expert.profile_pic }}" style="height:50px; width:50px;" id="expert-image" class="expert-image" data-toggle="tooltip" title="{{ expert.first_name }} {{ expert.last_name }} - {{ expert.role }}">
 				{% endfor %}
 			</div>
 
 			<div class="feature-questions" style="height:auto;">
 				<div class="feature-questions-header">
-					<h4>Questions</h4>
+					<h4 id="questions-header">Questions</h4>
 					<div class="question-ask-btn">
 					    <a class="btn btn-default btn-xs" href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/ask-a-question/">
 						{% if questions %}

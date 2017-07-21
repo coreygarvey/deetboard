@@ -24,10 +24,10 @@ def home(request):
     user_orgs = current_user.orgs.all()
     admin_orgs = Org.objects.filter(admin=current_user)
     primary_org = current_user.primary_org
-    '''
+    
     if primary_org:
         return redirect('org_home', pk=primary_org.id)
-    '''
+    
 
     return render_to_response(
         'home/home.html',

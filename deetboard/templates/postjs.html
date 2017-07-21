@@ -9,23 +9,42 @@
 <script type="text/javascript" src="{% static '/js/annotorious.min.js' %}"></script>
 <script type="text/javascript" src="{% static '/js/anno-psql-plugin.js' %}"></script>
 <script>
-        
+    // Annotatinos should be stored in a more programatic way to
+    //  allow for other types beyond expert and other
     var annotationsList = []
     var annotationsJsonString = unescape("{{annotations | safe | escapejs}}");
 	var annotationsJson = JSON.parse(annotationsJsonString)
 
-    for(i=0; i<annotationsJson.length; i++){
-    	var annotationParsed = JSON.parse(annotationsJson[i]);
-    	annotationsList.push(annotationParsed);
+    console.log("annotationsJson");
+    console.log(annotationsJson);
+
+    // Divide and conquer
+    var expertAnnosList = []
+    var otherAnnosList = []
+    
+    
+
+    var expertAnnos = annotationsJson[0]
+    var otherAnnos = annotationsJson[1]
+
+    for(i=0; i<expertAnnos.length; i++){
+    	var annotationParsed = JSON.parse(expertAnnos[i]);
+    	annotationsList[0].push(annotationParsed);
     }
+    annotationsList.push(expertAnnosList)
+    for(i=0; i<otherAnnos.length; i++){
+        var annotationParsed = JSON.parse(otherAnnos[i]);
+        annotationsList[0].push(annotationParsed);
+    }
+    annotationsList.push(otherAnnosList)
 
     anno.addPlugin('PSQL', { base_url: 'http://127.0.0.1:8000/annotations/', media_url: 'http://127.0.0.1:8000/media/', annotations: annotationsList });
     anno.setProperties({
       outline: 'yellow',
-      
       stroke: 'green',
-      
     });
+    // Show only expert annotations
+
     
 </script>
 

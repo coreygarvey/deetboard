@@ -256,11 +256,19 @@ class FeatureView(TemplateView):
         if(len(feature_screenshots) > 0):
             screenshot = feature_screenshots[0]
             annotations = []
+            expert_annotations = [];
+            other_annotations = [];
             annotationsSet = Annotation.objects.filter(screenshot = screenshot)
             # Serialize each annotation
             for annotation in annotationsSet:
                 serializedAnno = serializers.serialize('json', [ annotation, ])
-                annotations.append(serializedAnno)
+                # Divide expert and other annotations before JSON
+                if(annotation.admin in feature.experts.all()):
+                    expert_annotations.append(serializedAnno)
+                else:
+                    other_annotations.append(serializedAnno)
+            annotations.append(expert_annotations)
+            annotations.append(other_annotations)
             # Json encoding
             annotations_json = json.dumps(annotations, cls=DjangoJSONEncoder)
             context['annotations'] = annotations_json

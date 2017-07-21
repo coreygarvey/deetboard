@@ -13,10 +13,14 @@ annotorious.plugin.PSQL = function(opt_config_options) {
   /** @private **/
   //this._annotations = [];
 
-  this._annotations = opt_config_options['annotations']
+  this._expertAnnos = opt_config_options['annotations'][0]
+  this._otherAnnos = opt_config_options['annotations'][1]
+
+  this._allAnnos = this._expertAnnos.concat(this._otherAnnos)
   
   /** @private **/
   this._loadIndicators = [];
+
 }
 
 annotorious.plugin.PSQL.prototype.initPlugin = function(anno) {  
@@ -34,7 +38,45 @@ annotorious.plugin.PSQL.prototype.initPlugin = function(anno) {
     self._delete(annotation);
   });
 
-  self._loadAnnotations(anno);
+  annoList = this._allAnnos;
+
+  self._loadAnnotations(anno, annoList);
+
+  self._setHooks(anno);
+  
+}
+
+annotorious.plugin.PSQL.prototype._setHooks = function(anno) {  
+  console.log("HEY There!");
+  var self = this;
+
+  
+  var allAnnos = self._allAnnos;
+  var expertAnnos = self._expertAnnos;
+  var otherAnnos = self._otherAnnos;
+  // edit annotation lsit based on select div's value
+  $( "#expert-image" ).click(function() {
+    console.log(self._otherAnnos)
+    anno.hideAnnotations();
+  });
+  var self = this;
+  $( "#questions-header" ).click(function() {
+    anno.showAnnotations();
+  });
+
+  $( "#allAnnos" ).click(function() {
+    anno.removeAll();
+    self._loadAnnotations(anno, allAnnos)
+  });
+  $( "#expertAnnos" ).click(function() {
+    anno.removeAll();
+    self._loadAnnotations(anno, expertAnnos)
+  });
+  $( "#otherAnnos" ).click(function() {
+    anno.removeAll();
+    self._loadAnnotations(anno, otherAnnos)
+  });
+
 }
 
 annotorious.plugin.PSQL.prototype.onInitAnnotator = function(annotator) {
@@ -66,12 +108,14 @@ annotorious.plugin.PSQL.prototype._showError = function(error) {
 /**
  * @private
  */
-annotorious.plugin.PSQL.prototype._loadAnnotations = function(anno) {
+annotorious.plugin.PSQL.prototype._loadAnnotations = function(anno, annoList) {
   // TODO need to restrict search to the URL of the annotated
   var self = this;
-
-  for (i = 0; i < self._annotations.length; i++) { 
-    var annotationFields = self._annotations[i][0]["fields"]
+  
+  var annos = annoList
+  console.log(annos)
+  for (i = 0; i < annos.length; i++) { 
+    var annotationFields = annos[i][0]["fields"]
     
     var rectGeometry = {};
     rectGeometry["x"] = annotationFields["x_val"];
