@@ -16,6 +16,10 @@ class Product(TimeStampedModel):
     
     class Meta:
         ordering = ('title',)
+        permissions = (
+            ("view_prod", "View product"),
+        )
+
 
 class Feature(models.Model):
     admins = models.ManyToManyField('accounts.Account', related_name='features_admin')
@@ -34,6 +38,9 @@ class Feature(models.Model):
 
     class Meta:
         ordering = ('title',)
+        permissions = (
+            ("view_feat", "View feature"),
+        )
 
 class Link(TimeStampedModel):
     admin = models.ForeignKey('accounts.Account', related_name='links_admin')

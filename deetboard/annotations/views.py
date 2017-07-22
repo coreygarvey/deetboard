@@ -6,14 +6,15 @@ import re
 from models import Annotation
 from screenshots.models import Screenshot
 from django.utils.safestring import mark_safe
+from django.contrib.auth.models import Group
+from guardian.mixins import PermissionRequiredMixin
+from guardian.shortcuts import assign_perm
 
 # Create your views here.
 @csrf_exempt
 def annotations(request):
 
 	if request.method == 'POST':
-		print "Got the POST!"
-		print request.body
 		annoJson = json.loads(request.body)
 		srcFull = annoJson["src"]
 		text = annoJson["text"]
@@ -28,21 +29,8 @@ def annotations(request):
 		y_val = shapeGeom["y"]
 		width = shapeGeom["width"]
 		height = shapeGeom["height"]
-		
-
-		
-		print srcFull
+	
 		src = re.search('(screenshots\/\S+)', srcFull).group(0)
-		print src
-		print text
-		print context
-		print shapeType
-		print style
-		print x_val
-		print y_val
-		print width
-		print height
-		
 
 		screenshot = Screenshot.objects.get(image=src)
 		annotation = Annotation(screenshot=screenshot)
@@ -56,11 +44,8 @@ def annotations(request):
 		annotation.y_val = y_val
 		annotation.width = width
 		annotation.height = height
-	
+		
 		annotation.save()
-
-		print screenshot
-		print annotation
 		# Handle post method
 	else:  # request.method == 'GET'
 		# Handle get method

@@ -19,6 +19,10 @@ class Org(TimeStampedModel):
         ordering = ('title',)
         permissions = (
             ("view_org", "View org"),
+            ("create_prod", "Create org product"),
+            ("create_feat", "Create org feature"),
+            ("create_anno", "Create org annotation"),
+            ("create_quest", "Create org question"),
         )
 
 

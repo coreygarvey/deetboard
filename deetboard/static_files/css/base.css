@@ -516,12 +516,12 @@ h1 {
 
   max-height: 0;
   display: block;
-  overflow: hidden;
+  overflow: scroll;
   opacity: 0;
 }
 
 .dropdown.open .dropdown-menu {
-    max-height: 200px;
+    max-height: 225px;
     opacity: 1;
 }
 

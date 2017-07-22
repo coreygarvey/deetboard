@@ -4,13 +4,14 @@ from django.utils.safestring import mark_safe
 from models import Product, Feature, Link
 from serializers import ProductSerializer, FeatureSerializer, LinkSerializer
 from rest_framework import generics
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, DetailView
 from braces.views import LoginRequiredMixin
 from forms import ProductForm, FeatureForm, FeatureScreenshotForm
 from orgs.models import Org
 from questions.models import Question
 from screenshots.models import Screenshot
 from annotations.models import Annotation
+from django.contrib.auth.models import Group
 
 from django.http import HttpResponse
 from django.views import View
@@ -19,7 +20,8 @@ import services
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
-
+from guardian.mixins import PermissionRequiredMixin
+from guardian.shortcuts import assign_perm
 
 from django.views.generic import DeleteView
 from django.http import Http404
@@ -48,6 +50,11 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         org = Org.objects.get(pk=org_pk)
         form.instance.org = org
         
+        current_user = self.request.user
+        # Redirect user if they don't have permission
+        if(not current_user.has_perm('create_prod', org)):
+            return HttpResponseRedirect('/home/')
+
         product = form.save(commit=False)
         product.save()
         product.admins.add(self.request.user)
@@ -62,13 +69,25 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def get_success_url(self):
+        org = self.object.org
+        prod = self.object
+        groupName = org.title + str(org.pk)
+        orgUserGroup = Group.objects.get(name=groupName)
+        assign_perm('view_prod', orgUserGroup, prod)
+        current_user = self.request.user
+        assign_perm('products.delete_product', current_user, prod)
+        #if(current_user.has_perm('products.delete_product', prod)):
+        #    print "User has product delete perm"
+
         return reverse('product_home', args=(self.object.org.id,self.object.id))
 
-class ProductView(TemplateView):
+class ProductView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     """
     
     """
+    model = Product
     template_name = "products/product-home.html"
+    permission_required = 'products.view_prod'
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
@@ -76,7 +95,7 @@ class ProductView(TemplateView):
         user = self.request.user
         org_pk = self.kwargs['opk']
         org = Org.objects.get(pk=org_pk)
-        product_pk = self.kwargs['ppk']
+        product_pk = self.kwargs['pk']
         product = Product.objects.get(pk=product_pk)
         user_orgs = user.orgs.all()
         org_products = org.products.all()
@@ -103,6 +122,37 @@ class ProductView(TemplateView):
             return user
         except User.DoesNotExist:
             return None
+
+class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    model=Product
+    template_name = 'features/feature-delete-confirm.html'
+    permission_required = 'products.delete_product'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductDeleteView, self).get_context_data(**kwargs)
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        product_pk = self.kwargs['pk']
+        product = Product.objects.get(pk=product_pk)
+        context['org'] = org
+        context['product'] = product
+
+        return context
+    
+    def get_object(self, queryset=None):
+
+        """ Hook to ensure object is owned by request.user. """
+        obj = super(FeatureDeleteView, self).get_object()
+        #success_url = self.get_success_url
+        if not obj.admins.filter(pk=self.request.user.id).exists():
+            raise Http404
+        return obj
+
+    def get_success_url(self):
+        success_url = reverse('org_home', args=(self.object.product.org.id))
+        return success_url
+        
+
 
 
 class FeatureListView(TemplateView):
@@ -146,6 +196,7 @@ class FeatureListView(TemplateView):
             return None
 
 
+
 class FeatureCreateView(LoginRequiredMixin, CreateView):
     form_class = FeatureScreenshotForm
     template_name = 'features/feature-create-home.html'
@@ -181,15 +232,15 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         product = Product.objects.get(pk=product_pk)
         form.instance.product = product
         
+        org = product.org
+        current_user = self.request.user
+        # Redirect user if they don't have permission
+        if(not current_user.has_perm('create_feat', org)):
+            return HttpResponseRedirect('/home/')
+
         feature = form.save(commit=False)
         feature.save()
         feature.admins.add(self.request.user)
-
-        print "current_user"
-        print self.request.user
-        print self.request.FILES['screenshot']
-        print form
-        print self.request
 
         screenshot = Screenshot(image=self.request.FILES['screenshot'])
         screenshot.title = self.request.FILES['screenshot']
@@ -214,13 +265,23 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def get_success_url(self):
+        prod = self.object.product
+        org = prod.org
+        feat = self.object
+        groupName = org.title + str(org.pk)
+        orgUserGroup = Group.objects.get(name=groupName)
+        assign_perm('view_feat', orgUserGroup, feat)
+        current_user = self.request.user
+        assign_perm('products.delete_feature', current_user, feat)
         return reverse('feature_home', args=(self.object.product.org.id,self.object.product.id,self.object.id))
 
-class FeatureView(TemplateView):
+class FeatureView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     """
     
     """
+    model = Feature
     template_name = "features/feature-home.html"
+    permission_required = 'products.view_feat'
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
@@ -230,7 +291,7 @@ class FeatureView(TemplateView):
         org = Org.objects.get(pk=org_pk)
         product_pk = self.kwargs['ppk']
         product = Product.objects.get(pk=product_pk)
-        feature_pk = self.kwargs['fpk']
+        feature_pk = self.kwargs['pk']
         feature = Feature.objects.get(pk=feature_pk)
         user_orgs = user.orgs.all()
         org_products = org.products.all()
@@ -291,9 +352,10 @@ class FeatureView(TemplateView):
         except User.DoesNotExist:
             return None
 
-class FeatureDeleteView(DeleteView):
+class FeatureDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model=Feature
     template_name = 'features/feature-delete-confirm.html'
+    permission_required = 'products.delete_feature'
 
     def get_context_data(self, **kwargs):
         context = super(FeatureDeleteView, self).get_context_data(**kwargs)

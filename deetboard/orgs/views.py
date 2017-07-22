@@ -3,6 +3,8 @@ from models import Org, Expert, Skill
 from serializers import OrgSerializer, ExpertSerializer, SkillSerializer
 from rest_framework import generics, permissions
 
+from django.contrib.auth.models import Group
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
 from django.core.urlresolvers import reverse
@@ -19,6 +21,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, TemplateView, DetailView
 from braces.views import LoginRequiredMixin
 from guardian.mixins import PermissionRequiredMixin
+from guardian.shortcuts import assign_perm
 
 import re
 
@@ -27,6 +30,8 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
     
     def form_valid(self, form):        
         form.instance.admin = self.request.user
+        
+        
 
         email = self.request.user.email
         domain = re.search("@[\w.]+", email)
@@ -53,7 +58,20 @@ class FrontOrgCreateView(OrgCreateView):
         current_user = self.request.user
         current_user.save()
         current_user.orgs.add(org)
-        #print current_user.orgs.count()
+
+        # Give permissions to admin
+        assign_perm('delete_org', current_user, org)
+
+        # Create group for this Org, add user, set view perm
+        groupName = org.title + str(org.pk)
+        orgUserGroup = Group.objects.create(name=groupName)
+        current_user.groups.add(orgUserGroup)
+        assign_perm('view_org', orgUserGroup, org)
+        assign_perm('create_prod', orgUserGroup, org)
+        assign_perm('create_feat', orgUserGroup, org)
+        assign_perm('create_anno', orgUserGroup, org)
+        assign_perm('create_quest', orgUserGroup, org)
+
         if current_user.primary_org is None:
             current_user.primary_org = org
             current_user.save()
@@ -68,6 +86,21 @@ class HomeOrgCreateView(OrgCreateView):
         current_user = self.request.user
         current_user.save()
         current_user.orgs.add(org)
+
+        # Give permissions to admin
+        assign_perm('delete_org', current_user, org)
+
+
+        # Create group for this Org, add user, set view perm
+        groupName = org.title + str(org.pk)
+        orgUserGroup = Group.objects.create(name=groupName)
+        current_user.groups.add(orgUserGroup)
+        assign_perm('view_org', orgUserGroup, org)
+        assign_perm('create_prod', orgUserGroup, org)
+        assign_perm('create_feat', orgUserGroup, org)
+        assign_perm('create_anno', orgUserGroup, org)
+        assign_perm('create_quest', orgUserGroup, org)
+        
         return reverse('new_org_invitation_home',args=(self.object.id,))
 
 
@@ -91,6 +124,8 @@ class OrgHomeView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         context['user'] = user
         context['org'] = org
         context['user_orgs'] = user_orgs
+        print "user_orgs"
+        print user_orgs
         context['products'] = products
         return context
 

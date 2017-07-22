@@ -30,7 +30,7 @@ from accounts.views import RegistrationTypeView, RegistrationView, ActivationVie
 
 from views import IndexView
 from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView, OrgProductsView
-from products.views import ProductCreateView, ProductView, FeatureCreateView, FeatureView, FeatureListView, FeatureDeleteView
+from products.views import ProductCreateView, ProductView, ProductDeleteView, FeatureCreateView, FeatureView, FeatureListView, FeatureDeleteView
 from questions.views import QuestionCreateView, QuestionView, QuestionListView
 
 from annotations.views import annotations, annotation_search
@@ -200,9 +200,14 @@ urlpatterns = [
         name='product_create_home',
     ),
 
-    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/$',
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<pk>\d+)/$',
         ProductView.as_view(),
         name='product_home',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/delete/$',
+        ProductDeleteView.as_view(),
+        name='product_delete',
     ),
 
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/create-feature/$',
@@ -210,7 +215,7 @@ urlpatterns = [
         name='feature_create_home',
     ),
 
-    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<fpk>\d+)/$',
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<pk>\d+)/$',
         FeatureView.as_view(),
         name='feature_home',
     ),

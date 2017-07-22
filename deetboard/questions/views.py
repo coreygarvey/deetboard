@@ -12,6 +12,9 @@ from braces.views import LoginRequiredMixin
 from orgs.models import Org
 from products.models import Product, Feature
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import Group
+from guardian.mixins import PermissionRequiredMixin
+from guardian.shortcuts import assign_perm
 
 
 class QuestionCreateView(LoginRequiredMixin, CreateView):
@@ -42,11 +45,18 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):        
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
         prod_pk = self.kwargs['ppk']
         product = Product.objects.get(pk=prod_pk)
         form.instance.product = product
         form.instance.user_asking = self.request.user
         form.instance.admin = self.request.user
+
+        current_user = self.request.user
+        # Redirect user if they don't have permission
+        if(not current_user.has_perm('create_quest', org)):
+            return HttpResponseRedirect('/home/')
 
         question = form.save(commit=False)
         question.save()
@@ -61,12 +71,20 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def get_success_url(self):
-    	question_pk = self.object.id
-        question = Question.objects.get(pk=question_pk)
+        question = self.object
         if 'fpk' in self.kwargs:
             feature_pk = self.kwargs['fpk']
             feature = Feature.objects.get(pk=feature_pk)
             question.features.add(feature)
+
+        product = self.object.product
+        org = product.org
+        groupName = org.title + str(org.pk)
+        orgUserGroup = Group.objects.get(name=groupName)
+        assign_perm('view_quest', orgUserGroup, question)
+        current_user = self.request.user
+        assign_perm('questions.delete_question', current_user, question)
+
         return reverse('question_home', 
         			args=(
         				self.object.product.org.id,
@@ -75,13 +93,14 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         				)
         			)
 
-class QuestionView(LoginRequiredMixin, UpdateView):
+class QuestionView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """
     
     """
     form_class = QuestionFeaturesForm
     template_name = "questions/question-home.html"
     model = Question
+    permission_required = 'questions.view_quest'
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""

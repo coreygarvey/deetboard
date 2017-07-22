@@ -12,7 +12,11 @@ from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
+from django.contrib.auth.models import Group
+
 from django.contrib.auth.views import login as login_view
+
+from django.contrib.auth.backends import ModelBackend
 
 from models import Account
 from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, ProfileUpdateForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm
@@ -211,7 +215,7 @@ class ActivationView(UpdateView):
             # Determine next move based on account's org
             success_url = self.get_success_url(activated_user, org_id)
             # Login user after updated and saved
-            login(self.request, updated_user)
+            login(self.request, updated_user, backend='django.contrib.auth.backends.ModelBackend')
             try:
                 to, args, kwargs = success_url
                 return redirect(to, *args, **kwargs)
@@ -420,7 +424,12 @@ class GeneralInvitationView(InvitationView):
                 new_user.save()
                 new_user.orgs.add(org)
 
-        success_url = self.get_success_url()
+                # Find group for this Org, add user, set view perm
+                groupName = org.title + str(org.pk)
+                orgUserGroup = Group.objects.get(name=groupName)
+                new_user.groups.add(orgUserGroup)
+
+                success_url = self.get_success_url()
 
         # success_url may be a simple string, or a tuple providing the
         # full argument set for redirect(). Attempting to unpack it
@@ -723,7 +732,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         # Determine next move based on account's org
         success_url = self.get_success_url()
 
-        login(self.request, updated_user)
+        login(self.request, updated_user, backend='django.contrib.auth.backends.ModelBackend')
         try:
             to, args, kwargs = success_url
             return redirect(to, *args, **kwargs)

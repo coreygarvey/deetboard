@@ -18,6 +18,9 @@ class Question(TimeStampedModel):
     
     class Meta:
         ordering = ('created',)
+        permissions = (
+            ("view_quest", "View question"),
+        )
 
 
 class Response(TimeStampedModel):
