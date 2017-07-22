@@ -338,6 +338,10 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
         domain_search = re.search("@[\w.]+", current_user.email)
         domain = domain_search.group()
         context['domain'] = domain
+        org_pk = self.kwargs['pk']
+        org = Org.objects.get(pk=org_pk)
+        context['org'] = org
+
         return context
 
     def form_valid(self, form):

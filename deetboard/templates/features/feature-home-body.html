@@ -61,6 +61,13 @@
 
 
     
-
-    <a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/delete/">Delete</a>
+	{% if deletable %}
+	<br>
+	<br>
+    <div class="row">	
+    	<div id="feature-delete-btn" class="col-md-1 col-md-offset-1">
+    		<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/delete/" class="btn btn-danger">Delete Feature</a>
+    	</div>
+    </div>
+    {% endif %}
 </div>

@@ -30,7 +30,7 @@ from accounts.views import RegistrationTypeView, RegistrationView, ActivationVie
 
 from views import IndexView
 from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView, OrgProductsView
-from products.views import ProductCreateView, ProductView,ProductCreateFirstView,  ProductDeleteView, FeatureCreateView, FeatureView, FeatureListView, FeatureDeleteView
+from products.views import ProductCreateView, ProductView,ProductCreateFirstView,  ProductDeleteView, FeatureCreateView, FeatureCreateFirstView, FeatureView, FeatureListView, FeatureDeleteView
 from questions.views import QuestionCreateView, QuestionView, QuestionListView
 
 from annotations.views import annotations, annotation_search
@@ -195,7 +195,7 @@ urlpatterns = [
         name='new_org_invitation_home',
     ),
 
-    url(r'^home/team/(?P<pk>\d+)/create-product/$',
+    url(r'^home/team/(?P<pk>\d+)/create-product/first$',
         ProductCreateFirstView.as_view(),
         name='product_create_first',
     ),
@@ -213,6 +213,11 @@ urlpatterns = [
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/delete/$',
         ProductDeleteView.as_view(),
         name='product_delete',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/create-feature/first$',
+        FeatureCreateFirstView.as_view(),
+        name='feature_create_first',
     ),
 
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/create-feature/$',

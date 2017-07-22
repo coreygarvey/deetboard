@@ -694,14 +694,17 @@ box-shadow: 0px 0px 2px #999;
 }
 
 /* Create Product - First time */
-.product-create-first-bottom{
+.product-create-first,
+.feature-create-first{
   margin-top: 20px;
   font-size: 13px;
   font-weight: 500;
   color: #555;
   width: 100%;
 }
-.product-create-first-bottom h3{
+.product-create-first h3,
+.feature-create-first h3{
+  font-weight:600;
   font-size: 19px;
   color: #333;
 }
@@ -912,6 +915,11 @@ box-shadow: 0px 0px 2px #999;
   text-align: center;
 }
 
+#feature-delete-btn{
+  right:5%;
+  bottom: 5%;
+}
+
 /* Annotations */
 .feature-details{
   padding: 0 5%;
@@ -924,12 +932,17 @@ box-shadow: 0px 0px 2px #999;
   padding: 20px 0 0;
   margin: 20px 0 30px;
 }
+
+.expert-image{
+  border-radius: 12px;
+  box-shadow: 0px 1px 4px #888;
+}
 .feature-screenshot{
 }
 
 .feature-screenshot img{
   width: 80%;
-  border-radius: 6px;
+  border-radius: 12px;
   box-shadow: 0px 2px 4px #888;
   margin: 3% 2%;
 }
@@ -938,8 +951,8 @@ box-shadow: 0px 0px 2px #999;
 
 }
 .feature-questions-header{
-  border-radius: 3px 3px 0 0;
-  background: #214478;
+  border-radius: 12px 12px 0 0;
+  background:#1b3864;
   font-weight: 500px;
   height: 50px;
   padding: 2% 10%;

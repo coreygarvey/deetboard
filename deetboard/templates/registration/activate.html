@@ -31,8 +31,19 @@
 
 	        {% render_field form.password placeholder="Password" class+="form-control activate-input" %}
 
-	        {% render_field form.profile_pic placeholder="Profile Pic" class+="form-control activate-input" %}
+	        
 
+	        <label class="btn btn-default btn-file" for="account-profpic-selector">
+					<i class="fa fa-upload" aria-hidden="true"></i>
+					Upload Profile Pic
+					
+					{% render_field form.profile_pic id="account-profpic-selector" style="display: none;" class+="file-upload" %}
+			</label>
+			<div id="upload-file-info">
+					
+			</div>
+			<br>
+			<br>
 	        <input type="submit" class="btn btn-main" value="Activate" />
 	    </form>
 	</div>

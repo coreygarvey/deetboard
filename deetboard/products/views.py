@@ -79,7 +79,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         #if(current_user.has_perm('products.delete_product', prod)):
         #    print "User has product delete perm"
 
-        return reverse('product_home', args=(self.object.org.id,self.object.id))
+        return reverse('feature_create_home', args=(self.object.org.id,self.object.id))
 
 class ProductView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     """
@@ -124,6 +124,19 @@ class ProductView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
             return None
 class ProductCreateFirstView(ProductCreateView):
     template_name = 'products/product-create-first.html'
+
+    def get_success_url(self):
+        org = self.object.org
+        prod = self.object
+        groupName = org.title + str(org.pk)
+        orgUserGroup = Group.objects.get(name=groupName)
+        assign_perm('view_prod', orgUserGroup, prod)
+        current_user = self.request.user
+        assign_perm('products.delete_product', current_user, prod)
+        #if(current_user.has_perm('products.delete_product', prod)):
+        #    print "User has product delete perm"
+
+        return reverse('feature_create_first', args=(self.object.org.id,self.object.id))
 
 class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model=Product
@@ -277,6 +290,10 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         assign_perm('products.delete_feature', current_user, feat)
         return reverse('feature_home', args=(self.object.product.org.id,self.object.product.id,self.object.id))
 
+class FeatureCreateFirstView(FeatureCreateView):
+    template_name = 'features/feature-create-first.html'
+
+
 class FeatureView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     """
     
@@ -313,6 +330,12 @@ class FeatureView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         context['questions'] = questions
         context['screenshots'] = feature_screenshots
         context['experts'] = feature_experts
+
+        if(user in feature.admins.all()):
+            context['deletable'] = True
+        else:
+            context['deletable'] = False
+
 
         # Get annotations for the first screenshot
         # TODO: Enable multiple screenshots and pass all anotations
@@ -381,7 +404,7 @@ class FeatureDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
 
     def get_success_url(self):
         print "GET SUCCESS URL"
-        success_url = reverse('product_home', args=(self.object.product.org.id,self.object.product.id))
+        success_url = reverse('feature_home', args=(self.object.product.org.id,self.object.product.id, self.object.id))
         return success_url
         
 
