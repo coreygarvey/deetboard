@@ -364,7 +364,7 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
         else:
             org.email_all=False
         org.save()
-        success_url = self.get_success_url()
+        success_url = self.get_success_url(org_pk)
 
         # success_url may be a simple string, or a tuple providing the
         # full argument set for redirect(). Attempting to unpack it
@@ -376,12 +376,17 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
             return redirect(success_url)
 
 
+
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-    def get_success_url(self):
-        return ('home', (), {})
+    def get_success_url(self, org_id):
+        # Users without org will create new, send to make product
+        if org_id is None:
+            return ('new_org', (), {})
+        else:
+            return reverse('product_create_first',args=(org_id,))
 
     def create_inactive_user(self, email):
         """

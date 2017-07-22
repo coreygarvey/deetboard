@@ -122,6 +122,8 @@ class ProductView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
             return user
         except User.DoesNotExist:
             return None
+class ProductCreateFirstView(ProductCreateView):
+    template_name = 'products/product-create-first.html'
 
 class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model=Product

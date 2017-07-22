@@ -1,0 +1,63 @@
+{% load widget_tweaks %}
+<div class="product-home-body">
+	
+		
+	<div class="title">
+	    <h1>Create a Product</h1>
+	</div>
+
+	<div class="row product-create-first-bottom">
+		<div class="col-md-4">
+			<h3>Get Started</h3>
+			<p>Products are composed of different features that your team can track and discuss. Create separate products for web, mobile, and different versions of your software.</p>
+		</div>
+		<div class="col-md-4">
+			<h3>Experts</h3>
+			<p>Identify experts within each feature, creating an easy connection for company members with questions and feedback</p>
+		</div>
+		<div class="col-md-4">
+			<h3>Questions</h3>
+			<p>Promote discussion between teammates through annotatable screenshots and feature specific questions.</p>
+		</div>
+	</div>
+
+	<form method="post" action="" enctype="multipart/form-data" class="create-product-form">
+
+		{% csrf_token %}
+	
+		<div class="row">
+			<div class="col-md-6">
+				<h3>Details</h3>
+				{% render_field form.title placeholder="Product name" class+="form-control create-product-input" %}
+				
+				{% render_field form.description placeholder="Product description" class+="form-control create-product-input" %}
+			</div>
+			<div class="col-md-6">
+				<h3>Screenshot</h3>
+				
+				<label class="btn btn-default btn-file" for="product-image-selector">
+					Choose File...
+					{% render_field form.image id="product-image-selector" style="display: none;" class+="file-upload" %}
+				</label>
+				
+				<div id="upload-file-info">
+					
+				</div>
+			</div>
+		</div>
+		<br>
+		
+		<div class="row">
+			<div class="col-md-6 col-md-offset-4">
+				<input type="submit" class="btn btn-main product-create-btn" value="Create Product" />
+			</div>
+			
+		</div>
+		
+		
+	    
+	</form>
+
+
+
+</div>

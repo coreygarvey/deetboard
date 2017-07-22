@@ -94,6 +94,7 @@ class MyActivationForm(ModelForm):
     will make use of it to create inactive user accounts.
     """
     password = forms.CharField(widget=forms.PasswordInput)
+    profile_pic = forms.ImageField()
     
     def __init__(self, *args, **kwargs):
         super(MyActivationForm, self).__init__(*args, **kwargs)
@@ -107,6 +108,7 @@ class MyActivationForm(ModelForm):
             'first_name',
             'last_name',
             'password',
+            'profile_pic'
         ]
 
 class ProfileUpdateForm(ModelForm):

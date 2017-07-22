@@ -11,7 +11,9 @@
         <div class="title">
             <h1>Create Your Team</h1>
         </div>
-
+		<p>Deetboard will organize conversations and questions about your team's products.</p>
+		<p>Get started by creating your team.</p>
+		<br>
 		<form method="post" action="">{% csrf_token %}
 	        {% render_field form.title placeholder="Team name" class+="form-control create-org-input" %}
 
