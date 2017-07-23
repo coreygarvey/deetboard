@@ -633,7 +633,8 @@ box-shadow: 0px 0px 2px #999;
 .product-home-body, 
 .feature-home-body,
 .feature-delete-body,
-.question-home-body{
+.question-home-body,
+.response-home-body{
   min-width: 700px;
   width: 97%;
   min-height: 94.5%;
@@ -1053,7 +1054,13 @@ box-shadow: 0px 0px 2px #999;
   font-size: 20px;
   font-weight: 500px;
 }
-
+.question-response-btn{
+    width: 50%;
+    text-align: center;
+    position: relative;
+    float: left;
+    margin: 5% 25%;
+}
 
 
 .responses-container{
@@ -1069,7 +1076,7 @@ box-shadow: 0px 0px 2px #999;
   width: 100%;
   float: left;
   padding: 1% 5% 1%;
-  background: #eee;
+  background: #fafafa;
   border: 1px solid #bbb;
   box-shadow: 0px 2px 4px #ccc;
   margin: 0;
@@ -1099,6 +1106,16 @@ box-shadow: 0px 0px 2px #999;
 .response-text{
   font-size: 15px;
   font-weight: 500px;
+}
+
+.response-input{
+  padding: 10px 5%;
+}
+.response-submit-btn{
+  position: relative;
+  float: left;
+  width: 40%;
+  margin: 5% 30%;
 }
 
 .question-features-form > ul {

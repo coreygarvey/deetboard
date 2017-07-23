@@ -25,10 +25,13 @@ class Question(TimeStampedModel):
 
 class Response(TimeStampedModel):
     admin = models.ForeignKey('accounts.Account', related_name='responses_admin')
-    question = models.ManyToManyField(Question, related_name='responses')
+    question = models.ForeignKey(Question, related_name='responses')
     text = models.TextField()
     user_responder = models.ForeignKey('accounts.Account', related_name='responses')
     accepted = models.BooleanField(default=False)
     
     class Meta:
         ordering = ('accepted','created')
+        permissions = (
+            ("view_response", "View response"),
+        )

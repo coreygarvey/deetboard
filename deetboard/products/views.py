@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
+from django.http import HttpResponseRedirect
 from models import Product, Feature, Link
 from serializers import ProductSerializer, FeatureSerializer, LinkSerializer
 from rest_framework import generics
@@ -30,6 +31,16 @@ from django.http import Http404
 class ProductCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductForm
     template_name = 'products/product-create-home.html'
+
+    # Check that user has permission to create products in this org
+    def dispatch(self, *args, **kwargs):
+        user = self.request.user
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        product_create_perm = user.has_perm('orgs.create_prod', org)
+        if(not product_create_perm):
+            return redirect('/home/')
+        return super(ProductCreateView, self).dispatch(*args, **kwargs)
     
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
@@ -216,12 +227,24 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
     form_class = FeatureScreenshotForm
     template_name = 'features/feature-create-home.html'
     
+    # Check that user has permission to create features in this org
+    def dispatch(self, *args, **kwargs):
+        user = self.request.user
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        feature_create_perm = user.has_perm('orgs.create_feat', org)
+        if(not feature_create_perm):
+            return redirect('/home/')
+        return super(FeatureCreateView, self).dispatch(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
         context = super(FeatureCreateView, self).get_context_data(**kwargs)
         user = self.request.user
         org_pk = self.kwargs['opk']
         org = Org.objects.get(pk=org_pk)
+        feature_create_perm = user.has_perm('orgs.create_feat', org);
+
         user_orgs = user.orgs.all()
         org_products = org.products.all()
         product_pk = self.kwargs['ppk']
@@ -239,7 +262,6 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         #print all_org_accounts
         #form_class.fields["experts"].queryset = all_org_accounts
         
-
         return context
 
     def form_valid(self, form):        
@@ -262,6 +284,11 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         screenshot.save()
         screenshot.admins.add(self.request.user)
         feature.screenshots.add(screenshot)
+
+        # Allow users in org to respond to questions about feature
+        groupName = org.title + str(org.pk)
+        orgUserGroup = Group.objects.get(name=groupName)
+        assign_perm('create_response', orgUserGroup, feature)
 
         return super(FeatureCreateView, self).form_valid(form)
 

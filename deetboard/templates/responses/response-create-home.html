@@ -1,0 +1,18 @@
+
+{% extends "../home.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Respond to Question{% endblock %}
+
+{% block content %}
+    
+        <div class="row">
+          
+            {% include "../nav/prod-left-nav.html" %}
+            
+            {% include "./response-create-body.html" %}
+
+        </div>
+    
+{% endblock %}

@@ -29,10 +29,17 @@
 			    {% else %}
 				    <div class="response-container">
 					    <div class="response-text">
-					        When an expert responds, it will appear here.
+					        When someone responds, it will appear here.
 					    </div>
 					</div>
 			    {% endif %}
+
+				<div class="question-response-btn">
+					<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ question_features.all.0.pk }}/question/{{ question.pk }}/respond" class="btn btn-default">
+						<i class="fa fa-pencil" aria-hidden="true"></i>
+						Give a response
+					</a>
+				</div>
 
 		    </div>
 		</div>

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from models import Question, Response
 from serializers import QuestionSerializer, ResponseSerializer
 from rest_framework import generics
@@ -7,7 +7,7 @@ from django.views.generic.edit import UpdateView
 from django.http import HttpResponse
 from django.views import View
 import services
-from forms import QuestionForm, QuestionFeaturesForm
+from forms import QuestionForm, QuestionFeaturesForm, ResponseForm
 from braces.views import LoginRequiredMixin
 from orgs.models import Org
 from products.models import Product, Feature
@@ -20,6 +20,16 @@ from guardian.shortcuts import assign_perm
 class QuestionCreateView(LoginRequiredMixin, CreateView):
     form_class = QuestionForm
     template_name = 'questions/question-create-home.html'
+
+    # Check that user has permission to create questions in this org
+    def dispatch(self, *args, **kwargs):
+        user = self.request.user
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        feature_create_perm = user.has_perm('orgs.create_quest', org)
+        if(not feature_create_perm):
+            return redirect('/home/')
+        return super(QuestionCreateView, self).dispatch(*args, **kwargs)
     
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
@@ -50,16 +60,22 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         prod_pk = self.kwargs['ppk']
         product = Product.objects.get(pk=prod_pk)
         form.instance.product = product
-        form.instance.user_asking = self.request.user
-        form.instance.admin = self.request.user
-
         current_user = self.request.user
+        form.instance.user_asking = current_user
+        form.instance.admin = current_user
+        
         # Redirect user if they don't have permission
         if(not current_user.has_perm('create_quest', org)):
             return HttpResponseRedirect('/home/')
 
         question = form.save(commit=False)
         question.save()
+
+        # If created in a feature, add to features field
+        if 'fpk' in self.kwargs:
+            feature_pk = self.kwargs['fpk']
+            feature = Feature.objects.get(pk=feature_pk)
+            question.features.add(feature)
 
         return super(QuestionCreateView, self).form_valid(form)
 
@@ -72,11 +88,6 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         question = self.object
-        if 'fpk' in self.kwargs:
-            feature_pk = self.kwargs['fpk']
-            feature = Feature.objects.get(pk=feature_pk)
-            question.features.add(feature)
-
         product = self.object.product
         org = product.org
         groupName = org.title + str(org.pk)
@@ -115,6 +126,7 @@ class QuestionView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         prod_features = product.features.all()
         question_pk = self.kwargs['qpk']
         question = Question.objects.get(pk=question_pk)
+        responses = question.responses.all()
         question_features = question.features.all()
         context['user'] = user
         context['org'] = org
@@ -123,7 +135,6 @@ class QuestionView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         context['prod_features'] = prod_features
         context['org_products'] = org_products
         context['question'] = question
-        responses = question.responses.all()
         context['responses'] = responses
         context['question_features'] = question_features
         context['form'].fields['features'].queryset = Feature.objects.filter(product=product)
@@ -197,6 +208,94 @@ class QuestionListView(TemplateView):
         context['prod_questions'] = prod_questions
         print context
         return context
+
+class ResponseCreateView(LoginRequiredMixin, CreateView):
+    form_class = ResponseForm
+    template_name = 'responses/response-create-home.html'
+
+    # Check that user has permission to create questions in this org
+    def dispatch(self, *args, **kwargs):
+        user = self.request.user
+        feature_pk = self.kwargs['fpk']
+        feature = Feature.objects.get(pk=feature_pk)
+        response_create_perm = user.has_perm('products.create_response', feature)
+        if(not response_create_perm):
+            return redirect('/home/')
+        return super(ResponseCreateView, self).dispatch(*args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(ResponseCreateView, self).get_context_data(**kwargs)
+        user = self.request.user
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        user_orgs = user.orgs.all()
+        products = org.products.all()
+        product_pk = self.kwargs['ppk']
+        product = Product.objects.get(pk=product_pk)
+        features = product.features.all()
+        feature_pk = self.kwargs['fpk']
+        feature = Feature.objects.get(pk=feature_pk)
+        quest_pk = self.kwargs['pk']
+        question = Question.objects.get(pk=quest_pk)
+        context['user'] = user
+        context['org'] = org
+        context['user_orgs'] = user_orgs
+        context['org_products'] = products
+        context['product'] = product
+        context['prod_features'] = features
+        context['question'] = question
+        context['feature'] = feature
+            
+        return context
+
+    def form_valid(self, form):        
+        feat_pk = self.kwargs['fpk']
+        feature = Feature.objects.get(pk=feat_pk)
+        quest_pk = self.kwargs['pk']
+        question = Question.objects.get(pk=quest_pk)
+        current_user = self.request.user
+        form.instance.question = question
+        form.instance.admin = current_user
+        form.instance.user_responder = current_user
+        form.instance.accepted = False
+        
+        # Redirect user if they don't have permission
+        if(not current_user.has_perm('create_response', feature)):
+            return HttpResponseRedirect('/home/')
+
+        response = form.save(commit=False)
+        response.save()
+
+        return super(ResponseCreateView, self).form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super(ResponseCreateView, self).get_form_kwargs()
+        kwargs.update({
+            'request' : self.request
+        })
+        return kwargs
+
+    def get_success_url(self):
+        response = self.object
+
+        product = response.question.product
+        org = product.org
+        groupName = org.title + str(org.pk)
+        orgUserGroup = Group.objects.get(name=groupName)
+        assign_perm('view_response', orgUserGroup, response)
+        current_user = self.request.user
+        assign_perm('questions.delete_response', current_user, response)
+
+        return reverse('question_home', 
+                    args=(
+                        self.object.question.product.org.id,
+                        self.object.question.product.id,
+                        self.object.question.id
+                        )
+                    )
+
+
 
 class QuestionList(generics.ListCreateAPIView):
     queryset = Question.objects.all()

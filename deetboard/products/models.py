@@ -40,6 +40,7 @@ class Feature(models.Model):
         ordering = ('title',)
         permissions = (
             ("view_feat", "View feature"),
+            ("create_response", "Create Question Response"),
         )
 
 class Link(TimeStampedModel):

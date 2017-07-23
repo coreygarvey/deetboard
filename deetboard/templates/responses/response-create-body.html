@@ -1,0 +1,37 @@
+{% load widget_tweaks %}
+<div class="response-home-body">
+	<a class="back-btn btn btn-default btn-xs" href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/question/{{ question.pk }}">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		<b>Question</b>
+	</a>
+	
+	<div class="row">
+    	<div class="col-md-6 col-md-offset-2">
+		    <div class="question-container">
+			    <h5>Question</h5>
+			    <div class="question-text">
+			        {{ question.text }}
+			    </div>
+		    </div>
+		    <div class="responses-container">
+			    <div class="responses-header">
+				    <h5>Respond:</h5>
+				</div>
+			    <div>
+			    	<form class="response-form" method="post" action="">{% csrf_token %}
+						{% render_field form.text placeholder="Response" class+="form-control create-response-input" %}
+						<br>
+
+					    <input type="submit" class="btn btn-main response-submit-btn" value="Submit" />
+					</form>
+
+			    </div>
+
+		    </div>
+		</div>
+	</div>
+
+	
+	
+	
+</div>

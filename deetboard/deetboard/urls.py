@@ -31,7 +31,7 @@ from accounts.views import RegistrationTypeView, RegistrationView, ActivationVie
 from views import IndexView
 from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView, OrgProductsView
 from products.views import ProductCreateView, ProductView,ProductCreateFirstView,  ProductDeleteView, FeatureCreateView, FeatureCreateFirstView, FeatureView, FeatureListView, FeatureDeleteView
-from questions.views import QuestionCreateView, QuestionView, QuestionListView
+from questions.views import QuestionCreateView, QuestionView, QuestionListView, ResponseCreateView
 
 from annotations.views import annotations, annotation_search
 
@@ -255,9 +255,19 @@ urlpatterns = [
         name='product_question_create',
     ),
 
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<fpk>\d+)/question/(?P<qpk>\d+)/$',
+        QuestionView.as_view(),
+        name='question_home',
+    ),
+
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/question/(?P<qpk>\d+)/$',
         QuestionView.as_view(),
         name='question_home',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/feature/(?P<fpk>\d+)/question/(?P<pk>\d+)/respond$',
+        ResponseCreateView.as_view(),
+        name='question_create_response',
     ),
 
     #url(r'^join_org/$', start),
