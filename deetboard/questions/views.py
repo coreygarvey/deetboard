@@ -123,6 +123,8 @@ class QuestionView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         context['prod_features'] = prod_features
         context['org_products'] = org_products
         context['question'] = question
+        responses = question.responses.all()
+        context['responses'] = responses
         context['question_features'] = question_features
         context['form'].fields['features'].queryset = Feature.objects.filter(product=product)
 

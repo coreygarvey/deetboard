@@ -26,7 +26,7 @@ class Question(TimeStampedModel):
 class Response(TimeStampedModel):
     admin = models.ForeignKey('accounts.Account', related_name='responses_admin')
     question = models.ManyToManyField(Question, related_name='responses')
-    test = models.TextField()
+    text = models.TextField()
     user_responder = models.ForeignKey('accounts.Account', related_name='responses')
     accepted = models.BooleanField(default=False)
     

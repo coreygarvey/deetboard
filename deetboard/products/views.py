@@ -404,7 +404,7 @@ class FeatureDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
 
     def get_success_url(self):
         print "GET SUCCESS URL"
-        success_url = reverse('feature_home', args=(self.object.product.org.id,self.object.product.id, self.object.id))
+        success_url = reverse('product_home', args=(self.object.product.org.id,self.object.product.id))
         return success_url
         
 

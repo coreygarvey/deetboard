@@ -14,18 +14,42 @@
 			        {{ question.text }}
 			    </div>
 		    </div>
+		    <div class="responses-container">
+			    <div class="responses-header">
+				    <h5>Responses</h5>
+				</div>
+			    {% if responses %}
+					{% for response in responses %}
+					    <div class="response-container">
+						    <div class="response-text">
+						        {{ response.text }}
+						    </div>
+					    </div>
+					{% endfor %}
+			    {% else %}
+				    <div class="response-container">
+					    <div class="response-text">
+					        When an expert responds, it will appear here.
+					    </div>
+					</div>
+			    {% endif %}
+
+		    </div>
 		</div>
     </div>
 
 	<div>
 	
-
+	<!--
+	Ability to add features that the question also relates to
 	<h3>Add Features</h3>
 
 	<form method="post" class="question-features-form">{% csrf_token %}
 	    {% render_field form.features class+="question-features-input" %}
 	    <input type="submit" class="btn btn-main" value="Update Features" />
 	</form>
+
+	-->
 
 
 	</div>

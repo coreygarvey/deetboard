@@ -1047,10 +1047,57 @@ box-shadow: 0px 0px 2px #999;
   border: 1px solid #bbb;
   border-radius: 3px 3px 0 0;
   box-shadow: 0px 2px 4px #ccc;
-  margin: 3% 2%;
+  margin: 3% 2% 0;
 }
 .question-text{
   font-size: 20px;
+  font-weight: 500px;
+}
+
+
+
+.responses-container{
+  margin: 0 2% 0;
+  position: relative;
+  width: 100%;
+  float: left;
+}
+
+.responses-header{
+  text-decoration: none;
+  position: relative;
+  width: 100%;
+  float: left;
+  padding: 1% 5% 1%;
+  background: #eee;
+  border: 1px solid #bbb;
+  box-shadow: 0px 2px 4px #ccc;
+  margin: 0;
+}
+.responses-header h5{
+  font-size: 14;
+  font-weight: 600px;
+  text-decoration: underline;
+  color: #333;
+  margin: 3px 0;
+
+}
+
+.response-container{
+  color: #333;
+  text-decoration: none;
+  font-size: 15px;
+  position: relative;
+  width: 100%;
+  float: left;
+  padding: 3% 5% 5%;
+  background: #fff;
+  border: 1px solid #bbb;
+  box-shadow: 0px 2px 4px #ccc;
+  margin: 0;
+}
+.response-text{
+  font-size: 15px;
   font-weight: 500px;
 }
 
