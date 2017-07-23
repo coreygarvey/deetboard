@@ -1,18 +1,44 @@
 <div class="product-home-body">
+    <div class="row">
+    	<div class="col-md-6 col-md-offset-2">
     
-	<h2>{{ product.title }} - Questions</h2>
-	<div>
-	{% for question in prod_questions.all %}
-		<li>
-			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/question/{{ question.pk }}">{{ question.text }}</a>
-		</li>
-	{% endfor %}
-	<br>
-	<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/ask-a-question/">
-    	Ask a question
-    </a>
-	</div>
+			<h2>{{ product.title }} - Questions</h2>
+			<div class="feature-questions-list">
+				<div class="feature-questions-header">
+					<h4 id="questions-header">Questions</h4>
+					<div class="question-ask-btn">
+					    <a class="btn btn-default btn-xs" href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/ask-a-question/">
+						{% if questions %}
+							Ask
+						{% else %}
+							Ask
+						{% endif %}
+						</a>
+					</div>
+				</div>
+				<div class="feature-questions">
+				{% for question in prod_questions.all %}
+			        <div class="feature-question">
+				        <a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/question/{{ question.pk }}">
+				        	
+							<div class="feature-question-indicators">
+								{% if question.responses.count > 0 %}
+									<i class="fa fa-check-circle" aria-hidden="true"></i>
+								{% else %}
+									<i class="fa fa-clock-o" aria-hidden="true"></i>
+								{% endif %}
+								<br>
+							</div>
+				        	<div class="feature-question-text-wrapper">
+				        		{{ question.text }}...
+				        	</div>
+				        </a>
+				    </div>
+			    {% endfor %}
+			    </div>
+			</div>
 
-
+		</div>
+    </div>
 
 </div>

@@ -10,29 +10,43 @@
 
     <div class="row">
         <div class="col-md-8">
+            
             <div class="feature-details">
 	            <h2>{{ feature.title }}</h2>
 	            <p>{{ feature.description }}</p>
             </div>
-            <div class="btn-group" role="group" aria-label="Annotation Selection">
-			  <button type="button" id="allAnnos" class="btn btn-default">All</button>
-			  <button type="button" id="expertAnnos" class="btn btn-default">Experts</button>
-			  <button type="button" id="otherAnnos" class="btn btn-default">Others</button>
+            <div class="feature-filters-experts">
+	            <div class="feature-anno-group-btns">
+		            <div class="btn-group" role="group" aria-label="Annotation Selection">
+					  <button type="button" id="allAnnos" class="btn btn-default feature-filter-btn">All</button>
+					  <button type="button" id="expertAnnos" class="btn btn-default feature-filter-btn">Experts</button>
+					  <button type="button" id="otherAnnos" class="btn btn-default feature-filter-btn">Others</button>
+					</div>
+				</div>
+
+				<div class="feature-experts">
+					{% for expert in experts.all %}
+						<img src="{% get_media_prefix %}{{ expert.profile_pic }}" style="height:35px; width:35px;" id="expert-image" class="expert-image" data-toggle="tooltip" title="{{ expert.first_name }} {{ expert.last_name }} - {{ expert.role }}">
+					{% endfor %}
+				</div>
 			</div>
+
 			<div class="feature-screenshot">
 				<img src="{% get_media_prefix %}{{ screenshots.all.0.image }}" class="annotatable">
 			</div>
+			{% if deletable %}
+			<br>
+			<br>	
+	    	<div id="feature-delete-btn">
+	    		<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/delete/" class="btn btn-danger">Delete Feature</a>
+	    	</div>
+		    {% endif %}
         </div>
 
         <div class="col-md-4">
-			<div class="feature-experts">
-				<h4>Experts</h4>
-				{% for expert in experts.all %}
-					<img src="{% get_media_prefix %}{{ expert.profile_pic }}" style="height:50px; width:50px;" id="expert-image" class="expert-image" data-toggle="tooltip" title="{{ expert.first_name }} {{ expert.last_name }} - {{ expert.role }}">
-				{% endfor %}
-			</div>
+			
 
-			<div class="feature-questions" style="height:auto;">
+			<div class="feature-questions-list">
 				<div class="feature-questions-header">
 					<h4 id="questions-header">Questions</h4>
 					<div class="question-ask-btn">
@@ -45,15 +59,28 @@
 						</a>
 					</div>
 				</div>
+				<div class="feature-questions">
 				{% for question in questions.all %}
 			        <div class="feature-question">
 				        <a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/question/{{ question.pk }}">
-				        	{{ question.text }}
+				        	
+							<div class="feature-question-indicators">
+								{% if question.responses.count > 0 %}
+									<i class="fa fa-check-circle" aria-hidden="true"></i>
+								{% else %}
+									<i class="fa fa-clock-o" aria-hidden="true"></i>
+								{% endif %}
+								<br>
+							</div>
+				        	<div class="feature-question-text-wrapper">
+				        		{{ question.text }}...
+				        	</div>
 				        </a>
 				    </div>
 			    {% endfor %}
+			    </div>
 			</div>  
-		    
+	    	
 			
 		</div>
     </div>
@@ -61,13 +88,5 @@
 
 
     
-	{% if deletable %}
-	<br>
-	<br>
-    <div class="row">	
-    	<div id="feature-delete-btn" class="col-md-1 col-md-offset-1">
-    		<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/delete/" class="btn btn-danger">Delete Feature</a>
-    	</div>
-    </div>
-    {% endif %}
+	
 </div>
