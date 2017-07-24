@@ -224,6 +224,7 @@ class FeatureListView(TemplateView):
 
 
 class FeatureCreateView(LoginRequiredMixin, CreateView):
+    model = Feature
     form_class = FeatureScreenshotForm
     template_name = 'features/feature-create-home.html'
     

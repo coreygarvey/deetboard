@@ -12,6 +12,25 @@
 		<div class="row">
 			<div class="col-md-5">
 				<h2>Details</h2>
+				{% for error in form.title.errors %}
+					{{error}}
+				{% endfor %}
+				{% for error in form.description.errors %}
+					{{error}}
+				{% endfor %}
+				{% for error in form.experts.errors %}
+					{{error}}
+				{% endfor %}
+				{% for error in form.screenshot.errors %}
+					{{error}}
+				{% endfor %}
+				{% if form.title.errors %}
+				    <ol>
+				    {% for error in form.title.errors %}
+				        <li><strong>{{ error|escape }}</strong></li>
+				    {% endfor %}
+				    </ol>
+				{% endif %}
 				{% render_field form.title placeholder="Feature name" class+="form-control create-feature-input" %}
 
 				{% render_field form.description placeholder="Feature description" class+="form-control create-feature-input" %}
