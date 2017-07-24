@@ -904,6 +904,11 @@ box-shadow: 0px 0px 2px #999;
     display: block;
 }
 
+#upload-file-info{
+  padding-left: 7px;
+}
+
+
 .back-btn{
   font-size: 10px;
 }

@@ -10,14 +10,14 @@
 		{% csrf_token %}
 	
 		<div class="row feature-create-first">
-			<div class="col-md-6">
+			<div class="col-md-5">
 				<h3>Details</h3>
 				<p>Name the features and define the specifics. Better details allow for more directed conversations.</p>
 				{% render_field form.title placeholder="Feature name" class+="form-control create-feature-input" %}
 
 				{% render_field form.description placeholder="Feature description" class+="form-control create-feature-input" %}
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-5 col-md-offset-2">
 				<h3>Experts</h3>
 				<p>Decide on teammates with the expertise to answer questions and handle feedback.</p>
 				{% render_field form.experts placeholder="Feature experts" class+="create-feature-input feature-field" %}

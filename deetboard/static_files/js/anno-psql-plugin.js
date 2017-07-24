@@ -47,7 +47,6 @@ annotorious.plugin.PSQL.prototype.initPlugin = function(anno) {
 }
 
 annotorious.plugin.PSQL.prototype._setHooks = function(anno) {  
-  console.log("HEY There!");
   var self = this;
 
   
@@ -55,14 +54,7 @@ annotorious.plugin.PSQL.prototype._setHooks = function(anno) {
   var expertAnnos = self._expertAnnos;
   var otherAnnos = self._otherAnnos;
   // edit annotation lsit based on select div's value
-  $( "#expert-image" ).click(function() {
-    console.log(self._otherAnnos)
-    anno.hideAnnotations();
-  });
   var self = this;
-  $( "#questions-header" ).click(function() {
-    anno.showAnnotations();
-  });
 
   $( "#allAnnos" ).click(function() {
     anno.removeAll();

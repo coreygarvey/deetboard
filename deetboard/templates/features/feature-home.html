@@ -1,5 +1,5 @@
 {% extends "../home.html" %}
-
+{% load staticfiles %}
 {% load widget_tweaks %}
 
 {% block title %}{{product.title}} - {{feature.title}}{% endblock %}
@@ -13,4 +13,12 @@
 
         </div>
     
+{% endblock %}
+
+{% block postjs %}
+	
+	{% include "../javascript/feature-anno-start.js" %}
+	{% include "../javascript/feature-expert-image-tooltip.js" %}
+	
+
 {% endblock %}

@@ -10,13 +10,13 @@
 		{% csrf_token %}
 	
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-5">
 				<h2>Details</h2>
 				{% render_field form.title placeholder="Feature name" class+="form-control create-feature-input" %}
 
 				{% render_field form.description placeholder="Feature description" class+="form-control create-feature-input" %}
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-5 col-md-offset-2">
 				<h2>Experts</h2>
 				{% render_field form.experts placeholder="Feature experts" class+="create-feature-input feature-field" %}
 
