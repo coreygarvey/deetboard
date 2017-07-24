@@ -35,7 +35,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     # Check that user has permission to create products in this org
     def dispatch(self, *args, **kwargs):
         user = self.request.user
-        org_pk = self.kwargs['opk']
+        org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)
         product_create_perm = user.has_perm('orgs.create_prod', org)
         if(not product_create_perm):

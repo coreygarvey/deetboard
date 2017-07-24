@@ -17,6 +17,7 @@
             </div>
             <div class="feature-filters-experts">
 	            <div class="feature-anno-group-btns">
+		            <p class="feature-filter-expert-label">Filter</p>
 		            <div class="btn-group" role="group" aria-label="Annotation Selection">
 					  <button type="button" id="allAnnos" class="btn btn-default feature-filter-btn">All</button>
 					  <button type="button" id="expertAnnos" class="btn btn-default feature-filter-btn">Experts</button>
@@ -25,6 +26,7 @@
 				</div>
 
 				<div class="feature-experts">
+					<p class="feature-filter-expert-label">Experts</p>
 					{% for expert in experts.all %}
 						<img src="{% get_media_prefix %}{{ expert.profile_pic }}" style="height:35px; width:35px;" id="expert-image" class="expert-image" data-toggle="tooltip" title="{{ expert.first_name }} {{ expert.last_name }} - {{ expert.role }}">
 					{% endfor %}
