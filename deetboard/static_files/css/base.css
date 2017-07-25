@@ -221,6 +221,14 @@ h1 {
 	display: block;
 }
 
+/* Email sent page */
+.email-sent-text{
+  font-size:19px;
+  color: #555;
+  padding-left: 5px;
+  float: left;
+}
+
 /* Find Org page */
 .find-org-input {
   width: 200px;
@@ -233,6 +241,10 @@ h1 {
 }
 
 /* Activate Form */
+.activation-text{
+  font-size: 18px;
+  color: #555;
+}
 .activate-input {
   width: 200px;
   margin: 5px 0;
@@ -631,6 +643,7 @@ box-shadow: 0px 0px 2px #999;
 .home-body, 
 .org-home-body, 
 .product-home-body, 
+.product-delete-body,
 .feature-home-body,
 .feature-delete-body,
 .question-home-body,
@@ -785,6 +798,10 @@ box-shadow: 0px 0px 2px #999;
   box-shadow: 0px 0px 6px #ccc;
 }
 
+/* Product Page */
+.product-details{
+  text-align: center;
+}
 
 /* Features List */
 .features-list h3{
@@ -800,7 +817,7 @@ box-shadow: 0px 0px 2px #999;
   text-decoration: none;
   font-size: 15px;
   position: relative;
-  width: 28%;
+  width: 29%;
   float: left;
   padding: 1% 3% 3%;
   height: 250px;
@@ -918,13 +935,20 @@ box-shadow: 0px 0px 2px #999;
   margin: 20px 0 0 0;
 }
 
-.feature-delete-body{
+.feature-delete-body,
+.product-delete-body{
   text-align: center;
 }
 
 #feature-delete-btn{
   float:left;
   margin-top: 10%;
+  text-align: center;
+  width:100%;
+}
+#product-delete-btn{
+  float:left;
+  margin-top: 20px;
   text-align: center;
   width:100%;
 }
@@ -974,8 +998,10 @@ box-shadow: 0px 0px 2px #999;
 }
 
 .expert-image{
+  float:left;
   border-radius: 12px;
   box-shadow: 0px 1px 4px #888;
+  margin-right:8px;
 }
 .feature-screenshot{
   float: left;
@@ -995,7 +1021,9 @@ box-shadow: 0px 0px 2px #999;
   border: 2px solid #111;
 }
 .feature-questions-list{
-  margin-top: 15%;
+  margin: 10% 0 0 10%;
+  float: left;
+  width: 80%
 }
 
 .feature-questions{
@@ -1013,8 +1041,7 @@ box-shadow: 0px 0px 2px #999;
   background:#1b3864;
   font-weight: 500px;
   height: 50px;
-  padding: 2% 10%;
-  
+  padding: 6px 25px;
   box-shadow: 0px 1px 6px #999;
   
 }

@@ -33,7 +33,7 @@ class OrgForm(forms.ModelForm):
 		cleaned_data = super(OrgForm,self).clean()
 		try:
 			dupeOrg = Org.objects.get(title__iexact=cleaned_data.get('title'))
-			raise forms.ValidationError(_("Already a team with that name."))
+			raise forms.ValidationError(_("Sorry, already a team with that name."))
 		except Org.DoesNotExist:
 			pass
 

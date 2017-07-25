@@ -19,7 +19,7 @@
 				<div class="feature-questions">
 				{% for question in prod_questions.all %}
 			        <div class="feature-question">
-				        <a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/question/{{ question.pk }}">
+				        <a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/question/{{ question.pk }}">
 				        	
 							<div class="feature-question-indicators">
 								{% if question.responses.count > 0 %}

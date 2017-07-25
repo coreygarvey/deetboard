@@ -210,7 +210,7 @@ urlpatterns = [
         name='product_home',
     ),
 
-    url(r'^home/team/(?P<opk>\d+)/prod/(?P<ppk>\d+)/delete/$',
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<pk>\d+)/delete/$',
         ProductDeleteView.as_view(),
         name='product_delete',
     ),

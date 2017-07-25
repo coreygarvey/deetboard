@@ -1,10 +1,23 @@
 <div class="product-home-body">
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <h2>{{ product.title }}</h2>
+        <div class="col-md-12">
+        	<div class="product-details">
+	            <h2>{{ product.title }}</h2>
+            </div>
         </div>
     </div>
+
     {% include "../features/features-list.html" %}
+
+    {% if deletable %}
+    <div class="row">
+        <div class="col-md-12">
+			<div id="product-delete-btn">
+				<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/delete/" class="btn btn-danger">Delete Product</a>
+			</div>
+		</div>
+	</div>
+    {% endif %}
     
 
 </div>

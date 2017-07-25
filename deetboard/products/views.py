@@ -117,7 +117,13 @@ class ProductView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         context['user_orgs'] = user_orgs
         context['prod_features'] = prod_features
         context['org_products'] = org_products
-        #print context
+        
+        if(user in product.admins.all()):
+            context['deletable'] = True
+        else:
+            context['deletable'] = False
+
+
         return context
 
     def get_user(self, username):        
@@ -151,15 +157,15 @@ class ProductCreateFirstView(ProductCreateView):
 
 class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model=Product
-    template_name = 'features/feature-delete-confirm.html'
+    template_name = 'products/product-delete-confirm.html'
     permission_required = 'products.delete_product'
 
     def get_context_data(self, **kwargs):
         context = super(ProductDeleteView, self).get_context_data(**kwargs)
-        org_pk = self.kwargs['opk']
-        org = Org.objects.get(pk=org_pk)
-        product_pk = self.kwargs['pk']
-        product = Product.objects.get(pk=product_pk)
+
+        product = self.get_object()
+        org = product.org
+
         context['org'] = org
         context['product'] = product
 
@@ -168,16 +174,16 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
     def get_object(self, queryset=None):
 
         """ Hook to ensure object is owned by request.user. """
-        obj = super(FeatureDeleteView, self).get_object()
+        obj = super(ProductDeleteView, self).get_object()
         #success_url = self.get_success_url
         if not obj.admins.filter(pk=self.request.user.id).exists():
             raise Http404
         return obj
 
     def get_success_url(self):
-        success_url = reverse('org_home', args=(self.object.product.org.id))
+        success_url = reverse('org_home', args=(self.object.org.id))
         return success_url
-        
+
 
 
 
@@ -412,12 +418,14 @@ class FeatureDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
 
     def get_context_data(self, **kwargs):
         context = super(FeatureDeleteView, self).get_context_data(**kwargs)
-        org_pk = self.kwargs['opk']
-        org = Org.objects.get(pk=org_pk)
-        product_pk = self.kwargs['ppk']
-        product = Product.objects.get(pk=product_pk)
+        
+        feature = self.get_object()
+        product = feature.product
+        org = product.org
+        
         context['org'] = org
         context['product'] = product
+        context['feature'] = feature
 
         return context
     

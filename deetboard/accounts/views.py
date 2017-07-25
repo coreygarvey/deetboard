@@ -90,6 +90,7 @@ class ActivationEmailMixin(object):
         subject = ''.join(subject.splitlines())
         message = render_to_string(self.email_body_template,
                                    context)
+
         html_message = render_to_string(self.email_body_html_template, 
                                     context)
         

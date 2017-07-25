@@ -10,14 +10,15 @@
 
 {% block content %}
     <div id="activation-body">
-        <div class="title">
-            <h1>Activate</h1>
-        </div>
-        
-        Welcome {{ new_user.email }}
-    	
-    	</br>
-    	</br>
+        <div class="activation-details">
+	        <div class="title">
+	            <h1>Activate</h1>
+	        </div>
+	        <div class="activation-text">
+	        	Welcome {{ new_user.email }}
+	        </div>
+    	</div>
+
 	    <form method="post" action="" enctype="multipart/form-data">
 	    	{% csrf_token %}
 

@@ -8,4 +8,5 @@ from deetboard.settings.base import *
 #STATIC_URL = S3_URL
 
 ALLOWED_HOSTS = ['52.20.6.21',
+				'www.deetboard.com',
                 'deetboard.com']
