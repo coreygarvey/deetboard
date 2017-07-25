@@ -6,6 +6,7 @@ from django.contrib.auth.models import (
 from django.core.mail import send_mail
 from core.models import TimeStampedModel
 from django.template.loader import render_to_string
+import os
 
 class AccountManager(BaseUserManager):
 	def create_user(self, email, username, role, first_name, last_name, password=None):
@@ -101,6 +102,10 @@ class Account(AbstractBaseUser, PermissionsMixin):
     	# The user identified by email
     	return self.email
 
+    @property
+    def filename(self):
+    	return os.path.basename(self.profile_pic.name)
+
     def email_user(self, subject, message, from_email=None, html_message=None):
 		"""
 		Sends an email to this User.
@@ -109,6 +114,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
 		send_mail(subject, message, from_email, [self.email], 
 					fail_silently=True, html_message=html_message)
 		print "after send"
+
     def __unicode__(self):
     	return self.email
 

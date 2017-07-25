@@ -379,9 +379,24 @@ class FeatureView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
             expert_annotations = [];
             other_annotations = [];
             annotationsSet = Annotation.objects.filter(screenshot = screenshot)
+
+            
             # Serialize each annotation
             for annotation in annotationsSet:
+
+                annotationAdmin = annotation.admin
+                adminProfilePic = annotationAdmin.filename
+                
+
+                profile_pic_url = "/media/profile_pics/" + adminProfilePic
+                annotation.profilePic = profile_pic_url
+                print "profile_pic_url"
+                print profile_pic_url
+                print annotation.profilePic
+                annotation.save()
+
                 serializedAnno = serializers.serialize('json', [ annotation, ])
+                print serializedAnno
                 # Divide expert and other annotations before JSON
                 if(annotation.admin in feature.experts.all()):
                     expert_annotations.append(serializedAnno)

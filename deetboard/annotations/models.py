@@ -7,6 +7,7 @@ from core.models import TimeStampedModel
 class Annotation(TimeStampedModel):
 	screenshot = models.ForeignKey('screenshots.Screenshot', related_name='annotations')
 	admin = models.ForeignKey('accounts.Account', related_name='admin')
+	profilePic = models.CharField(max_length=150, blank=True)
 	src = models.CharField(max_length=150)
 	text = models.TextField()
 	context = models.CharField(max_length=150)

@@ -111,23 +111,28 @@ annotorious.plugin.PSQL.prototype._loadAnnotations = function(anno, annoList) {
     
     var rectGeometry = {};
     rectGeometry["x"] = annotationFields["x_val"];
-    rectGeometry["y"] = annotationFields["y_val"];;
-    rectGeometry["width"] = annotationFields["width"];;
-    rectGeometry["height"] = annotationFields["height"];;
+    rectGeometry["y"] = annotationFields["y_val"];
+    rectGeometry["width"] = annotationFields["width"];
+    rectGeometry["height"] = annotationFields["height"];
     
     var shape1 = {};
     shape1['geometry'] = rectGeometry;
-    shape1['style'] = annotationFields["style"];;
+    shape1['style'] = annotationFields["style"];
     shape1['type'] = annotationFields["shapeType"];
     
     var shapes = [];
     shapes.push(shape1);
 
     annotation = {};
-    annotation['src'] = this._MEDIA_URI + annotationFields["src"];;
+    annotation['src'] = this._MEDIA_URI + annotationFields["src"];
     annotation['shapes'] = shapes;
-    annotation['context'] = annotationFields["context"];;
-    annotation['text'] = annotationFields["text"];;
+    annotation['context'] = annotationFields["context"];
+    annotation['text'] = annotationFields["text"];
+
+    annotation['profilePic'] = annotationFields["profilePic"];
+
+    console.log("annotation:");
+    console.log(annotation);
 
     anno.addAnnotation(annotation);
   }
