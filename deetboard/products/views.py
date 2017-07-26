@@ -385,17 +385,19 @@ class FeatureView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
             for annotation in annotationsSet:
 
                 annotationAdmin = annotation.admin
-                adminProfilePic = annotationAdmin.filename
                 
-
+                adminProfilePic = annotationAdmin.filename
                 profile_pic_url = "/media/profile_pics/" + adminProfilePic
+                adminName = annotationAdmin.username
+                adminRole = annotationAdmin.role
+
                 annotation.profilePic = profile_pic_url
-                print "profile_pic_url"
-                print profile_pic_url
-                print annotation.profilePic
+                annotation.name = adminName
+                annotation.role = adminRole
                 annotation.save()
 
                 serializedAnno = serializers.serialize('json', [ annotation, ])
+
                 print serializedAnno
                 # Divide expert and other annotations before JSON
                 if(annotation.admin in feature.experts.all()):
@@ -458,7 +460,6 @@ class FeatureDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
         success_url = reverse('product_home', args=(self.object.product.org.id,self.object.product.id))
         return success_url
         
-
 
 
 class ProductList(generics.ListCreateAPIView):

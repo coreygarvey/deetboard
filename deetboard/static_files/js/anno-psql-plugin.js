@@ -130,6 +130,8 @@ annotorious.plugin.PSQL.prototype._loadAnnotations = function(anno, annoList) {
     annotation['text'] = annotationFields["text"];
 
     annotation['profilePic'] = annotationFields["profilePic"];
+    annotation['name'] = annotationFields["name"];
+    annotation['role'] = annotationFields["role"];
 
     console.log("annotation:");
     console.log(annotation);

@@ -34,7 +34,9 @@
 			</div>
 
 			<div class="feature-screenshot">
-				<img src="{% get_media_prefix %}{{ screenshots.all.0.image }}" class="annotatable">
+				<div class="screenshot-wrapper">
+					<img src="{% get_media_prefix %}{{ screenshots.all.0.image }}" class="annotatable feature-screenshot-image">
+				</div>
 			</div>
 			{% if deletable %}
 			<br>

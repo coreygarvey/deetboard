@@ -804,14 +804,6 @@ box-shadow: 0px 0px 2px #999;
 }
 
 /* Features List */
-.features-list h3{
-  color: #333;
-  font-size: 20px;
-  margin-top: 5px;
-  text-align: center;
-  font-weight: bold;
-}
-
 .features-list-item {
   color: #333;
   text-decoration: none;
@@ -826,11 +818,11 @@ box-shadow: 0px 0px 2px #999;
   border-radius: 6px;
   box-shadow: 0px 2px 4px #ccc;
   margin: 3% 2%;
-  transition: .5s;
+  transition: .35s;
 }
 
 .features-list-item:hover {
-  box-shadow: 0px 1px 4px 3px #829fc9;
+  box-shadow: 0px 0px 6px 3px #c9d6e8;
   cursor: pointer;
 }
 
@@ -852,18 +844,37 @@ box-shadow: 0px 0px 2px #999;
   cursor: pointer;
 }
 
-.features-list-image{
-  margin:0 auto;
-  text-align:center;
-  color: #333;
-  margin: 0% 0 7%;
+.features-list-add-icon{
+  height: 170px;
+  padding-top:50px;
+  text-align: center;
+
 }
 
-.features-list-image > img{
-  height: 170px;
-  width: 170px;
+.features-list-image{
+  margin:0;
+  text-align:center;
+  color: #333;
+  /* width:200px; */
+  height:170px; 
+  background-position:center;
+  background-size: cover;
   border-radius: 3px 3px 0 0;
-  margin: -1px 0 0 -1px;
+}
+
+
+
+.features-list-text{
+  padding: 8px 5px 5px;
+  overflow: scroll;
+  font-size: 12px;
+}
+.features-list h3{
+  color: #333;
+  font-size: 14px;
+  margin-top: 5px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .features-list-description{
@@ -1009,12 +1020,54 @@ box-shadow: 0px 0px 2px #999;
   text-align: center;
 }
 
+.screenshot-wrapper{
+  display: table;
+  margin: 0 auto;
+}
+
 .feature-delete-button{
 
 }
 
-.feature-screenshot img{
-  width: 80%;
+.annotorious-popup-image{
+  width: 35px;
+  height: 35px;
+  border-radius: 2px;
+  margin: 3px 10px 3px 3px;
+  border: 1px solid #555;
+  float:left;
+}
+
+.annotorious-popup-name{
+  float: left;
+  font-size: 14px;
+  font-weight: 700;
+  width: 50%;
+  text-align: left;
+  font-style: italic;
+}
+
+.annotorious-popup-role{
+  font-size: 11px;
+  font-weight: 500;
+  color: #555;
+  float: left;
+  width: 50%;
+  text-align:left;
+  display:none;
+}
+
+.annotorious-popup-text{
+  text-align: left;
+  width: 70%;
+  float: left;
+}
+.annotorious-popup-buttons{
+  display:none;
+}
+
+.feature-screenshot-image{
+  width: 200px;
   border-radius: 3px;
   box-shadow: 0px 0px 40px 3px #888;
   margin: 3% 2%;

@@ -4,18 +4,17 @@
 
 	<div class="features-list-item">
 		<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/create-feature/">
-			<div class="features-list-image">
-				<i class="fa fa-plus-square-o fa-5x" aria-hidden="true"></i>
+			<div class="features-list-add-icon">
+					<i class="fa fa-plus-square-o fa-5x" aria-hidden="true"></i>
 			</div>
-			<h3>
-				New Feature
-			</h3>
-
-			
-			
-			<p class="features-list-description">
-				Upload screenshots, ask questions, and get knowledge through product features.
-			</p>
+			<div class="features-list-text">
+				<h3>
+					New Feature
+				</h3>
+				<p class="features-list-description">
+					Upload screenshots, ask questions, and get knowledge through product features.
+				</p>
+			</div>
 		</a>
 	</div>
 
@@ -23,21 +22,18 @@
 	
 		<div class="features-list-item">
 			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">					
-				<div class="features-list-image">
-					<img src="{% get_media_prefix %}{{ feature.screenshots.all.0.image }}">
+				<div class="features-list-image" style="background-image: url('{% get_media_prefix %}{{ feature.screenshots.all.0.image }}');">
+					<!--<img src="{% get_media_prefix %}{{ feature.screenshots.all.0.image }}">-->
 				</div>
-				<h3>
-					{{ feature.title }}		
-				</h3>
+				<div class="features-list-text">
+					<h3>
+						{{ feature.title }}		
+					</h3>
 					
-				
-				
-				
-				
-
-				<p class="features-list-description">
-					{{ feature.description }}
-				</p>
+					<p class="features-list-description">
+						{{ feature.description }}
+					</p>
+				</div>
 
 			</a>
 		</div>
