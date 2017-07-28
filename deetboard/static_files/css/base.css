@@ -946,6 +946,12 @@ box-shadow: 0px 0px 2px #999;
   margin: 20px 0 0 0;
 }
 
+.feature-edit-text{
+  font-size: 10px;
+  color: #555;
+  text-align: center;
+}
+
 .feature-delete-body,
 .product-delete-body{
   text-align: center;
@@ -1018,11 +1024,12 @@ box-shadow: 0px 0px 2px #999;
   float: left;
   width: 100%;
   text-align: center;
+  margin-top: 20px;
 }
 
 .screenshot-wrapper{
   display: table;
-  margin: 0 auto;
+  margin: 15px auto 10px;
 }
 
 .feature-delete-button{
@@ -1044,7 +1051,6 @@ box-shadow: 0px 0px 2px #999;
   font-weight: 700;
   width: 50%;
   text-align: left;
-  font-style: italic;
 }
 
 .annotorious-popup-role{
@@ -1067,11 +1073,12 @@ box-shadow: 0px 0px 2px #999;
 }
 
 .feature-screenshot-image{
-  width: 200px;
+  max-width: 500px;
+  min-width: 300px;
   border-radius: 3px;
-  box-shadow: 0px 0px 40px 3px #888;
+  box-shadow: 0px 0px 12px 3px #ccc;
   margin: 3% 2%;
-  border: 2px solid #111;
+  border: 1px solid #ccc;
 }
 .feature-questions-list{
   margin: 10% 0 0 10%;
@@ -1203,6 +1210,14 @@ box-shadow: 0px 0px 2px #999;
   box-shadow: 0px 2px 4px #ccc;
   margin: 3% 2% 0;
 }
+
+.question-admin-image{
+  float:left;
+  border-radius: 12px;
+  box-shadow: 0px 1px 4px #888;
+  margin-right:8px;
+}
+
 .question-text{
   font-size: 20px;
   font-weight: 500px;

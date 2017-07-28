@@ -1,4 +1,7 @@
 {% load widget_tweaks %}
+
+{% load static %}
+
 <div class="question-home-body">
 	{% if question_features %}
 		<a class="back-btn btn btn-default btn-xs" href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ question_features.all.0.pk }}">
@@ -10,6 +13,11 @@
     	<div class="col-md-6 col-md-offset-2">
 		    <div class="question-container">
 			    <h5>Question</h5>
+			    <div class="question-owner-details">
+					<a href="/home/profile/{{ question.admin.pk }}">
+						<img src="{% get_media_prefix %}{{ question.admin.profile_pic }}" style="height:35px; width:35px;" id="question-admin-image" class="question-admin-image" data-toggle="tooltip" title="{{ question.admin.first_name }} {{ question.admin.last_name }} - {{ question.admin.role }}">
+					</a>
+			    </div>
 			    <div class="question-text">
 			        {{ question.text }}
 			    </div>

@@ -9,4 +9,4 @@ from deetboard.settings.base import *
 
 ALLOWED_HOSTS = ['52.20.6.21',
 				'www.deetboard.com',
-                'deetboard.com']
+				'deetboard.com']
