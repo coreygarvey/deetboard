@@ -5,9 +5,9 @@ from django.http import HttpResponseRedirect
 from models import Product, Feature, Link
 from serializers import ProductSerializer, FeatureSerializer, LinkSerializer
 from rest_framework import generics
-from django.views.generic import CreateView, TemplateView, DetailView
+from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, DeleteView
 from braces.views import LoginRequiredMixin
-from forms import ProductForm, FeatureForm, FeatureScreenshotForm
+from forms import ProductForm, FeatureForm, FeatureScreenshotForm, FeatureUpdateForm, FeatureScreenshotUpdateForm
 from orgs.models import Org
 from questions.models import Question
 from screenshots.models import Screenshot
@@ -24,7 +24,6 @@ from django.core import serializers
 from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import assign_perm
 
-from django.views.generic import DeleteView
 from django.http import Http404
 
 
@@ -322,6 +321,7 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         assign_perm('view_feat', orgUserGroup, feat)
         current_user = self.request.user
         assign_perm('products.delete_feature', current_user, feat)
+        assign_perm('products.change_feature', current_user, feat)
         return reverse('feature_home', args=(self.object.product.org.id,self.object.product.id,self.object.id))
 
 class FeatureCreateFirstView(FeatureCreateView):
@@ -366,9 +366,9 @@ class FeatureView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         context['experts'] = feature_experts
 
         if(user in feature.admins.all()):
-            context['deletable'] = True
+            context['editable'] = True
         else:
-            context['deletable'] = False
+            context['editable'] = False
 
 
         # Get annotations for the first screenshot
@@ -428,6 +428,113 @@ class FeatureView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         except User.DoesNotExist:
             return None
 
+class FeatureUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """
+    Form to update a feature
+    """
+    success_url = None
+    template_name = "features/feature-update.html"
+    form_class = FeatureScreenshotUpdateForm
+    model = Feature
+    permission_required = 'products.change_feature'
+    
+
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(FeatureUpdateView, self).get_context_data(**kwargs)
+        feature_pk = self.kwargs['pk']
+        feature = Feature.objects.get(pk=feature_pk)
+        context['feature'] = feature
+
+
+        user = self.request.user
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+
+        user_orgs = user.orgs.all()
+        org_products = org.products.all()
+        product_pk = self.kwargs['ppk']
+        product = Product.objects.get(pk=product_pk)
+        prod_features = product.features.all()
+        context['user'] = user
+        context['org'] = org
+        context['product'] = product
+        context['user_orgs'] = user_orgs
+        context['org_products'] = org_products
+        context['prod_features'] = prod_features
+
+        return context
+
+
+
+    def get_object(self):
+        feature_pk = self.kwargs['pk']
+        current_feature = Feature.objects.get(pk=feature_pk)
+        return current_feature
+
+    def form_valid(self, form, *args, **kwargs):
+        updated_feature = form.save()
+        updated_feature.save()
+
+        print "UPDATED!!"
+        print form
+        for expert in updated_feature.experts.all():
+            print expert
+
+        # Determine next move 
+        org_pk = self.kwargs['opk']
+        prod_pk = self.kwargs['ppk']
+        feat_pk = self.kwargs['pk']
+        success_url = self.get_success_url(org_pk, prod_pk, feat_pk)
+        try:
+            to, args, kwargs = success_url
+            return redirect(to, *args, **kwargs)
+        except ValueError:
+            return redirect(success_url)
+
+    def get_form_kwargs(self):
+        kwargs = super(FeatureUpdateView, self).get_form_kwargs()
+        
+        # Pass org accounts to form for experts choice
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        org_accounts = org.accounts.all().only('first_name', 'last_name')
+        
+        kwargs.update({
+            'request' : self.request,
+            'org_accounts' : org_accounts
+        })
+        return kwargs
+        
+
+    def get_success_url(self, org_id, prod_id, feat_id):
+        return reverse('feature_home',args=(org_id, prod_id, feat_id,))
+
+
+    def form_invalid(self, form):
+        # tl;dr -- this method is implemented to work around Django
+        # ticket #25548, which is present in the Django 1.9 release
+        # (but not in Django 1.8 or 1.10).
+        #
+        # The longer explanation is that in Django 1.9,
+        # FormMixin.form_invalid() does not pass the form instance to
+        # get_context_data(). This causes get_context_data() to
+        # construct a new form instance with the same data in order to
+        # put it into the template context, and then any access to
+        # that form's ``errors`` or ``cleaned_data`` runs that form
+        # instance's validation. The end result is that validation
+        # gets run twice on an invalid form submission, which is
+        # undesirable for performance reasons.
+        #
+        # Manually implementing this method, and passing the form
+        # instance to get_context_data(), solves this issue (which was
+        # fixed in Django 1.9.1 and so is not present in Django
+        # 1.10).
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+
+
 class FeatureDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model=Feature
     template_name = 'features/feature-delete-confirm.html'
@@ -459,7 +566,10 @@ class FeatureDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
         print "GET SUCCESS URL"
         success_url = reverse('product_home', args=(self.object.product.org.id,self.object.product.id))
         return success_url
-        
+
+
+
+
 
 
 class ProductList(generics.ListCreateAPIView):

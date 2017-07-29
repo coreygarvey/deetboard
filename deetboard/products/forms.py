@@ -87,6 +87,44 @@ class FeatureForm(forms.ModelForm):
 			pass
 		'''
 		super(FeatureForm, self).clean()
+
+class FeatureUpdateForm(forms.ModelForm):
+	"""
+	Form for updating a feature.
+	"""
+
+	def __init__(self, *args, **kwargs):
+		self.request = kwargs.pop('request', None)
+		
+		# Get org_accounts to set expert choices
+		org_accounts = kwargs.pop('org_accounts', None)
+		
+		super(FeatureUpdateForm, self).__init__(*args, **kwargs)
+
+		self.fields['description'].required = False
+		self.fields['experts'].required = False
+		
+		self.fields['experts'].queryset = org_accounts
+
+	class Meta:
+  		model = Feature
+		fields = ['title', 'description', 'experts',]
+		labels = {
+			'title': _('Name'),
+			'description': _('Description'),
+			'experts': _('Experts')
+		}
+		widgets = {
+			'title': forms.TextInput(attrs=dict(max_length=30)),
+			'description': forms.Textarea(attrs=dict(max_length=100, rows=8, cols=12)),
+			'experts': forms.CheckboxSelectMultiple(),
+		}
+
+		field_classes = {
+			'title': forms.CharField,
+			'description': forms.CharField,
+			'experts': UserModelMultipleChoiceField,
+		}
 '''
 '''
 class FeatureScreenshotForm(FeatureForm):
@@ -100,6 +138,21 @@ class FeatureScreenshotForm(FeatureForm):
 
 	def __init__(self, *args, **kwargs):
 		super(FeatureScreenshotForm, self).__init__(*args, **kwargs)
+		self.fields['screenshot'].required = False
+
+
+
+class FeatureScreenshotUpdateForm(FeatureUpdateForm):
+	screenshot = forms.ImageField()
+
+	class Meta(FeatureUpdateForm.Meta):
+		fields = FeatureUpdateForm.Meta.fields + ['screenshot']
+		field_classes = {
+			'screenshot': forms.ImageField,
+		}
+
+	def __init__(self, *args, **kwargs):
+		super(FeatureScreenshotUpdateForm, self).__init__(*args, **kwargs)
 		self.fields['screenshot'].required = False
 
 

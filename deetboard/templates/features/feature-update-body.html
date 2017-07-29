@@ -1,0 +1,70 @@
+{% load widget_tweaks %}
+{% load staticfiles %}
+<div class="feature-home-body">
+	<div class="title">
+	    <h1>Update a Feature</h1>
+	</div>
+
+	<form method="post" action="" enctype="multipart/form-data" class="create-feature-form">
+
+		{% csrf_token %}
+	
+		<div class="row">
+			<div class="col-md-5">
+				<h2>Details</h2>
+				{% for error in form.title.errors %}
+					{{error}}
+				{% endfor %}
+				{% for error in form.description.errors %}
+					{{error}}
+				{% endfor %}
+				{% for error in form.experts.errors %}
+					{{error}}
+				{% endfor %}
+				{% for error in form.screenshot.errors %}
+					{{error}}
+				{% endfor %}
+				{% if form.title.errors %}
+				    <ol>
+				    {% for error in form.title.errors %}
+				        <li><strong>{{ error|escape }}</strong></li>
+				    {% endfor %}
+				    </ol>
+				{% endif %}
+				{% render_field form.title placeholder="Feature name" class+="form-control create-feature-input" %}
+
+				{% render_field form.description placeholder="Feature description" class+="form-control create-feature-input" %}
+			</div>
+			<div class="col-md-5 col-md-offset-2">
+				<h2>Experts</h2>
+				{% render_field form.experts placeholder="Feature experts" class+="create-feature-input feature-field" %}
+				
+				<h2>Screenshot</h2>
+				<p style="font-size:10px;margin-top:-5px; width:60%">Sorry, screenshots cannot be updated at the moment. Please delete and create a new feature.</p>
+
+				<!--
+				<label class="btn btn-default btn-file" for="feature-screenshot-selector">
+					Choose File...
+					{% render_field form.screenshot id="feature-screenshot-selector" class+="file-upload" %}
+
+				</label>
+				
+				<div id="upload-file-info">
+					
+				</div>
+				-->
+			</div>
+		</div>
+		<br>
+		
+		<div class="row">
+			<div class="col-md-6 col-md-offset-4">
+				<input type="submit" class="btn btn-main feature-create-btn" value="Update the Feature" />
+			</div>
+			
+		</div>
+		
+	    
+	</form>
+
+</div>

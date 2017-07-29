@@ -45,11 +45,16 @@
 			 	Add shapes and annotations to the image above.
 			 </div>
 			 {% endif %}
-			{% if deletable %}
+			{% if editable %}
+	    	<div class="feature-control-btns">
+		    	<div id="feature-edit-btn">
+		    		<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/update/" class="btn btn-warning">Edit Feature</a>
+		    	</div>
 
-	    	<div id="feature-delete-btn">
-	    		<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/delete/" class="btn btn-danger">Delete Feature</a>
-	    	</div>
+		    	<div id="feature-delete-btn">
+		    		<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}/delete/" class="btn btn-danger">Delete Feature</a>
+		    	</div>
+		    </div>
 		    {% endif %}
         </div>
 
