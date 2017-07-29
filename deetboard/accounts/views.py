@@ -207,6 +207,13 @@ class ActivationView(UpdateView):
                 org = Org.objects.get(id=org_id)
                 updated_user.orgs.add(org)
                 updated_user.primary_org = org
+                
+                # Find group for this Org, add user, set view perm
+                groupName = org.title + str(org.pk)
+                orgUserGroup = Group.objects.get(name=groupName)
+                updated_user.groups.add(orgUserGroup)
+                updated_user.save()
+
                 updated_user.save()
             signals.user_activated.send(
                 sender=self.__class__,
@@ -319,7 +326,7 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
     """
     disallowed_url = 'invitation_disallowed'
     form_class = AdminInvitationForm
-    success_url = None
+    
     template_name = 'registration/invitation-front.html'
 
 
@@ -342,6 +349,10 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)
         context['org'] = org
+
+        org_pk = self.kwargs['pk']
+        success_url = self.get_success_url(org_pk)
+        context['success_url'] = success_url
 
         return context
 
@@ -369,7 +380,6 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
         else:
             org.email_all=False
         org.save()
-        success_url = self.get_success_url(org_pk)
 
         # success_url may be a simple string, or a tuple providing the
         # full argument set for redirect(). Attempting to unpack it
@@ -416,7 +426,7 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
 
 class GeneralInvitationView(InvitationView):
     form_class = GeneralInvitationForm
-
+    
     def form_valid(self, form):
         # Protect for only users in org
         org_pk = self.kwargs['pk']
@@ -439,7 +449,10 @@ class GeneralInvitationView(InvitationView):
                 orgUserGroup = Group.objects.get(name=groupName)
                 new_user.groups.add(orgUserGroup)
 
-                success_url = self.get_success_url()
+
+        # Send to org home after invitations sent
+        success_url = get_success_url(org_pk)
+                
 
         # success_url may be a simple string, or a tuple providing the
         # full argument set for redirect(). Attempting to unpack it
@@ -449,6 +462,11 @@ class GeneralInvitationView(InvitationView):
             return redirect(to, *args, **kwargs)
         except ValueError:
             return redirect(success_url)
+
+    def get_success_url(self, org_id):
+        success_url = reverse('org_home', args=(org_id,))
+        return success_url
+        
 
 class HomeInvitationView(GeneralInvitationView):
     template_name = 'accounts/invitation.html'
