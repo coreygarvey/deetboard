@@ -1,0 +1,30 @@
+{% load static %}
+    <div class="row equal">
+		<div class="orgs-list">
+			<h4>Teams</h4>
+			<div class="orgs-list-item">
+				<a href="/home/create-team/">
+					<h3>
+						New Team
+					</h3>
+
+					<div class="orgs-list-image">
+						<i class="fa fa-plus-square-o fa-5x" aria-hidden="true"></i>
+					</div>
+
+				</a>
+			</div>
+			{% for org in user_orgs.all %}
+			
+				<div class="orgs-list-item">
+					<a href="/home/team/{{ org.pk }}">					
+						<h3>
+							{{ org.title }}
+						</h3>
+					</a>
+				</div>
+
+			{% endfor %}
+		</div>
+	</div>
+

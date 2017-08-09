@@ -279,7 +279,7 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
         return obj
 
     def get_success_url(self):
-        success_url = reverse('org_home', args=(self.object.org.id))
+        success_url = reverse('org_home', args=(self.object.org.id,))
         return success_url
 
 

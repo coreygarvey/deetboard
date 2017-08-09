@@ -2,7 +2,7 @@
 {% load staticfiles %}
 <div class="feature-home-body">
 	<div class="title">
-	    <h1>Update a Feature</h1>
+	    <h1>Update Feature</h1>
 	</div>
 
 	<form method="post" action="" enctype="multipart/form-data" class="create-feature-form">
@@ -40,8 +40,17 @@
 				{% render_field form.experts placeholder="Feature experts" class+="create-feature-input feature-field" %}
 				
 				<h2>Screenshot</h2>
-				<p style="font-size:10px;margin-top:-5px; width:60%">Sorry, screenshots cannot be updated at the moment. Please delete and create a new feature.</p>
+				
 
+				
+				<p style="font-size:11px;margin-top:-5px; width:60%">Sorry, screenshots cannot be updated at the moment. Please delete and create a new feature.</p>
+				
+				<!--
+				<td class="update-label">Screenshot</td>
+				<td class="update-field">
+					{% render_field form.screenshot placeholder="Screenshot" class+="form-control update-input" %}
+				</td>
+				-->
 				<!--
 				<label class="btn btn-default btn-file" for="feature-screenshot-selector">
 					Choose File...

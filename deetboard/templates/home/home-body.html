@@ -1,14 +1,8 @@
-<div class="home-body">
-    <div class="title">
-        <h2>Home</h2>
-    </div>
-
-    <p>Welcome {{ user.first_name }}  </p>
-
-    DeetBoard is here to get your team on track.
+<!--<div class="home-body">
+    <h3>Welcome {{ user.first_name }} {{ user.last_name }}</h3>
 
     {% if user_orgs %}
-    Choose your team below:
+    <h4>Teams</h4>
       <ul>
         {% for org in user_orgs.all %}
             <li><a href="/home/team/{{ org.pk }}">{{ org.title }}</a></li>
@@ -19,7 +13,19 @@
     {% else %}
     <a href="/home/create-team">Create a new team</a>
     {% endif %}
-    
-    
+
+</div>
+-->
+
+
+<div class="home-dash-body">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-2 org-home-header">
+            <h2>Welcome {{ user.first_name }} {{ user.last_name }}</h2>
+        </div>
+    </div>
+
+            
+        {% include "../orgs/orgs-list.html" %}
 
 </div>

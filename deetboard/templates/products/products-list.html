@@ -1,41 +1,43 @@
 {% load static %}
-    <div class="row equal products-list">
-		
-		<div class="products-list-item">
-			<a href="/home/team/{{ org.pk }}/create-product/">
-				<h3>
-					New Product	
-				</h3>
-
-				<div class="products-list-image">
-					<i class="fa fa-plus-square-o fa-5x" aria-hidden="true"></i>
-				</div>
-				
-				<p class="products-list-description">
-					Organized collection of features and conversations to connect your team with internal experts.
-				</p>
-			</a>
-		</div>
-		{% for product in products.all %}
-		
+    <div class="row equal">
+		<div class="products-list">
+			<h4>Products</h4>
 			<div class="products-list-item">
-				<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">					
+				<a href="/home/team/{{ org.pk }}/create-product/">
 					<h3>
-						{{ product.title }}		
+						New Product	
 					</h3>
 
 					<div class="products-list-image">
-						<img src="{% get_media_prefix %}{{ product.image }}">
+						<i class="fa fa-plus-square-o fa-5x" aria-hidden="true"></i>
 					</div>
 					
-
 					<p class="products-list-description">
-						{{ product.description }}
+						Organized collection of features and conversations to connect your team with internal experts.
 					</p>
-
 				</a>
 			</div>
+			{% for product in products.all %}
+			
+				<div class="products-list-item">
+					<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">					
+						<h3>
+							{{ product.title }}		
+						</h3>
 
-		{% endfor %}
+						<div class="products-list-image">
+							<img src="{% get_media_prefix %}{{ product.image }}">
+						</div>
+						
+
+						<p class="products-list-description">
+							{{ product.description }}
+						</p>
+
+					</a>
+				</div>
+
+			{% endfor %}
+		</div>
 	</div>
 

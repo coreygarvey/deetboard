@@ -1,7 +1,7 @@
 {% load widget_tweaks %}
 <div class="org-home-body">
 	<div class="title">
-	    <h1>Create Your Team</h1>
+	    <h1>Create Team</h1>
 	</div>
 	<form method="post" action="">{% csrf_token %}
 	    {% render_field form.title placeholder="Team name" class+="form-control create-org-input" %}

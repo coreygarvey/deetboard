@@ -1,7 +1,7 @@
 {% load widget_tweaks %}
 <div class="product-home-body">
 	<div class="title">
-	    <h1>Update a Product</h1>
+	    <h1>Update Product</h1>
 	</div>
 
 
@@ -26,9 +26,35 @@
 				<div id="upload-file-info">
 					
 				</div>
-				-->
 				
-				<p style="font-size:10px;margin-top:-5px; width:60%">Sorry, images cannot be updated at the moment. Please delete and create a new product.</p>
+
+				
+				
+				<table style="width:100%">
+					<tr>
+						<td class="update-label">Screenshot</td>
+						<td class="update-field">
+							{% render_field form.image placeholder="Screenshot" class+="form-control file-upload" %}
+						</td>
+					</tr>
+				</table>
+				-->
+
+				
+
+				{% render_field form.image id="product-image-selector" class+="file-upload" %}
+
+				<label class="btn btn-default btn-file" for="product-image-selector">
+					Choose File...
+				</label>
+				
+				<div id="upload-file-info">
+					
+				</div>
+				
+				<!--
+				<p style="font-size:11px;margin-top:-5px; width:60%">Sorry, images cannot be updated at the moment. Please delete and create a new product.</p>
+				-->
 				
 			</div>
 		</div>

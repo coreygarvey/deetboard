@@ -23,20 +23,25 @@ class ProductForm(forms.ModelForm):
 
 	def clean(self):
 		cleaned_data = super(ProductForm,self).clean()
+		'''
+		CURRENTLY ALLOWING DUPLICATE PRODUCT NAMES
 		try:
 			dupeProduct = Product.objects.get(title__iexact=cleaned_data.get('title'))
 			raise forms.ValidationError(_("Already a product with that name."))
 		except Product.DoesNotExist:
 			pass
+		'''
 
 		super(ProductForm, self).clean()
 
 
 class ProductUpdateForm(forms.ModelForm):
 	title = forms.CharField(required=False, widget=forms.TextInput(attrs=dict(required=False, max_length=30)), label=_("Name"))
+	image = forms.ImageField()
+
 	class Meta:
 		model = Product
-		fields = ['title', 'description', 'image']
+		fields = ['title', 'description', 'image',]
 		widgets = {
           'description': forms.Textarea(attrs={'rows':4}),
         }
@@ -49,11 +54,14 @@ class ProductUpdateForm(forms.ModelForm):
 
 	def clean(self):
 		cleaned_data = super(ProductUpdateForm,self).clean()
+		'''
+		CURRENTLY ALLOWING DUPLICATE PRODUCT NAMES
 		try:
 			dupeProduct = Product.objects.get(title__iexact=cleaned_data.get('title'))
 			raise forms.ValidationError(_("Already a product with that name."))
 		except Product.DoesNotExist:
 			pass
+		'''
 
 		super(ProductUpdateForm, self).clean()
 
