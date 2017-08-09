@@ -2,24 +2,41 @@
 
 <div class="home-body">
     <div class="container">
+		
 		<div class="row">
-			<div class="col-md-3 profile-image">
-				<img src="{% get_media_prefix %}{{ profile_user.profile_pic }}" style="height:150px; width:150px;">
+	        <div class="col-md-10 col-md-offset-1 profile-header">
+	            <!--<h2>Welcome {{ user.first_name }} {{ user.last_name }}</h2>-->
+	            <h2>Profile</h2>
+	        </div>
+	    </div>
+
+
+
+		<div class="row">
+			
+			<div class="col-md-10 col-md-offset-1 profile-body">
+				<div class="row">
+					<div class="col-md-3">
+						<img src="{% get_media_prefix %}{{ profile_user.profile_pic }}" class="profile-image" style="height:150px; width:150px;">
+					</div>
+					<div class="col-md-4 profile-title">
+						<h2>{{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
+		        		
+		        		<div class="profile-details">
+							<span class="profile-label">Username</span>
+							<p>{{ profile_user.username }}</p>
+							
+							<span class="profile-label">Role</span>
+							<p>{{ profile_user.role }}</p>
+
+		        		</div>
+
+
+					</div>
+				</div>
 			</div>
-			<div class="col-md-4 profile-title">
-				<h2>{{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
-        		
-				<table class="profile-details-table">
-					<tr>
-						<td class="profile-label">Username:</td>
-						<td>{{ profile_user.username }}</td>
-					</tr>
-					<tr>
-						<td class="profile-label">Role:</td>
-						<td>{{ profile_user.role }}</td>
-					</tr>
-				</table>
-			</div>
+
+
 		</div>
 	</div>
 

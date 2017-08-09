@@ -1,6 +1,11 @@
 {% load widget_tweaks %}
 {% load staticfiles %}
 <div class="feature-home-body">
+	<a class="back-btn btn btn-default btn-xs" href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">
+		<i class="fa fa-arrow-left" aria-hidden="true"></i>
+		<b>{{product.title}}</b>
+	</a>
+
 	<div class="title">
 	    <h1>Create a Feature</h1>
 	</div>
