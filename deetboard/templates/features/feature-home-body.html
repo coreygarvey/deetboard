@@ -10,10 +10,13 @@
 
     <div class="row">
         <div class="col-md-8">
-            
-            <div class="feature-details">
-	            <h2>{{ feature.title }}</h2>
-	            <p>{{ feature.description }}</p>
+            <div class="row">
+            	<div class="col-md-10 col-md-offset-1 feature-header">
+		            <div class="feature-details">
+			            <h2>{{ feature.title }}</h2>
+			            <p>{{ feature.description }}</p>
+		            </div>
+            	</div>
             </div>
             <div class="feature-filters-experts">
 	            <div class="feature-anno-group-btns">
@@ -88,7 +91,7 @@
 								<br>
 							</div>
 				        	<div class="feature-question-text-wrapper">
-				        		{{ question.text }}...
+				        		{{ question.text }}
 				        	</div>
 				        </a>
 				    </div>

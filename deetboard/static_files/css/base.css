@@ -486,7 +486,7 @@ h1 {
   line-height: 50px;
   font-size: 16px;
   padding: 0px 0px 0px 20px;
-  border-top: 1px solid rgba(0,0,0,0.12);
+  border-bottom: 1px solid rgba(0,0,0,0.12);
   -o-transition:.5s;
   -ms-transition:.5s;
   -moz-transition:.5s;
@@ -502,21 +502,7 @@ h1 {
   background-color: #dadfe7;
   color: #214478;
   cursor: pointer;
-  border-top: 1px solid rgba(0,0,0,0.12);
-}
-
-.left-nav-title{
-    font-weight: 450;
-}
-
-.left-nav-title > ul > li:hover, 
-.left-nav-title > ul > li:active, 
-.left-nav-title > ul > li:active:focus, 
-.left-nav-title > ul > li:focus  {
-  background-color: #dadfe7;
-  color: #214478;
-  cursor: pointer;
-  border-top: 1px solid rgba(0,0,0,0.12);
+  border-bottom: 1px solid rgba(0,0,0,0.12);
 }
 
 .dropdown .dropdown-menu {
@@ -667,8 +653,8 @@ box-shadow: 0px 0px 2px #999;
 
 /* Home Dash */
 .orgs-list {
-  width: 90%;
-  margin: 0 3.5%;
+  width: 86%;
+  margin: 2% 7%;
 }
 
 .orgs-list h3{
@@ -783,7 +769,9 @@ box-shadow: 0px 0px 2px #999;
 
 /* Org home page */
 .org-home-header{
-  text-align: center;
+  text-align: left;
+  border-bottom: 1px solid #bbb;
+  color: #333;
 }
 
 /* Create Product - First time */
@@ -816,8 +804,8 @@ box-shadow: 0px 0px 2px #999;
 
 /* Products List */
 .products-list {
-  width: 90%;
-  margin: 0 3.5%;
+  width: 86%;
+  margin: 2% 7%;
 }
 
 .products-list h3{
@@ -891,14 +879,19 @@ box-shadow: 0px 0px 2px #999;
 }
 
 /* Product Page */
+.product-header{
+  text-align: left;
+  border-bottom: 1px solid #bbb;
+  color: #333;
+}
+
 .product-details{
-  text-align: center;
 }
 
 /* Features List */
 .features-list {
-  width: 90%;
-  margin: 0 3.5%;
+  width: 86%;
+  margin: 2% 7%;
 }
 
 .features-list h3{
@@ -1081,14 +1074,15 @@ box-shadow: 0px 0px 2px #999;
 }
 
 /* Annotations */
-
+.feature-header{
+  text-align: center;
+  border-bottom: 1px solid #bbb;
+  color: #333;
+}
 .feature-details{
-  padding: 0 5%;
-  text-align: center
 }
 .feature-details h2{
-  font-size: 36px;
-  text-align: center;
+  font-size: 30px;
 }
 
 .feature-anno-group-btns{
@@ -1312,8 +1306,7 @@ box-shadow: 0px 0px 2px #999;
   position: relative;
   width: 100%;
   float: left;
-  padding: 6% 10% 10%;
-  
+  padding: 8% 10% 10%;
   background: #fff;
   border: 1px solid #bbb;
   border-radius: 3px 3px 0 0;
@@ -1321,16 +1314,25 @@ box-shadow: 0px 0px 2px #999;
   margin: 3% 2% 0;
 }
 
-.question-admin-image{
+
+.question-image{
   float:left;
   border-radius: 12px;
   box-shadow: 0px 1px 4px #888;
   margin-right:8px;
 }
 
+.question-details {
+  width: 10%;
+  min-width: 50px;
+  float: left;
+}
+
 .question-text{
   font-size: 20px;
   font-weight: 500px;
+  width: 80%;
+  float: left;
 }
 .question-response-btn{
     width: 50%;
@@ -1375,15 +1377,30 @@ box-shadow: 0px 0px 2px #999;
   position: relative;
   width: 100%;
   float: left;
-  padding: 3% 5% 5%;
+  padding: 6% 10% 10%;
   background: #fff;
   border: 1px solid #bbb;
   box-shadow: 0px 2px 4px #ccc;
   margin: 0;
 }
+
+.response-image{
+  float:left;
+  border-radius: 12px;
+  box-shadow: 0px 1px 4px #888;
+  margin-right:8px;
+}
+
+.response-details{
+  float: left;
+  width: 10%;
+  min-width: 50px;
+}
+
 .response-text{
   font-size: 15px;
-  font-weight: 500px;
+  width: 80%;
+  float: left;
 }
 
 .response-input{
