@@ -9,14 +9,18 @@
 
     {% include "../features/features-list.html" %}
 
-    {% if deletable %}
+    {% if editable %}
     <div class="row">
-        <div class="col-md-12">
-			<div id="product-delete-btn">
-				<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/delete/" class="btn btn-danger">Delete Product</a>
-			</div>
-		</div>
-	</div>
+        <div class="product-control-btns">
+            <div id="product-edit-btn">
+                <a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/update/" class="btn btn-warning">Edit Product</a>
+            </div>
+
+            <div id="product-delete-btn">
+                <a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/delete/" class="btn btn-danger">Delete Product</a>
+            </div>
+        </div>
+    </div>
     {% endif %}
     
 

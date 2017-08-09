@@ -1,0 +1,20 @@
+{% extends "../home.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Product Update{% endblock %}
+
+{% block content %}
+    
+            {% include "../nav/prod-left-nav.html" %}
+            
+            {% include "./product-update-body.html" %}
+
+    
+{% endblock %}
+
+{% block postjs %}
+	
+	{% include "../javascript/file-upload-display.js" %}
+
+{% endblock %}

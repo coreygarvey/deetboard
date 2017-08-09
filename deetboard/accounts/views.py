@@ -664,6 +664,7 @@ def custom_login(request):
     else:
         return login_view(request)
 
+
 @csrf_protect
 def register(request):
     if request.method == 'POST':

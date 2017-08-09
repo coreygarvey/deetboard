@@ -25,10 +25,25 @@ def home(request):
     admin_orgs = Org.objects.filter(admin=current_user)
     primary_org = current_user.primary_org
     
+
     if primary_org:
         return redirect('org_home', pk=primary_org.id)
     
+    return render_to_response(
+        'home/home.html',
+        { 
+            'user': current_user,
+            'user_orgs': user_orgs,
+            'admin_orgs': admin_orgs
+        }
+    )
 
+@login_required
+def home_dash(request):
+    current_user = request.user
+    user_orgs = current_user.orgs.all()
+    admin_orgs = Org.objects.filter(admin=current_user)
+    
     return render_to_response(
         'home/home.html',
         { 

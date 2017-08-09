@@ -7,7 +7,7 @@ from serializers import ProductSerializer, FeatureSerializer, LinkSerializer
 from rest_framework import generics
 from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, DeleteView
 from braces.views import LoginRequiredMixin
-from forms import ProductForm, FeatureForm, FeatureScreenshotForm, FeatureUpdateForm, FeatureScreenshotUpdateForm
+from forms import ProductForm, ProductUpdateForm, FeatureForm, FeatureScreenshotForm, FeatureUpdateForm, FeatureScreenshotUpdateForm
 from orgs.models import Org
 from questions.models import Question
 from screenshots.models import Screenshot
@@ -86,10 +86,109 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         assign_perm('view_prod', orgUserGroup, prod)
         current_user = self.request.user
         assign_perm('products.delete_product', current_user, prod)
+        assign_perm('products.change_product', current_user, prod)
         #if(current_user.has_perm('products.delete_product', prod)):
         #    print "User has product delete perm"
 
         return reverse('feature_create_home', args=(self.object.org.id,self.object.id))
+
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """
+    Form to update a product
+    """
+    success_url = None
+    template_name = "products/product-update.html"
+    form_class = ProductUpdateForm
+    model = Product
+    permission_required = 'products.change_product'
+    
+
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(ProductUpdateView, self).get_context_data(**kwargs)
+        product_pk = self.kwargs['pk']
+        product = Product.objects.get(pk=product_pk)
+        context['product'] = product
+
+
+        user = self.request.user
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+
+        user_orgs = user.orgs.all()
+        org_products = org.products.all()
+        prod_features = product.features.all()
+        context['user'] = user
+        context['org'] = org
+        
+        context['user_orgs'] = user_orgs
+        context['org_products'] = org_products
+        context['prod_features'] = prod_features
+
+        return context
+
+
+
+    def get_object(self):
+        product_pk = self.kwargs['pk']
+        current_product = Product.objects.get(pk=product_pk)
+        return current_product
+
+    def form_valid(self, form, *args, **kwargs):
+        updated_product = form.save()
+        updated_product.save()
+
+        # Determine next move 
+        org_pk = self.kwargs['opk']
+        prod_pk = self.kwargs['pk']
+        success_url = self.get_success_url(org_pk, prod_pk)
+        try:
+            to, args, kwargs = success_url
+            return redirect(to, *args, **kwargs)
+        except ValueError:
+            return redirect(success_url)
+    '''
+    def get_form_kwargs(self):
+        kwargs = super(ProductUpdateView, self).get_form_kwargs()
+        
+        # Pass org accounts to form for experts choice
+        org_pk = self.kwargs['opk']
+        org = Org.objects.get(pk=org_pk)
+        org_accounts = org.accounts.all().only('first_name', 'last_name')
+        
+        kwargs.update({
+            'request' : self.request,
+            'org_accounts' : org_accounts
+        })
+        return kwargs
+    '''
+
+    def get_success_url(self, org_id, prod_id):
+        return reverse('product_home',args=(org_id, prod_id,))
+
+
+    def form_invalid(self, form):
+        # tl;dr -- this method is implemented to work around Django
+        # ticket #25548, which is present in the Django 1.9 release
+        # (but not in Django 1.8 or 1.10).
+        #
+        # The longer explanation is that in Django 1.9,
+        # FormMixin.form_invalid() does not pass the form instance to
+        # get_context_data(). This causes get_context_data() to
+        # construct a new form instance with the same data in order to
+        # put it into the template context, and then any access to
+        # that form's ``errors`` or ``cleaned_data`` runs that form
+        # instance's validation. The end result is that validation
+        # gets run twice on an invalid form submission, which is
+        # undesirable for performance reasons.
+        #
+        # Manually implementing this method, and passing the form
+        # instance to get_context_data(), solves this issue (which was
+        # fixed in Django 1.9.1 and so is not present in Django
+        # 1.10).
+        return self.render_to_response(self.get_context_data(form=form))
+
+
 
 class ProductView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     """
@@ -116,11 +215,11 @@ class ProductView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         context['user_orgs'] = user_orgs
         context['prod_features'] = prod_features
         context['org_products'] = org_products
-        
+
         if(user in product.admins.all()):
-            context['deletable'] = True
+            context['editable'] = True
         else:
-            context['deletable'] = False
+            context['editable'] = False
 
 
         return context

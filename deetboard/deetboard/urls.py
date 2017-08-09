@@ -24,13 +24,13 @@ from django.contrib.auth.views import login, password_reset_confirm, password_re
 
 from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm
 
-from views import home
+from views import home, home_dash
 from accounts.views import register, register_success, logout_page, custom_login
 from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, HomeInvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView, ProfilePublicView
 
 from views import IndexView
 from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView, OrgProductsView
-from products.views import ProductCreateView, ProductView,ProductCreateFirstView,  ProductDeleteView, FeatureCreateView, FeatureCreateFirstView, FeatureView, FeatureListView, FeatureUpdateView, FeatureDeleteView
+from products.views import ProductCreateView, ProductView, ProductCreateFirstView, ProductUpdateView, ProductDeleteView, FeatureCreateView, FeatureCreateFirstView, FeatureView, FeatureListView, FeatureUpdateView, FeatureDeleteView
 from questions.views import QuestionCreateView, QuestionView, QuestionListView, ResponseCreateView
 
 from annotations.views import annotations, annotation_search
@@ -149,6 +149,12 @@ urlpatterns = [
     ),
 
     # After Registration
+    url(r'^home/dashboard/$', 
+        home_dash,
+        name = 'home_dash'
+    ),
+
+    # After Registration
     url(r'^home/profile/$', 
         ProfileView.as_view(
             ),
@@ -208,6 +214,11 @@ urlpatterns = [
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<pk>\d+)/$',
         ProductView.as_view(),
         name='product_home',
+    ),
+
+    url(r'^home/team/(?P<opk>\d+)/prod/(?P<pk>\d+)/update/$',
+        ProductUpdateView.as_view(),
+        name='product_update',
     ),
 
     url(r'^home/team/(?P<opk>\d+)/prod/(?P<pk>\d+)/delete/$',

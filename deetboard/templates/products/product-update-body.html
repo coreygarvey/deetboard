@@ -1,0 +1,49 @@
+{% load widget_tweaks %}
+<div class="product-home-body">
+	<div class="title">
+	    <h1>Update a Product</h1>
+	</div>
+
+
+	<form method="post" action="" enctype="multipart/form-data" class="create-product-form">
+
+		{% csrf_token %}
+	
+		<div class="row">
+			<div class="col-md-6">
+				<h2>Details</h2>
+				{% render_field form.title placeholder="Product name" class+="form-control create-product-input" %}
+				
+				{% render_field form.description placeholder="Product description" class+="form-control create-product-input" %}
+			</div>
+			<div class="col-md-6">
+				<h2>Image</h2>
+				<!--
+				<label class="btn btn-default btn-file" for="product-image-selector">
+					Choose File...
+					{% render_field form.image id="product-image-selector" style="display: none;" class+="file-upload" %}
+				</label>
+				<div id="upload-file-info">
+					
+				</div>
+				-->
+				
+				<p style="font-size:10px;margin-top:-5px; width:60%">Sorry, images cannot be updated at the moment. Please delete and create a new product.</p>
+				
+			</div>
+		</div>
+		<br>
+		
+		<div class="row">
+			<div class="col-md-6 col-md-offset-4">
+				<input type="submit" class="btn btn-main product-create-btn" value="Update Product" />
+			</div>
+			
+		</div>
+		
+	    
+	</form>
+
+
+
+</div>

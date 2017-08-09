@@ -31,6 +31,32 @@ class ProductForm(forms.ModelForm):
 
 		super(ProductForm, self).clean()
 
+
+class ProductUpdateForm(forms.ModelForm):
+	title = forms.CharField(required=False, widget=forms.TextInput(attrs=dict(required=False, max_length=30)), label=_("Name"))
+	class Meta:
+		model = Product
+		fields = ['title', 'description', 'image']
+		widgets = {
+          'description': forms.Textarea(attrs={'rows':4}),
+        }
+	
+	def __init__(self, *args, **kwargs):
+		self.request = kwargs.pop('request', None)
+		super(ProductUpdateForm, self).__init__(*args, **kwargs)
+		print kwargs
+
+
+	def clean(self):
+		cleaned_data = super(ProductUpdateForm,self).clean()
+		try:
+			dupeProduct = Product.objects.get(title__iexact=cleaned_data.get('title'))
+			raise forms.ValidationError(_("Already a product with that name."))
+		except Product.DoesNotExist:
+			pass
+
+		super(ProductUpdateForm, self).clean()
+
 class FeatureForm(forms.ModelForm):
 	#title = forms.CharField(required=False, widget=forms.TextInput(attrs=dict(required=False, max_length=30)), label=_("Name"))
 	#description = forms.CharField(required=False, widget=forms.Textarea(attrs=dict(required=False, max_length=100,rows=8, cols=12)), label=_("Description"))

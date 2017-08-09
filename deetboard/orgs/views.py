@@ -124,12 +124,8 @@ class OrgHomeView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         context['user'] = user
         context['org'] = org
         context['user_orgs'] = user_orgs
-        print "user_orgs"
-        print user_orgs
         context['products'] = products
         return context
-
-
 
     def get_user(self, username):        
         #Given the verified username, look up and return the
