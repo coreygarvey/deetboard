@@ -1,0 +1,32 @@
+{% load static %}
+    <div class="row equal">
+		<div class="org-members-list">
+			<h4>Team Members</h4>
+			<!--
+			<div class="team-users-list-item">
+				<a href="/home/team/{{ org.pk }}/create-product/">
+					<h3>
+						New Product	
+					</h3>
+
+					<div class="products-list-image">
+						<i class="fa fa-plus-square-o fa-5x" aria-hidden="true"></i>
+					</div>
+					
+					<p class="products-list-description">
+						Organized collection of features and conversations to connect your team with internal experts.
+					</p>
+				</a>
+			</div>
+			-->
+			{% for account in org.accounts.all %}
+			
+
+				<a href="/home/profile/{{ account.pk }}">
+					<img src="{% get_media_prefix %}{{ account.profile_pic }}" style="height:60px; width:60px;" id="org-member-image" class="org-member-image" data-toggle="tooltip" title="{{ account.first_name }} {{ account.last_name }} - {{ account.role }}">
+				</a>
+
+
+			{% endfor %}
+		</div>
+	</div>

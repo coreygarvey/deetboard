@@ -1,5 +1,17 @@
 <div class="home-left-nav">
 	<ul id="MainMenu" class="sidebar-nav">
+		
+
+		{% for feature in prod_features %}
+			<li class="left-nav-title">
+				<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">
+					<i class="fa fa-fw fa-cube" aria-hidden="true"></i>
+					{{ feature.title }}
+				</a>
+			</li>
+		{% endfor %}
+
+		<!--
 		<li class="left-nav-title">
 			<a href="/home/team/{{ org.pk }}">
 				
@@ -30,6 +42,7 @@
 				Questions
 			</a>
 		</li>
+		-->
 	</ul>
 </div>
 

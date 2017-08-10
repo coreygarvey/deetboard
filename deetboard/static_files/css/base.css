@@ -891,6 +891,27 @@ box-shadow: 0px 0px 2px #999;
   box-shadow: 0px 0px 6px #ccc;
 }
 
+.org-members-list {
+  width: 86%;
+  margin: 2% 7%;
+  padding: 0 2%;
+}
+
+.org-members-list h4{
+  color: #666;
+  font-size: 16px;
+  margin: 0 0 20px;
+  font-weight: bold;
+}
+
+.org-member-image{
+  float:left;
+  border-radius: 12px;
+  box-shadow: 0px 1px 4px #888;
+  margin-right: 20px;
+}
+
+
 /* Product Page */
 .product-header{
   text-align: left;
@@ -1068,8 +1089,14 @@ box-shadow: 0px 0px 2px #999;
 
 .feature-delete-body,
 .product-delete-body{
+
+}
+
+.feature-delete-container,
+.product-delete-container {
   text-align: center;
 }
+
 
 .feature-control-btns,
 .product-control-btns{
