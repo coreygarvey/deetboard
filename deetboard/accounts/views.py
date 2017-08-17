@@ -326,7 +326,7 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
     """
     disallowed_url = 'invitation_disallowed'
     form_class = AdminInvitationForm
-    
+    success_url = None
     template_name = 'registration/invitation-front.html'
 
 
@@ -380,6 +380,7 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
         else:
             org.email_all=False
         org.save()
+        success_url = self.get_success_url()
 
         # success_url may be a simple string, or a tuple providing the
         # full argument set for redirect(). Attempting to unpack it

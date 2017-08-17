@@ -31,7 +31,7 @@
 	}
 
 
-	anno.addPlugin('PSQL', { base_url: 'https://127.0.0.1:8000/annotations/', media_url: 'http://127.0.0.1:8000/media/', annotations: annotationsList });
+	anno.addPlugin('PSQL', { base_url: 'http://127.0.0.1:8000/annotations/', media_url: 'http://127.0.0.1:8000/media/', annotations: annotationsList });
 	anno.setProperties({
 	  outline: '#0066ff',
 	  outline_width: '3',
