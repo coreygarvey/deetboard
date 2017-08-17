@@ -1461,3 +1461,11 @@ box-shadow: 0px 0px 2px #999;
 .question-features-form label {
   font-weight:normal;
 }
+
+
+
+
+.breadcrumb{
+  display: inline-block;
+  font-size: 11px;
+}
