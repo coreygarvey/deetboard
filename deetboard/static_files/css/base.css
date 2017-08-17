@@ -477,7 +477,7 @@ h1 {
 .left-nav-icon {
   width: 10%;
   float: left;
-  margin: 2px 3px 0 0;
+  margin: 0 3px 0 0;
 }
 .left-nav-text {
   width: 80%;
@@ -495,7 +495,7 @@ h1 {
   height: 50px;
   line-height: 13px;
   font-size: 12px;
-  padding: 14px 0px 6px 20px;
+  padding: 16px 0px 4px 20px;
   border-bottom: 1px solid rgba(0,0,0,0.12);
   -o-transition:.5s;
   -ms-transition:.5s;
