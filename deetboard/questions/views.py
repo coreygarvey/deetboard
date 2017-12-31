@@ -59,6 +59,7 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         org = Org.objects.get(pk=org_pk)
         prod_pk = self.kwargs['ppk']
         product = Product.objects.get(pk=prod_pk)
+
         form.instance.product = product
         current_user = self.request.user
         form.instance.user_asking = current_user
@@ -90,6 +91,9 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         question = self.object
         product = self.object.product
         org = product.org
+        feature = question.features.all()[0]
+        print "feature ID: "
+        print feature.id
         groupName = org.title + str(org.pk)
         orgUserGroup = Group.objects.get(name=groupName)
         assign_perm('view_quest', orgUserGroup, question)
@@ -100,6 +104,7 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         			args=(
         				self.object.product.org.id,
         				self.object.product.id,
+                        feature.id,
         				self.object.id
         				)
         			)
@@ -121,6 +126,8 @@ class QuestionView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         org = Org.objects.get(pk=org_pk)
         product_pk = self.kwargs['ppk']
         product = Product.objects.get(pk=product_pk)
+        feature_pk = self.kwargs['fpk']
+        feature = Feature.objects.get(pk=feature_pk)
         user_orgs = user.orgs.all()
         org_products = org.products.all()
         prod_features = product.features.all()
@@ -131,6 +138,7 @@ class QuestionView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         context['user'] = user
         context['org'] = org
         context['product'] = product
+        context['feature'] = feature
         context['user_orgs'] = user_orgs
         context['prod_features'] = prod_features
         context['org_products'] = org_products

@@ -1,6 +1,18 @@
 {% load widget_tweaks %}
 {% load staticfiles %}
 <div class="feature-home-body">
+	<ol class="breadcrumb">
+	  <li class="breadcrumb-item">
+	  	<a href="/home/team/{{ org.pk }}">{{org.title}}</a>
+	  </li>
+	  <li class="breadcrumb-item">
+	  	<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">{{product.title}}</a>
+	  </li>
+	  <li class="breadcrumb-item active">
+	  	<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">{{feature.title}}</a>
+	  </li>
+	</ol>
+
 	<div class="title">
 	    <h1>Update Feature</h1>
 	</div>

@@ -3,12 +3,17 @@
 {% load static %}
 
 <div class="question-home-body">
-	{% if question_features %}
-		<a class="back-btn btn btn-default btn-xs" href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ question_features.all.0.pk }}">
-			<i class="fa fa-arrow-left" aria-hidden="true"></i>
-			<b>{{question_features.all.0.title}}</b>
-		</a>
-	{% endif %}
+	<ol class="breadcrumb">
+	  <li class="breadcrumb-item">
+	  	<a href="/home/team/{{ org.pk }}">{{org.title}}</a>
+	  </li>
+	  <li class="breadcrumb-item">
+	  	<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">{{product.title}}</a>
+	  </li>
+	  <li class="breadcrumb-item active">
+	  	<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">{{feature.title}}</a>
+	  </li>
+	</ol>
     <div class="row">
     	<div class="col-md-6 col-md-offset-2">
 		    <div class="question-container">
