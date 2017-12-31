@@ -373,6 +373,7 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
             # This should check that invite is valid email, not just filled in
             if invite != '':
                 print "Registering invite: " + invite
+                print "Am I here?"
                 new_user = self.register(invite)
                 
                 # Create initial tooltip message
@@ -464,6 +465,12 @@ class GeneralInvitationView(InvitationView):
                 new_user = self.register(invite)
                 new_user.save()
                 new_user.orgs.add(org)
+
+                # Create initial tooltip message
+                new_user.tooltip = new_user.get_full_name_role()
+                print "new_user.tooltip: " + new_user.tooltip
+                new_user.save()
+                new_user.orgs.add(org) 
 
                 # Find group for this Org, add user, set view perm
                 groupName = org.title + str(org.pk)
