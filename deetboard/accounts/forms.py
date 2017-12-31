@@ -205,12 +205,15 @@ class GeneralInvitationForm(Form):
     invite1 = forms.EmailField(required=False)
     invite2 = forms.EmailField(required=False)
     invite3 = forms.EmailField(required=False)
+    next = forms.CharField(required=False)
+
 
     class Meta:
         fields = [
             'invite1',
             'invite2',
             'invite3',
+            'next'
         ]
         required_css_class = 'required'
         

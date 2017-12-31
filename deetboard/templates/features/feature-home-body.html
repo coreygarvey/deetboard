@@ -51,7 +51,12 @@
 								<img src="{% get_media_prefix %}profile_pics/avatar.png" style="height:35px; width:35px;" id="expert-image" class="expert-image" data-toggle="tooltip" title="{{ expert.tooltip }}">
 							{% endif %}
 						</a>
+						<!-- Invite -->
+						
 					{% endfor %}
+					<a href="/invitation/{{org.pk}}?next={{ request.path|urlencode }}">
+						<img src="{% get_media_prefix %}envelope.png" style="height:35px; width:35px;" id="expert-image" class="expert-image" data-toggle="tooltip" title="Invite an expert">
+					</a>
 				</div>
 			</div>
 			

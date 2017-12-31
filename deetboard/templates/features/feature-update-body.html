@@ -51,6 +51,8 @@
 				<h2>Experts</h2>
 				{% render_field form.experts placeholder="Feature experts" class+="create-feature-input feature-field" %}
 				
+				<a href="/invitation/{{org.pk}}?next={{ request.path|urlencode }}">Invite an Expert</a>
+
 				<h2>Screenshot</h2>
 				
 				{% if screenshot %}

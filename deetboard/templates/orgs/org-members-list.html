@@ -36,5 +36,9 @@
 
 
 			{% endfor %}
+
+			<a href="/invitation/{{org.pk}}?next={{ request.path|urlencode }}">
+				<img src="{% get_media_prefix %}envelope.png" style="height:60px; width:60px;" id="org-member-image"class="org-member-image" data-toggle="tooltip" title="Invite a teammate">
+			</a>
 		</div>
 	</div>

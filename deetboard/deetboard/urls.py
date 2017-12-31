@@ -81,6 +81,11 @@ urlpatterns = [
         name='general_invitation',
     ),
 
+    url(r'^invitation/(?P<pk>\d+)?(.*)$',
+        GeneralInvitationView.as_view(),
+        name='general_invitation',
+    ),
+
     url(r'^find_org/$',
         FindOrgView.as_view(),
         name='find_org',

@@ -436,6 +436,14 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
 class GeneralInvitationView(InvitationView):
     form_class = GeneralInvitationForm
     
+    def get_new_success_url(self, org_id, next):
+        if next:
+            success_url = next
+            print "next: " + success_url
+        else:
+            success_url = reverse('org_home', args=(org_id,))
+        return success_url
+
     def form_valid(self, form):
         # Protect for only users in org
         org_pk = self.kwargs['pk']
@@ -445,6 +453,10 @@ class GeneralInvitationView(InvitationView):
             form.cleaned_data['invite2'],
             form.cleaned_data['invite3'],
         ]
+        next = form.cleaned_data['next']
+        print "next: " + next
+
+
         for invite in invited_users:
             # This should check that invite is valid email, not just filled in
             if invite != '':
@@ -460,7 +472,8 @@ class GeneralInvitationView(InvitationView):
 
 
         # Send to org home after invitations sent
-        success_url = get_success_url(org_pk)
+        #success_url = get_success_url(org_pk)
+        success_url = self.get_new_success_url(org_pk, next)
                 
 
         # success_url may be a simple string, or a tuple providing the
@@ -472,9 +485,7 @@ class GeneralInvitationView(InvitationView):
         except ValueError:
             return redirect(success_url)
 
-    def get_success_url(self, org_id):
-        success_url = reverse('org_home', args=(org_id,))
-        return success_url
+    
         
 
 class HomeInvitationView(GeneralInvitationView):
