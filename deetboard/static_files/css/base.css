@@ -151,9 +151,10 @@ h1 {
 .btn-main {
   color: #fff !important;
   font-weight:500;
-  background-color: hsl(220, 83%, 18%) !important;
+  background-color: #3771B7;
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#274f8c", endColorstr="#3771C8");
+  /*
   background-image: -khtml-gradient(linear, left top, left bottom, from(#274f8c), to(#3771C8));
   background-image: -moz-linear-gradient(top, ##274f8c, #3771C8);
   background-image: -ms-linear-gradient(top, #274f8c, #3771C8);
@@ -161,6 +162,7 @@ h1 {
   background-image: -webkit-linear-gradient(top, #274f8c, #3771C8);
   background-image: -o-linear-gradient(top, #274f8c, #3771C8);
   background-image: linear-gradient(#274f8c, #3771C8);
+  */
   border-color: #3771C8 #3771C8 hsl(220, 83%, 9.5%);
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.56);
   -webkit-font-smoothing: antialiased;
@@ -170,7 +172,14 @@ h1 {
   background-color: #eff2f5;
 }
 
+.btn-reg{
+  width: 150px;
+  height: 46px;
+  font-size: 20px;
+}
+
 .title {
+  margin-bottom: 20px;
 }
 
 /* Landing page */
@@ -221,12 +230,37 @@ h1 {
 	display: block;
 }
 
+/* Registration */
+.registration-body{
+  padding-right:200px;
+  text-align: center;
+}
+.registration-text{
+  font-size: 18px;
+  color: #555;
+  width: 50%;
+  margin: 0 auto;
+}
+.registration-form{
+  width: 280px;
+  margin: 0 auto;
+
+}
+.registration-input{
+  height: 45px;
+  font-size: 16px;
+  margin: 10px 0;
+  display: inline-block;
+  text-align: center;
+}
+
 /* Email sent page */
 .email-sent-text{
   font-size:19px;
   color: #555;
   padding-left: 5px;
   float: left;
+  width: 100%;
 }
 
 /* Find Org page */
@@ -241,13 +275,18 @@ h1 {
 }
 
 /* Activate Form */
+#activation-form{
+  width:200px;
+  margin: 0 auto;
+}
+
 .activation-text{
   font-size: 18px;
   color: #555;
 }
 .activate-input {
   width: 200px;
-  margin: 5px 0;
+  margin: 15px 0;
   display: block;
 }
 
@@ -267,10 +306,18 @@ h1 {
 }
 
 /* Create team */
+.create-org-text{
+  width:60%;
+  margin: 0 auto;
+  font-size: 20px;
+}
 .create-org-input {
-  width: 200px;
+  width: 280px;
+  height: 60px;
+  font-size: 36px;
   margin: 5px 0;
   display: inline-block;
+  text-align: center;
 }
 
 /* Invite page */
@@ -1041,8 +1088,6 @@ box-shadow: 0px 0px 2px #999;
   width: 100%;
 }
 .create-feature-input {
-  /*width: 200px;
-  display: block;*/
   margin: 5px 0;
   
 }
@@ -1075,7 +1120,7 @@ box-shadow: 0px 0px 2px #999;
     outline: none;
     background: white;
     cursor: inherit;
-    display: block;
+    display: block !important;
 }
 
 #upload-file-info{
@@ -1086,6 +1131,7 @@ box-shadow: 0px 0px 2px #999;
 .back-btn{
   font-size: 10px;
 }
+
 
 
 .feature-create-btn{
@@ -1144,7 +1190,7 @@ box-shadow: 0px 0px 2px #999;
 .feature-experts{
   padding: 0px 10%;
   float:right;
-  margin-right: 20%;
+  margin-right: 10%;
   
 }
 .feature-filters-experts{
@@ -1172,7 +1218,7 @@ box-shadow: 0px 0px 2px #999;
 .expert-image{
   float:left;
   border-radius: 12px;
-  box-shadow: 0px 1px 4px #888;
+  box-shadow: 0px 0px 2px #ccc;
   margin-right:8px;
 }
 .feature-screenshot{
@@ -1185,6 +1231,11 @@ box-shadow: 0px 0px 2px #999;
 .screenshot-wrapper{
   display: table;
   margin: 15px auto 10px;
+}
+
+.add-screenshot-btn{
+  width: 150px;
+  margin: 25% auto 0%;
 }
 
 .feature-delete-button{
@@ -1448,10 +1499,14 @@ box-shadow: 0px 0px 2px #999;
   min-width: 50px;
 }
 
-.response-text{
+.response-text, .response-placeholder{
   font-size: 15px;
   width: 80%;
   float: left;
+}
+
+.response-paceholder{
+  color:#777;
 }
 
 .response-input{

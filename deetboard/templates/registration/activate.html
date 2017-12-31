@@ -9,7 +9,7 @@
 
 
 {% block content %}
-    <div id="activation-body">
+    <div id="activation-body" class="registration-body">
         <div class="activation-details">
 	        <div class="title">
 	            <h1>Activate</h1>
@@ -19,7 +19,7 @@
 	        </div>
     	</div>
 
-	    <form method="post" action="" enctype="multipart/form-data">
+	    <form id="activation-form" method="post" action="" enctype="multipart/form-data">
 	    	{% csrf_token %}
 
 	        {% render_field form.username placeholder="Username" class+="form-control activate-input" %}
@@ -30,6 +30,8 @@
 
 	        {% render_field form.last_name placeholder="Last name" class+="form-control activate-input" %}
 
+	        {{ new_user.email }}
+
 	        {% render_field form.password placeholder="Password" class+="form-control activate-input" %}
 
 	        
@@ -38,7 +40,8 @@
 					<i class="fa fa-upload" aria-hidden="true"></i>
 					Upload Profile Pic
 					
-					{% render_field form.profile_pic id="account-profpic-selector" style="display: none;" class+="file-upload" %}
+					<!--{% render_field form.profile_pic id="account-profpic-selector" style="display: none;" class+="file-upload" %}-->
+					{% render_field form.profile_pic id="account-profpic-selector" class+="file-upload" %}
 			</label>
 			<div id="upload-file-info">
 					

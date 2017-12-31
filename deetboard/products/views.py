@@ -66,7 +66,10 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
             return HttpResponseRedirect('/home/')
 
         product = form.save(commit=False)
+        
+
         product.save()
+        
         product.admins.add(self.request.user)
 
         return super(ProductCreateView, self).form_valid(form)
@@ -85,6 +88,8 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         orgUserGroup = Group.objects.get(name=groupName)
         assign_perm('view_prod', orgUserGroup, prod)
         current_user = self.request.user
+        print current_user
+        print prod
         assign_perm('products.delete_product', current_user, prod)
         assign_perm('products.change_product', current_user, prod)
         #if(current_user.has_perm('products.delete_product', prod)):
@@ -92,7 +97,8 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
 
         return reverse('feature_create_home', args=(self.object.org.id,self.object.id))
 
-class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
+#class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):    
     """
     Form to update a product
     """
@@ -383,12 +389,16 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         feature = form.save(commit=False)
         feature.save()
         feature.admins.add(self.request.user)
-
-        screenshot = Screenshot(image=self.request.FILES['screenshot'])
-        screenshot.title = self.request.FILES['screenshot']
-        screenshot.save()
-        screenshot.admins.add(self.request.user)
-        feature.screenshots.add(screenshot)
+        print self.request.FILES
+        if "screenshot" in self.request.FILES:
+            print "Creating Screenshot object"
+            screenshot = Screenshot(image=self.request.FILES['screenshot'])
+            screenshot.title = self.request.FILES['screenshot']
+            screenshot.save()
+            screenshot.admins.add(self.request.user)
+            feature.screenshots.add(screenshot)
+        else:
+            print "No Screenshot present"
 
         # Allow users in org to respond to questions about feature
         groupName = org.title + str(org.pk)
@@ -419,8 +429,11 @@ class FeatureCreateView(LoginRequiredMixin, CreateView):
         orgUserGroup = Group.objects.get(name=groupName)
         assign_perm('view_feat', orgUserGroup, feat)
         current_user = self.request.user
+        print current_user
+        print feat
         assign_perm('products.delete_feature', current_user, feat)
         assign_perm('products.change_feature', current_user, feat)
+
         return reverse('feature_home', args=(self.object.product.org.id,self.object.product.id,self.object.id))
 
 class FeatureCreateFirstView(FeatureCreateView):
@@ -462,8 +475,10 @@ class FeatureView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         context['prod_features'] = product_features
         context['questions'] = questions
         context['screenshots'] = feature_screenshots
+        
         context['experts'] = feature_experts
 
+        print feature_experts[0]
         if(user in feature.admins.all()):
             context['editable'] = True
         else:
@@ -507,9 +522,10 @@ class FeatureView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
             annotations.append(other_annotations)
             print "annotations: "
             print annotations
+            context['annotations'] = annotationsSet
             # Json encoding
             annotations_json = json.dumps(annotations, cls=DjangoJSONEncoder)
-            context['annotations'] = annotations_json
+            context['annotations_json'] = annotations_json
 
         return context
 
@@ -562,6 +578,9 @@ class FeatureUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
         context['org_products'] = org_products
         context['prod_features'] = prod_features
 
+        if feature.screenshots.count() > 0:
+            context['screenshot'] = feature.screenshots.all()[0].image
+
         return context
 
 
@@ -579,6 +598,26 @@ class FeatureUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
         print form
         for expert in updated_feature.experts.all():
             print expert
+
+
+        print "checking files"
+        print self.request.FILES
+        if "screenshot" in self.request.FILES:
+            # Check for current screenshot and remove
+            print "current screenshot count: "
+            print updated_feature.screenshots.count()
+            if updated_feature.screenshots.count() > 0:
+                current_screenshot = updated_feature.screenshots.all()[0]
+                updated_feature.screenshots.remove(current_screenshot)
+            print "Creating Screenshot object"
+            screenshot = Screenshot(image=self.request.FILES['screenshot'])
+            screenshot.title = self.request.FILES['screenshot']
+            screenshot.save()
+            screenshot.admins.add(self.request.user)
+
+            updated_feature.screenshots.add(screenshot)
+        else:
+            print "No Screenshot present"
 
         # Determine next move 
         org_pk = self.kwargs['opk']

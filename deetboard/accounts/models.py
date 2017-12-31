@@ -71,9 +71,10 @@ class Account(AbstractBaseUser, PermissionsMixin):
     	unique=True,
     	db_index=True,
     )
-    role = models.CharField(max_length=50, blank=True, default='')
+    role = models.CharField(max_length=50, default='')
     first_name = models.CharField(max_length=30, default='')
     last_name = models.CharField(max_length=30, default='')
+    tooltip = models.CharField(max_length=50, default='')
     notifs = models.BooleanField(default=False)
     features_following = models.ManyToManyField('products.Feature', related_name='followers')
 
@@ -81,7 +82,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
-    profile_pic = models.FileField(upload_to='profile_pics/')
+    profile_pic = models.FileField(upload_to='profile_pics/', blank=True)
 
     objects = AccountManager()
 
@@ -96,7 +97,11 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def get_full_name_role(self):
     	# The user identified by their email
     	#	and role
-    	return "%s %s - %s" % (self.first_name, self.last_name, self.role)
+    	if self.is_active:
+    		return "%s %s - %s" % (self.first_name, self.last_name, self.role)
+    	else:
+    		return "%s - Pending" % (self.email)
+    	
 
     def get_short_name(self):
     	# The user identified by email

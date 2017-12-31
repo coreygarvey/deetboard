@@ -201,6 +201,10 @@ class ActivationView(UpdateView):
             updated_user.is_active = True
             password = form.cleaned_data['password']
             updated_user.set_password(password)
+
+            # Create initial tooltip message
+            updated_user.tooltip = updated_user.get_full_name_role()
+
             updated_user.save()
             # Connect user with org
             if org_id is not None:
@@ -214,7 +218,6 @@ class ActivationView(UpdateView):
                 updated_user.groups.add(orgUserGroup)
                 updated_user.save()
 
-                updated_user.save()
             signals.user_activated.send(
                 sender=self.__class__,
                 user=activated_user,
@@ -371,6 +374,10 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
             if invite != '':
                 print "Registering invite: " + invite
                 new_user = self.register(invite)
+                
+                # Create initial tooltip message
+                new_user.tooltip = new_user.get_full_name_role()
+                print "new_user.tooltip: " + new_user.tooltip
                 new_user.save()
                 new_user.orgs.add(org)        
 
@@ -380,7 +387,8 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
         else:
             org.email_all=False
         org.save()
-        success_url = self.get_success_url()
+        print "org_id: " + org_pk
+        success_url = self.get_success_url(org_pk)
 
         # success_url may be a simple string, or a tuple providing the
         # full argument set for redirect(). Attempting to unpack it
@@ -746,6 +754,10 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         updated_user = form.save(commit=False)
         password = form.cleaned_data['password']
         updated_user.set_password(password)
+
+        # Update tooltip vlaue
+        updated_user.tooltip = updated_user.get_full_name_role()
+
         updated_user.save()
 
         # Connect user with org

@@ -35,20 +35,19 @@
 
 				{% render_field form.description placeholder="Feature description" class+="form-control create-feature-input" %}
 			</div>
-			<div class="col-md-5 col-md-offset-2">
+			<div class="col-md-4 col-md-offset-2">
 				<h2>Experts</h2>
 				{% render_field form.experts placeholder="Feature experts" class+="create-feature-input feature-field" %}
 				
 				<h2>Screenshot</h2>
 				
-				<p style="font-size:11px;margin-top:-5px; width:60%">Sorry, screenshots cannot be updated at the moment. Please delete and create a new feature.</p>
-				
-				<!--
-				<td class="update-label">Screenshot</td>
+				{% if screenshot %}
+					Currently: <i>{{ screenshot }}</i>
+				{% endif %}
 				<td class="update-field">
-					{% render_field form.screenshot placeholder="Screenshot" class+="form-control update-input" %}
+					{% render_field form.screenshot placeholder="Screenshot" class+="file-upload create-feature-input" %}
 				</td>
-				-->
+				
 				<!--
 				<label class="btn btn-default btn-file" for="feature-screenshot-selector">
 					Choose File...

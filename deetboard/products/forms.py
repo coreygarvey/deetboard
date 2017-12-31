@@ -18,6 +18,7 @@ class ProductForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		self.request = kwargs.pop('request', None)
 		super(ProductForm, self).__init__(*args, **kwargs)
+		self.fields["image"].required = False
 		print kwargs
 
 
@@ -126,10 +127,11 @@ class FeatureUpdateForm(forms.ModelForm):
 	"""
 	Form for updating a feature.
 	"""
+	screenshot = forms.ImageField()
 
 	def __init__(self, *args, **kwargs):
 		self.request = kwargs.pop('request', None)
-		
+	
 		# Get org_accounts to set expert choices
 		org_accounts = kwargs.pop('org_accounts', None)
 		
@@ -142,11 +144,11 @@ class FeatureUpdateForm(forms.ModelForm):
 
 	class Meta:
   		model = Feature
-		fields = ['title', 'description', 'experts',]
+		fields = ['title', 'description', 'experts', 'screenshot']
 		labels = {
 			'title': _('Name'),
 			'description': _('Description'),
-			'experts': _('Experts')
+			'experts': _('Experts'),
 		}
 		widgets = {
 			'title': forms.TextInput(attrs=dict(max_length=30)),
@@ -159,6 +161,8 @@ class FeatureUpdateForm(forms.ModelForm):
 			'description': forms.CharField,
 			'experts': UserModelMultipleChoiceField,
 		}
+
+
 '''
 '''
 class FeatureScreenshotForm(FeatureForm):

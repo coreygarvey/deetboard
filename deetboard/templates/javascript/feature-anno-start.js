@@ -2,7 +2,7 @@
 	// Annotatinos should be stored in a more programatic way to
 	//  allow for other types beyond expert and other
 	var annotationsList = [];
-	var annotationsJsonString = unescape("{{annotations | safe | escapejs}}");
+	var annotationsJsonString = unescape("{{annotations_json | safe | escapejs}}");
 	var annotationsJson = JSON.parse(annotationsJsonString);
 
 	console.log("annotationsJson");

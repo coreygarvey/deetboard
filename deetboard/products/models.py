@@ -12,7 +12,7 @@ class Product(TimeStampedModel):
     image = models.FileField(upload_to='product_pics/')
 
     def __str__(self):
-        return "%s" % (self.title)
+        return u'{0}'.format(self.title)
     
     class Meta:
         ordering = ('title',)

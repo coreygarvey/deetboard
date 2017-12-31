@@ -11,12 +11,7 @@
 			{% csrf_token %}
 			
 			<table style="width:100%">
-				<tr>
-					<td class="update-label">Username</td>
-					<td class="update-field">
-						{% render_field form.username placeholder="Username" class+="form-control update-input" %}
-					</td> 
-				</tr>
+				
 				<tr>
 					<td class="update-label">Role</td>
 					<td class="update-field">
@@ -46,6 +41,13 @@
 					<td class="update-label">Profile Pic</td>
 					<td class="update-field">
 						{% render_field form.profile_pic placeholder="Profile Pic" class+="form-control update-input" %}
+					</td> 
+				</tr>
+
+				<tr>
+					<td class="update-label">Username</td>
+					<td class="update-field">
+						{% render_field form.username placeholder="Username" class+="form-control update-input" %}
 					</td> 
 				</tr>
 

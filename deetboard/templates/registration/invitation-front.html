@@ -7,14 +7,19 @@
 {% block nav %}{% include "nav/front-nav.html" %}{% endblock %}
 
 {% block content %}
-    <div id="send-invites-body">
+    <div id="send-invites-body" class="registration-body">
 	    <div class="title">
-            <h1>Invitations</h1>
+            <h1>Build Your Team</h1>
+
         </div>
-	    <form method="post" action="">{% csrf_token %}
-	        {% render_field form.invite1 placeholder="Email" class+="form-control invite-input" %}
-	        {% render_field form.invite2 placeholder="Email" class+="form-control invite-input" %}
-	        {% render_field form.invite3 placeholder="Email" class+="form-control invite-input" %}
+        <div class="registration-text">
+        	<p>Invite product experts and teammates to join your team on Deetboard</p>
+        	
+        </div>
+	    <form method="post" action="" class="registration-form">{% csrf_token %}
+	        {% render_field form.invite1 placeholder="Email" class+="form-control registration-input" %}
+	        {% render_field form.invite2 placeholder="Email" class+="form-control registration-input" %}
+	        {% render_field form.invite3 placeholder="Email" class+="form-control registration-input" %}
 	        
 	        {% if form.inviteEmail %}
 	        <div id="checkbox">
@@ -26,7 +31,8 @@
 	        {% endif %}
 			</br>
 	       	<input type="submit" class="btn btn-main" value="Send Invites" />
-
+			</br>
+			</br>
 	    </form>
 	    <a class="btn btn-default" href="{{ success_url }}">Skip</a>
 
