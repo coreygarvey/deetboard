@@ -7,6 +7,8 @@ from django.views.generic.edit import UpdateView
 from django.http import HttpResponse
 from django.views import View
 import services
+from django.conf import settings
+from django.template.loader import render_to_string
 from forms import QuestionForm, QuestionFeaturesForm, ResponseForm
 from braces.views import LoginRequiredMixin
 from orgs.models import Org
@@ -20,6 +22,10 @@ from guardian.shortcuts import assign_perm
 class QuestionCreateView(LoginRequiredMixin, CreateView):
     form_class = QuestionForm
     template_name = 'questions/question-create-home.html'
+
+    ask_question_email_body_template = 'questions/emails/ask_question_email_body.txt'
+    ask_question_email_body_html_template = 'questions/emails/ask_question_email_body.html'
+    ask_question_email_subject_template = 'questions/emails/ask_question_email_subject.txt'
 
     # Check that user has permission to create questions in this org
     def dispatch(self, *args, **kwargs):
@@ -72,11 +78,13 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         question = form.save(commit=False)
         question.save()
 
-        # If created in a feature, add to features field
+        # If created in a feature, add to features field and send email
         if 'fpk' in self.kwargs:
             feature_pk = self.kwargs['fpk']
             feature = Feature.objects.get(pk=feature_pk)
             question.features.add(feature)
+            # Only send email if part of a feature
+            self.send_question_emails(question, feature)
 
         return super(QuestionCreateView, self).form_valid(form)
 
@@ -86,6 +94,55 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
             'request' : self.request
         })
         return kwargs
+
+    def send_question_emails(self, question, feature):
+        """
+        Send an email to all experts asking the question.
+        """
+        # Get the question txt
+        # Insert necessary information into context
+        # Create messages and variables
+        # Render text to string
+        # Get experts of feature
+        # Email all experts
+        
+        question_pk = question.pk
+        print "question_pk: " 
+        print question_pk
+
+        question_text = question.text
+        print "question-text: " 
+        print question_text
+
+        asker_un = question.user_asking.username
+        print "asker_un: " 
+        print asker_un
+
+
+        context = {}
+        context.update({
+            'question_pk': question_pk,
+            'question_text': question_text,
+            'asker': asker_un,
+        })
+
+        subject_var = self.ask_question_email_subject_template
+        message_var = self.ask_question_email_body_template
+        html_message_var = self.ask_question_email_body_html_template
+        
+        subject = render_to_string(subject_var,context)
+        message = render_to_string(message_var,context)
+        html_message = render_to_string(html_message_var,context)
+        # Force subject to a single line to avoid header-injection
+            # issues.
+        subject = ''.join(subject.splitlines())
+        
+        experts = feature.experts.all()
+        for expert in experts:
+            expert.email_user(subject, message, settings.DEFAULT_FROM_EMAIL, 
+                        html_message=html_message)
+
+
 
     def get_success_url(self):
         question = self.object
