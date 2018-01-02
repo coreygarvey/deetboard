@@ -152,8 +152,27 @@ class RegistrationView(ActivationContextMixin, ActivationKeyMixin,
         customer = stripe.Customer.create(
           email=new_user.email,
         )
-        print "created user, here's the id:"
-        print customer.id
+
+
+        # Store Stripe ID for user
+        customer_id = customer.id
+        new_user.stripe_id = customer.id
+
+        print customer_id
+        # Set your secret key: remember to change this to your live secret key in production
+        # See your keys here: https://dashboard.stripe.com/account/apikeys
+        subscription = stripe.Subscription.create(
+          customer=customer_id,
+          items=[
+            {
+              "plan": "basic-plan",
+            },
+          ],
+          trial_period_days=30,
+        )
+
+        print "Customer subscription: "
+        print subscription
 
         self.send_activation_email(new_user)
         return new_user
