@@ -145,6 +145,16 @@ class RegistrationView(ActivationContextMixin, ActivationKeyMixin,
         form_email = form.cleaned_data['email']
         new_user.is_active = False
         new_user.save()
+        print "I can make the customer and subscription right here"
+        import stripe
+        stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
+
+        customer = stripe.Customer.create(
+          email=new_user.email,
+        )
+        print "created user, here's the id:"
+        print customer.id
+
         self.send_activation_email(new_user)
         return new_user
 

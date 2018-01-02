@@ -146,6 +146,13 @@ urlpatterns = [
         name='pricing'
     ),
 
+    url(r'^first-sub/$',
+        TemplateView.as_view(
+            template_name='pricing.html'
+        ),
+        name='pricing'
+    ),
+
 
     # After Registration
     url(r'^home/$', 

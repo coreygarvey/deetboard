@@ -9,4 +9,17 @@
 {% block content %}
     <h1>Pricing</h1>
     <h4>$14/month</h4>
+
+    <form action="/your-server-side-code" method="POST">
+	  <script
+	    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+	    data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+	    data-amount="999"
+	    data-name="Corey's Account"
+	    data-description="Widget"
+	    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+	    data-locale="auto">
+	  </script>
+	</form>
 {% endblock %}
+

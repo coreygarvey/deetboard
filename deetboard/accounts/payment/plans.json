@@ -1,0 +1,8 @@
+stripe.Plan.create(
+  amount=1200,
+  interval="month",
+  name="Steak Knives Plan",
+  currency="usd",
+  id="steak-knives-plan",
+  trial_period_days=30
+)
