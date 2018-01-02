@@ -157,6 +157,7 @@ class RegistrationView(ActivationContextMixin, ActivationKeyMixin,
         # Store Stripe ID for user
         customer_id = customer.id
         new_user.stripe_id = customer.id
+        new_user.save()
 
         print customer_id
         # Set your secret key: remember to change this to your live secret key in production
@@ -884,6 +885,7 @@ class ProfileView(TemplateView):
         user_orgs = user.orgs.all()
         context['user'] = user
         context['user_orgs'] = user_orgs
+
         return context
 
 
@@ -901,6 +903,14 @@ class ProfileView(TemplateView):
             return user
         except User.DoesNotExist:
             return None
+
+    def form_valid(self, form):
+        # Need to protect for only admin of org
+        user = self.request.user
+        stripe_token = form.cleaned_data['stripeToken']
+        print "Stripe_token: "
+        print stripe_token
+        
 
 class ProfilePublicView(TemplateView):
     """
@@ -936,3 +946,29 @@ class ProfilePublicView(TemplateView):
             return user
         except User.DoesNotExist:
             return None
+
+
+def update_payment(request):
+    import stripe
+    stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
+    if request.method == 'POST':
+        # Need to protect for only admin of org
+        user = request.user
+        form = request.POST
+        token = form.get('stripeToken')
+        print "Stripe_token: "
+        print token
+
+        stripe_id = user.stripe_id
+        print "Stripe ID: "
+        print stripe_id
+
+        customer = stripe.Customer.retrieve(stripe_id)
+        print "Customer"
+        print customer
+        source = customer.sources.create(source=token)
+        print "Source"
+        print source
+
+        
+        return HttpResponseRedirect('/home/profile/')

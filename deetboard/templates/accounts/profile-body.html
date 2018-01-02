@@ -30,11 +30,23 @@
 							<span class="profile-label">Role</span>
 							<p>{{ user.role }}</p>
 
+							<span class="profile-label">Stripe ID</span>
+							<p>{{ user.stripe_id }}</p>
+
 		        		</div>
 
 
 					</div>
 				</div>
+
+				<form action="/update_payment/" method="POST">
+				  {% csrf_token %}
+				  <script
+				    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+				    data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+				    data-label="Update my details">
+				  </script>
+				</form>
 			</div>
 		</div>
 	</div>
