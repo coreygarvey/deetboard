@@ -886,6 +886,22 @@ class ProfileView(TemplateView):
         context['user'] = user
         context['user_orgs'] = user_orgs
 
+
+
+        import stripe
+        stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
+        stripe_id = user.stripe_id
+        customer = stripe.Customer.retrieve(stripe_id)
+        card_id = customer.default_source
+        source = customer.sources.retrieve(card_id)
+        context['default_source'] = source
+        print "default_source: "
+        print source
+
+
+
+
+
         return context
 
 
@@ -918,6 +934,17 @@ class ProfilePublicView(TemplateView):
     """
     disallowed_url = 'registration_disallowed'
     template_name = "accounts/profile-public.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        print "here"
+        print request.user.pk == self.kwargs['pk']
+        print type(request.user.pk)
+        print type(self.kwargs['pk'])
+        print request.user.is_authenticated()
+
+        if request.user.is_authenticated() and int(request.user.pk) == int(self.kwargs['pk']):
+            return HttpResponseRedirect('/home/profile/')
+        return super(ProfilePublicView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
@@ -969,6 +996,11 @@ def update_payment(request):
         source = customer.sources.create(source=token)
         print "Source"
         print source
+        print source.id
+        print source['id']
+        customer.default_source = source.id
+        customer.save()
 
-        
+        print "default_source: "
+        print customer.default_source
         return HttpResponseRedirect('/home/profile/')

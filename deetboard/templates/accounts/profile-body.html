@@ -24,29 +24,39 @@
 						<h2>{{ user.first_name }} {{ user.last_name }}</h2>
 		        		
 		        		<div class="profile-details">
+							<span class="profile-label">Email</span>
+							<p>{{ user.email }}</p>
+
 							<span class="profile-label">Username</span>
 							<p>{{ user.username }}</p>
 							
 							<span class="profile-label">Role</span>
 							<p>{{ user.role }}</p>
 
-							<span class="profile-label">Stripe ID</span>
-							<p>{{ user.stripe_id }}</p>
-
+							<span class="profile-label">CC Number</span>
+							<p>xxxx - xxxx - xxxx - {{ default_source.last4 }}</p>
+							<span class="profile-label">CC Email</span>
+							<p>{{ default_source.name }}</p>
+							<span class="profile-label">CC Expiration</span>
+							<p>{{ default_source.exp_month }}/{{ default_source.exp_year }}</p>
+							
+							<span>
+								<form action="/update_payment/" method="POST">
+								  {% csrf_token %}
+								  <script
+								    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+								    data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+								    data-label="Update CC details">
+								  </script>
+								</form>
+							</span>
 		        		</div>
 
 
 					</div>
 				</div>
 
-				<form action="/update_payment/" method="POST">
-				  {% csrf_token %}
-				  <script
-				    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-				    data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
-				    data-label="Update my details">
-				  </script>
-				</form>
+				
 			</div>
 		</div>
 	</div>
