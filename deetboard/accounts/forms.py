@@ -99,6 +99,7 @@ class MyActivationForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(MyActivationForm, self).__init__(*args, **kwargs)
         self.fields["username"].required = False
+        self.fields["role"].required = False
         self.fields["profile_pic"].required = False
 
         #eeeself.fields['username'].widget.attrs['placeholder'] = "testing"
