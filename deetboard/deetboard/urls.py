@@ -29,7 +29,7 @@ from accounts.views import register, register_success, logout_page, custom_login
 from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, HomeInvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView, ProfilePublicView
 
 from views import IndexView
-from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView, OrgProductsView
+from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView, OrgPaymentView, OrgProductsView
 from products.views import ProductCreateView, ProductView, ProductCreateFirstView, ProductUpdateView, ProductDeleteView, FeatureCreateView, FeatureCreateFirstView, FeatureView, FeatureListView, FeatureUpdateView, FeatureDeleteView
 from questions.views import QuestionCreateView, QuestionView, QuestionListView, ResponseCreateView
 
@@ -44,7 +44,7 @@ urlpatterns = [
     url(r'^login/$', custom_login),
     url(r'^logout/$', logout_page),
 
-    url(r'^update_payment/$', update_payment),    
+    url(r'^update_payment/$', update_payment),
 
 
     # Account Registration Views
@@ -193,6 +193,13 @@ urlpatterns = [
         OrgHomeView.as_view(
             ),
         name = 'org_home'
+    ),
+
+    # Team Payments
+    url(r'^home/team/(?P<pk>\d+)/payment/$', 
+        OrgPaymentView.as_view(
+            ),
+        name = 'org_payment'
     ),
     
     url(r'^home/team/(?P<pk>\d+)/products/$', 

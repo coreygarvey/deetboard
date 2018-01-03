@@ -1,0 +1,54 @@
+<div class="org-home-body">
+    
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="/home/team/{{ org.pk }}">{{org.title}}</a>
+      </li>
+    </ol>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 org-home-header">
+            <h1>Payments</h1>
+            
+            <b>Subscription Status</b>
+            <p>{{ org.subscription_type }} - {{ org.subscription_status }}</p>
+            <br>
+            
+
+            {% if default_source %}
+                <h4>Team Payment Source</h4>
+                <span class="profile-label">CC Number</span>
+                <p>xxxx - xxxx - xxxx - {{ default_source.last4 }}</p>
+                <span class="profile-label">CC Email</span>
+                <p>{{ default_source.name }}</p>
+                <span class="profile-label">CC Expiration</span>
+                <p>{{ default_source.exp_month }}/{{ default_source.exp_year }}</p>
+
+                <span>
+                    <form action="/update_payment/" method="POST">
+                        {% csrf_token %}
+                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
+                        <script
+                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+                            data-label="Update CC details">
+                        </script>
+                    </form>
+                </span>
+            {% else %}
+                <span>
+                    <form action="/update_payment/" method="POST">
+                        {% csrf_token %}
+                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
+                        <script
+                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+                            data-label="Add CC details">
+                        </script>
+                    </form>
+                </span>
+            {% endif %}
+
+        </div>
+    </div>
+</div>

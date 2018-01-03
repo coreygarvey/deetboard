@@ -983,6 +983,8 @@ class ProfilePublicView(TemplateView):
 
 def update_payment(request):
     ###### NEEDS PERMISSIONS!!! #####
+    print "Printing request: "
+    print request
     # Need to protect for only admin of org
     import stripe
     stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
@@ -992,6 +994,12 @@ def update_payment(request):
         user = request.user
         form = request.POST
         token = form.get('stripeToken')
+
+        if form.get('next'):
+            next = form.get('next')
+            success_url = next
+        else:
+            sucess_url = 'home/profile'
 
         if user.stripe_id:
             customer = stripe.Customer.retrieve(user.stripe_id)
@@ -1006,4 +1014,4 @@ def update_payment(request):
         source = customer.sources.create(source=token)
         customer.default_source = source.id
         customer.save()
-        return HttpResponseRedirect('/home/profile/')
+        return HttpResponseRedirect(success_url)

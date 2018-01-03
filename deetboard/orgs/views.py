@@ -146,6 +146,15 @@ class OrgHomeView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         context['org'] = org
         context['user_orgs'] = user_orgs
         context['products'] = products
+        
+        # Indicate if user is admin to 
+        org_admin = org.admin
+        if user == org.admin:
+            print "User is admin of this org:"
+            context['admin'] = True
+        else:
+            context['admin'] = False
+
         return context
 
     def get_user(self, username):        
@@ -161,6 +170,53 @@ class OrgHomeView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
             return user
         except User.DoesNotExist:
             return None
+
+class OrgPaymentView(LoginRequiredMixin, TemplateView):
+#class OrgPaymentView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    """
+    
+    """
+    template_name = "orgs/org-payment.html"
+    # This permission should let any org member view, will change soon to give permission to admin
+    #permission_required = 'orgs.view_org'
+
+    def get_context_data(self, **kwargs):
+        """Use this to add extra context (the user)."""
+        context = super(OrgPaymentView, self).get_context_data(**kwargs)
+        user = self.request.user
+        org_pk = self.kwargs['pk']
+        org = Org.objects.get(pk=org_pk)
+        
+        context['user'] = user
+        context['org'] = org
+        
+        # Indicate if user is admin to 
+        org_admin = org.admin
+        if user == org.admin:
+            print "User is admin of this org:"
+            context['admin'] = True
+            # Include admin payment details
+            if user.stripe_id:
+                import stripe
+                stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
+                stripe_id = user.stripe_id
+                customer = stripe.Customer.retrieve(stripe_id)
+                if customer.default_source:
+                    card_id = customer.default_source
+                    source = customer.sources.retrieve(card_id)
+                    context['default_source'] = source
+                    print "default_source: "
+                    print source
+                else:
+                    print "no card yet"
+            else:
+                print "no stripe id"
+
+        else:
+            context['admin'] = False
+
+        return context
+
 
 class OrgProductsView(TemplateView):
     """

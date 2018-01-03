@@ -210,7 +210,6 @@ class GeneralInvitationForm(Form):
     invite3 = forms.EmailField(required=False)
     next = forms.CharField(required=False)
 
-
     class Meta:
         fields = [
             'invite1',

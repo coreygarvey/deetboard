@@ -40,18 +40,31 @@
 								<p>{{ default_source.name }}</p>
 								<span class="profile-label">CC Expiration</span>
 								<p>{{ default_source.exp_month }}/{{ default_source.exp_year }}</p>
-							{% endif %}
-							
-							<span>
-								<form action="/update_payment/" method="POST">
-								  {% csrf_token %}
-								  <script
-								    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-								    data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
-								    data-label="Update CC details">
-								  </script>
-								</form>
-							</span>
+								
+								<span>
+				                    <form action="/update_payment/" method="POST">
+				                        {% csrf_token %}
+				                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
+				                        <script
+				                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+				                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+				                            data-label="Update CC details">
+				                        </script>
+				                    </form>
+				                </span>
+				            {% else %}
+				                <span>
+				                    <form action="/update_payment/" method="POST">
+				                        {% csrf_token %}
+				                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
+				                        <script
+				                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+				                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+				                            data-label="Add CC details">
+				                        </script>
+				                    </form>
+				                </span>
+				            {% endif %}
 		        		</div>
 
 

@@ -2,10 +2,14 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1 org-home-header">
             <h2>{{ org.title }}</h2>
+            
+            {% if admin %}
+	        	<a href="{{request.path}}payment">Payment details</a>
+	        {% endif %}
+
         </div>
     </div>
 
-            
         {% include "../products/products-list.html" %}
 
         {% include "./org-members-list.html" %}
