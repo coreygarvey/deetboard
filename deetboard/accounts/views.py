@@ -236,8 +236,8 @@ class ActivationView(UpdateView):
 
             # Create initial tooltip message
             updated_user.tooltip = updated_user.get_full_name_role()
-
             updated_user.save()
+            
             # Connect user with org
             if org_id is not None:
                 org = Org.objects.get(id=org_id)
