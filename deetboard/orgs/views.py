@@ -29,22 +29,22 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
     form_class = OrgForm
     
     def form_valid(self, form):        
-        form.instance.admin = self.request.user
+        # Create org with current user as admin of group and customer
+        current_user = self.request.user
+        form.instance.admin = current_user
         
-        import stripe
-        stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
-
-        email = self.request.user.email
+        email = current_user.email
         domain = re.search("@[\w.]+", email)
         # Need to check domain against common domains
         form.instance.email_domain = domain.group()
 
-        user = self.request.user
-        customer_id = user.stripe_id
-        print "customer_id"
-        print customer_id
+        # Retrieve customer from user's stripe_id
+        customer_id = current_user.stripe_id
         # Set your secret key: remember to change this to your live secret key in production
         # See your keys here: https://dashboard.stripe.com/account/apikeys
+        import stripe
+        stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
+        
         subscription = stripe.Subscription.create(
           customer=customer_id,
           items=[
@@ -55,13 +55,10 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
           trial_period_days=30,
         )
 
-        print "Customer subscription: "
-        print subscription
-
         org = form.instance
         org.subscription_type = "Trial"
         org.subscription_id = subscription.id
-        org.subscription_status = "Active"
+        org.subscription_status = "Pending"
 
         return super(OrgCreateView, self).form_valid(form)
 

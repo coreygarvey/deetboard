@@ -894,11 +894,14 @@ class ProfileView(TemplateView):
             stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
             stripe_id = user.stripe_id
             customer = stripe.Customer.retrieve(stripe_id)
-            card_id = customer.default_source
-            source = customer.sources.retrieve(card_id)
-            context['default_source'] = source
-            print "default_source: "
-            print source
+            if customer.default_source:
+                card_id = customer.default_source
+                source = customer.sources.retrieve(card_id)
+                context['default_source'] = source
+                print "default_source: "
+                print source
+            else:
+                print "no card yet"
         else:
             print "no stripe id"
 
