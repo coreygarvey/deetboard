@@ -180,6 +180,15 @@ class OrgPaymentView(LoginRequiredMixin, TemplateView):
     # This permission should let any org member view, will change soon to give permission to admin
     #permission_required = 'orgs.view_org'
 
+    def dispatch(self, request, *args, **kwargs):
+        user = self.request.user
+        org_pk = self.kwargs['pk']
+        org = Org.objects.get(pk=org_pk)
+        if user != org.admin:
+            url = reverse('org_home', kwargs={'pk': org_pk})
+            return HttpResponseRedirect(url)
+        return super(OrgPaymentView, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
         context = super(OrgPaymentView, self).get_context_data(**kwargs)
