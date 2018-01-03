@@ -155,6 +155,22 @@ class OrgHomeView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         else:
             context['admin'] = False
 
+        context['org_status'] = 0;
+        if org.subscription_type == "Trial":
+            if org.subscription_status == "Pending":
+                context['org_status'] = 0;
+                print "YUP!!!"
+            elif org.subscription_status == "Active":
+                context['org_status'] = 1;
+            elif org.subscription_status == "Failed":
+                context['org_status'] = 2;
+        elif org.subscription_type == "Monthly":
+            if org.subscription_status == "Active":
+                context['org_status'] = 3;
+            elif org.subscription_status == "Failed":
+                context['org_status'] = 4;
+
+
         return context
 
     def get_user(self, username):        
@@ -177,9 +193,9 @@ class OrgPaymentView(LoginRequiredMixin, TemplateView):
     
     """
     template_name = "orgs/org-payment.html"
-    # This permission should let any org member view, will change soon to give permission to admin
+    
+    # Use permissions like below instead of dispatch for protecting pages
     #permission_required = 'orgs.view_org'
-
     def dispatch(self, request, *args, **kwargs):
         user = self.request.user
         org_pk = self.kwargs['pk']

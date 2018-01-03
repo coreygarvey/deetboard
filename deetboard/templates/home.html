@@ -10,6 +10,13 @@
 
 {% endblock %}
 
+{% block trial_content %}
+	{% if org_status == 0 %}
+	<h2>Trial Period</h2>
+	{% endif %}
+
+{% endblock %}
+
 {% block postjs %}
 
 {% endblock %}
