@@ -21,7 +21,6 @@
 			-->
 			{% for account in org.accounts.all %}
 			
-
 				<a href="/home/profile/{{ account.pk }}">
 					{% if account.profile_pic %}
 					<img src="{% get_media_prefix %}{{ account.profile_pic }}" style="height:60px; width:60px;" id="org-member-image" class="org-member-image" data-toggle="tooltip" title="{{ account.tooltip }}">

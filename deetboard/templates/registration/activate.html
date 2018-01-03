@@ -22,7 +22,7 @@
 	    <form id="activation-form" method="post" action="" enctype="multipart/form-data">
 	    	{% csrf_token %}
 
-	        {% render_field form.username placeholder="Username" class+="form-control activate-input" %}
+	        <!-- {% render_field form.username placeholder="Username" class+="form-control activate-input" %} -->
 
 	        {% render_field form.role placeholder="Role" class+="form-control activate-input" %}
 

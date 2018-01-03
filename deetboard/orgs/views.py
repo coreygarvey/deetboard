@@ -31,14 +31,38 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):        
         form.instance.admin = self.request.user
         
-        
+        import stripe
+        stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
 
         email = self.request.user.email
         domain = re.search("@[\w.]+", email)
         # Need to check domain against common domains
         form.instance.email_domain = domain.group()
 
-        
+        user = self.request.user
+        customer_id = user.stripe_id
+        print "customer_id"
+        print customer_id
+        # Set your secret key: remember to change this to your live secret key in production
+        # See your keys here: https://dashboard.stripe.com/account/apikeys
+        subscription = stripe.Subscription.create(
+          customer=customer_id,
+          items=[
+            {
+              "plan": "basic-plan",
+            },
+          ],
+          trial_period_days=30,
+        )
+
+        print "Customer subscription: "
+        print subscription
+
+        org = form.instance
+        org.subscription_type = "Trial"
+        org.subscription_id = subscription.id
+        org.subscription_status = "Active"
+
         return super(OrgCreateView, self).form_valid(form)
 
     def get_form_kwargs(self):

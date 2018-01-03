@@ -159,6 +159,8 @@ class RegistrationView(ActivationContextMixin, ActivationKeyMixin,
         new_user.stripe_id = customer.id
         new_user.save()
 
+        '''
+        new_user.stripe_id = customer.id
         print customer_id
         # Set your secret key: remember to change this to your live secret key in production
         # See your keys here: https://dashboard.stripe.com/account/apikeys
@@ -174,7 +176,7 @@ class RegistrationView(ActivationContextMixin, ActivationKeyMixin,
 
         print "Customer subscription: "
         print subscription
-
+        '''
         self.send_activation_email(new_user)
         return new_user
 
@@ -887,17 +889,18 @@ class ProfileView(TemplateView):
         context['user_orgs'] = user_orgs
 
 
-
-        import stripe
-        stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
-        stripe_id = user.stripe_id
-        customer = stripe.Customer.retrieve(stripe_id)
-        card_id = customer.default_source
-        source = customer.sources.retrieve(card_id)
-        context['default_source'] = source
-        print "default_source: "
-        print source
-
+        if user.stripe_id:
+            import stripe
+            stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
+            stripe_id = user.stripe_id
+            customer = stripe.Customer.retrieve(stripe_id)
+            card_id = customer.default_source
+            source = customer.sources.retrieve(card_id)
+            context['default_source'] = source
+            print "default_source: "
+            print source
+        else:
+            print "no stripe id"
 
 
 
@@ -976,31 +979,28 @@ class ProfilePublicView(TemplateView):
 
 
 def update_payment(request):
+    ###### NEEDS PERMISSIONS!!! #####
+    # Need to protect for only admin of org
     import stripe
     stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
     if request.method == 'POST':
-        # Need to protect for only admin of org
+        # Take token as payment info and store to user
+        # If user does not have stripe_id, create customer assigned to user
         user = request.user
         form = request.POST
         token = form.get('stripeToken')
-        print "Stripe_token: "
-        print token
 
-        stripe_id = user.stripe_id
-        print "Stripe ID: "
-        print stripe_id
+        if user.stripe_id:
+            customer = stripe.Customer.retrieve(user.stripe_id)
+        else:
+            # Create customer
+            customer = stripe.Customer.create(
+              email=user.email,
+            )
+            user.stripe_id = customer.id
+            user.save()
 
-        customer = stripe.Customer.retrieve(stripe_id)
-        print "Customer"
-        print customer
         source = customer.sources.create(source=token)
-        print "Source"
-        print source
-        print source.id
-        print source['id']
         customer.default_source = source.id
         customer.save()
-
-        print "default_source: "
-        print customer.default_source
         return HttpResponseRedirect('/home/profile/')

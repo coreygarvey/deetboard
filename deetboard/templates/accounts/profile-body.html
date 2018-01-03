@@ -32,13 +32,15 @@
 							
 							<span class="profile-label">Role</span>
 							<p>{{ user.role }}</p>
-
-							<span class="profile-label">CC Number</span>
-							<p>xxxx - xxxx - xxxx - {{ default_source.last4 }}</p>
-							<span class="profile-label">CC Email</span>
-							<p>{{ default_source.name }}</p>
-							<span class="profile-label">CC Expiration</span>
-							<p>{{ default_source.exp_month }}/{{ default_source.exp_year }}</p>
+							
+							{% if default_source %}
+								<span class="profile-label">CC Number</span>
+								<p>xxxx - xxxx - xxxx - {{ default_source.last4 }}</p>
+								<span class="profile-label">CC Email</span>
+								<p>{{ default_source.name }}</p>
+								<span class="profile-label">CC Expiration</span>
+								<p>{{ default_source.exp_month }}/{{ default_source.exp_year }}</p>
+							{% endif %}
 							
 							<span>
 								<form action="/update_payment/" method="POST">
