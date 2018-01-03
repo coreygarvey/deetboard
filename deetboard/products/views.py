@@ -478,7 +478,7 @@ class FeatureView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         
         context['experts'] = feature_experts
 
-        print feature_experts[0]
+        
         if(user in feature.admins.all()):
             context['editable'] = True
         else:

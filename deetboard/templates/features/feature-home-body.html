@@ -45,7 +45,7 @@
 			-->
 
 				<div class="feature-experts">
-					<p class="feature-filter-expert-label">Experts</p>
+					<p class="feature-filter-expert-label">Experts  <i class="fa fa-question-circle expert-question" aria-hidden="true" data-toggle="tooltip" title="Experts will be notified of questions and updates to this feature"></i></p>
 					{% for expert in experts.all %}
 						<a href="/home/profile/{{ expert.pk }}">
 							{% if expert.profile_pic %}
