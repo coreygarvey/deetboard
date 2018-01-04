@@ -213,7 +213,7 @@ class ActivationView(UpdateView):
             updated_user.set_password(password)
 
             # Create initial tooltip message
-            updated_user.tooltip = updated_user.get_full_name_role()
+            updated_user.tooltip = updated_user.username
             updated_user.save()
             
             # Connect user with org
@@ -387,7 +387,7 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
                 new_user = self.register(invite)
                 
                 # Create initial tooltip message
-                new_user.tooltip = new_user.get_full_name_role()
+                new_user.tooltip = new_user.email
                 print "new_user.tooltip: " + new_user.tooltip
                 new_user.save()
                 new_user.orgs.add(org)        
@@ -784,7 +784,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         updated_user.set_password(password)
 
         # Update tooltip vlaue
-        updated_user.tooltip = updated_user.get_full_name_role()
+        updated_user.tooltip = updated_user.username
 
         updated_user.save()
 

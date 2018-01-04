@@ -71,7 +71,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     	unique=True,
     	db_index=True,
     )
-    role = models.CharField(max_length=50, default='')
+    role = models.CharField(max_length=50, default='', blank=True)
     first_name = models.CharField(max_length=30, default='')
     last_name = models.CharField(max_length=30, default='')
     tooltip = models.CharField(max_length=50, default='')
