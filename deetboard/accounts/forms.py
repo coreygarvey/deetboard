@@ -311,3 +311,25 @@ class FindOrgForm(Form):
             'email'
         ]
         required_css_class = 'required'
+
+
+
+form_class = FindOrgForm
+
+
+class UpdatePaymentForm(Form):
+    """
+    Form for updating payment information
+    """
+    next = forms.CharField(required=False)
+    stripeToken = forms.CharField(required=True)
+    stripeEmail = forms.EmailField(required=True)
+    stripeTokenType = forms.CharField(required=True)
+
+    class Meta:
+        fields = [
+            'next',
+            'stripeToken',
+            'stripeEmail',
+            'stripeTokenType',
+        ]

@@ -19,7 +19,7 @@ from django.contrib.auth.views import login as login_view
 from django.contrib.auth.backends import ModelBackend
 
 from models import Account
-from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, ProfileUpdateForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm
+from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, ProfileUpdateForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm, UpdatePaymentForm
 from serializers import AccountSerializer
 from orgs.models import Org
 from braces.views import LoginRequiredMixin
@@ -871,12 +871,13 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         # 1.10).
         return self.render_to_response(self.get_context_data(form=form))
 
-class ProfileView(TemplateView):
+class ProfileView(FormView):
     """
     View the User's Profile
     """
     disallowed_url = 'registration_disallowed'
     template_name = "accounts/profile.html"
+    form_class = UpdatePaymentForm
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
@@ -904,11 +905,41 @@ class ProfileView(TemplateView):
                 print "no card yet"
         else:
             print "no stripe id"
-
-
-
-
         return context
+
+    def form_valid(self, form):
+        ###### NEEDS PERMISSIONS!!! #####
+        print "Printing request: "
+        print self.request
+        # Need to protect for only admin of org
+        import stripe
+        stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
+
+        # Take token as payment info and store to user
+        # If user does not have stripe_id, create customer assigned to user
+        user = self.request.user
+        token = form.cleaned_data['stripeToken']
+        
+        if form.cleaned_data['next']:
+            next = form.cleaned_data['next']
+            success_url = next
+        else:
+            sucess_url = 'home/profile'
+
+        if user.stripe_id:
+            customer = stripe.Customer.retrieve(user.stripe_id)
+        else:
+            # Create customer
+            customer = stripe.Customer.create(
+              email=user.email,
+            )
+            user.stripe_id = customer.id
+            user.save()
+
+        source = customer.sources.create(source=token)
+        customer.default_source = source.id
+        customer.save()
+        return HttpResponseRedirect(success_url)
 
 
 
@@ -926,13 +957,16 @@ class ProfileView(TemplateView):
         except User.DoesNotExist:
             return None
 
+    '''
     def form_valid(self, form):
         # Need to protect for only admin of org
         user = self.request.user
         stripe_token = form.cleaned_data['stripeToken']
         print "Stripe_token: "
         print stripe_token
-        
+    '''
+
+
 
 class ProfilePublicView(TemplateView):
     """
@@ -979,39 +1013,3 @@ class ProfilePublicView(TemplateView):
             return user
         except User.DoesNotExist:
             return None
-
-
-def update_payment(request):
-    ###### NEEDS PERMISSIONS!!! #####
-    print "Printing request: "
-    print request
-    # Need to protect for only admin of org
-    import stripe
-    stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
-    if request.method == 'POST':
-        # Take token as payment info and store to user
-        # If user does not have stripe_id, create customer assigned to user
-        user = request.user
-        form = request.POST
-        token = form.get('stripeToken')
-
-        if form.get('next'):
-            next = form.get('next')
-            success_url = next
-        else:
-            sucess_url = 'home/profile'
-
-        if user.stripe_id:
-            customer = stripe.Customer.retrieve(user.stripe_id)
-        else:
-            # Create customer
-            customer = stripe.Customer.create(
-              email=user.email,
-            )
-            user.stripe_id = customer.id
-            user.save()
-
-        source = customer.sources.create(source=token)
-        customer.default_source = source.id
-        customer.save()
-        return HttpResponseRedirect(success_url)

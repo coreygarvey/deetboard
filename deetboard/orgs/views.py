@@ -38,6 +38,19 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
         # Need to check domain against common domains
         form.instance.email_domain = domain.group()
 
+        org = form.instance
+
+        self.set_org_subscription(current_user, org)
+        return super(OrgCreateView, self).form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super(OrgCreateView, self).get_form_kwargs()
+        kwargs.update({
+            'request' : self.request
+        })
+        return kwargs
+
+    def set_org_subscription(self, current_user, org):
         # Retrieve customer from user's stripe_id
         customer_id = current_user.stripe_id
         # Set your secret key: remember to change this to your live secret key in production
@@ -55,19 +68,28 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
           trial_period_days=30,
         )
 
-        org = form.instance
+        # Initial org subscription
         org.subscription_type = "Trial"
         org.subscription_id = subscription.id
         org.subscription_status = "Pending"
+        org.sub_status = 0
 
-        return super(OrgCreateView, self).form_valid(form)
 
-    def get_form_kwargs(self):
-        kwargs = super(OrgCreateView, self).get_form_kwargs()
-        kwargs.update({
-            'request' : self.request
-        })
-        return kwargs
+        '''
+        if org.subscription_type == "Trial":
+            if org.subscription_status == "Pending":
+                context['org_status'] = 0;
+                print "YUP!!!"
+            elif org.subscription_status == "Active":
+                context['org_status'] = 1;
+            elif org.subscription_status == "Failed":
+                context['org_status'] = 2;
+        elif org.subscription_type == "Monthly":
+            if org.subscription_status == "Active":
+                context['org_status'] = 3;
+            elif org.subscription_status == "Failed":
+                context['org_status'] = 4;
+        '''
 
 
 class FrontOrgCreateView(OrgCreateView):
@@ -154,22 +176,6 @@ class OrgHomeView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
             context['admin'] = True
         else:
             context['admin'] = False
-
-        context['org_status'] = 0;
-        if org.subscription_type == "Trial":
-            if org.subscription_status == "Pending":
-                context['org_status'] = 0;
-                print "YUP!!!"
-            elif org.subscription_status == "Active":
-                context['org_status'] = 1;
-            elif org.subscription_status == "Failed":
-                context['org_status'] = 2;
-        elif org.subscription_type == "Monthly":
-            if org.subscription_status == "Active":
-                context['org_status'] = 3;
-            elif org.subscription_status == "Failed":
-                context['org_status'] = 4;
-
 
         return context
 

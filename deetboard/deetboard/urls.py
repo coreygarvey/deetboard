@@ -44,9 +44,6 @@ urlpatterns = [
     url(r'^login/$', custom_login),
     url(r'^logout/$', logout_page),
 
-    url(r'^update_payment/$', update_payment),
-
-
     # Account Registration Views
     # Remove this?!
     url(r'^accounts/register/$', 

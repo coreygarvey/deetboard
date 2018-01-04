@@ -9,6 +9,7 @@ class Org(TimeStampedModel):
     subscription_type = models.CharField(max_length=30)
     subscription_id = models.CharField(max_length=30)
     subscription_status = models.CharField(max_length=30)
+    sub_status = models.IntegerField(blank=True)
 
     email_domain = models.CharField(max_length=50)
     email_all = models.BooleanField(default=False)

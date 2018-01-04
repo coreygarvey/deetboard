@@ -24,7 +24,7 @@
                 <p>{{ default_source.exp_month }}/{{ default_source.exp_year }}</p>
 
                 <span>
-                    <form action="/update_payment/" method="POST">
+                    <form action="/home/profile/" method="POST">
                         {% csrf_token %}
                         <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
                         <script
@@ -36,7 +36,7 @@
                 </span>
             {% else %}
                 <span>
-                    <form action="/update_payment/" method="POST">
+                    <form action="/home/profile/" method="POST">
                         {% csrf_token %}
                         <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
                         <script
