@@ -64,6 +64,12 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
         import stripe
         stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
         
+        # End now + 3 minutes and print that time
+        now = datetime.datetime.now()
+        now_plus_3 = now + datetime.timedelta(minutes = 3)
+        now_plus_3_int = int(now_plus_3.strftime("%s"))
+
+
         subscription = stripe.Subscription.create(
           customer=customer_id,
           items=[
@@ -71,11 +77,35 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
               "plan": "basic-plan",
             },
           ],
-          trial_period_days=30,
+
+          trial_end=now_plus_3_int,
         )
 
         # Initial org subscription
-        org.set_subscription(subscription.id, "trial", "inactive")
+        subscription_id = subscription.id
+        # trial or monthly
+        subscription_type = "trial"
+        # active, inactive, or failed (CC not working)
+        subscription_status = "inactive"
+
+        current_period_start = datetime.datetime.fromtimestamp(subscription.current_period_start)
+        current_period_end = datetime.datetime.fromtimestamp(subscription.current_period_end)
+        subscription_amount = round(subscription.plan.amount/float(100), 2)
+
+        print "Subscription details being stored: "
+        print subscription_id
+        # trial or monthly
+        print subscription_type
+        # active, inactive, or failed (CC not working)
+        print subscription_status
+
+        print current_period_start
+        print current_period_end
+        print subscription_amount
+
+        org.set_subscription(subscription_id, subscription_type,
+                                subscription_status, current_period_start,
+                                current_period_end, subscription_amount)
         org.update_sub_status_int()
         
 
@@ -207,6 +237,7 @@ class OrgPaymentView(LoginRequiredMixin, TemplateView):
         org = Org.objects.get(pk=org_pk)
         
         context['user'] = user
+        print user.cc_last_four
         context['org'] = org
         
         # Indicate if user is admin to 
@@ -214,59 +245,48 @@ class OrgPaymentView(LoginRequiredMixin, TemplateView):
         if user == org.admin:
             context['admin'] = True
 
-            if org.subscription_id:
-                subscription_id = org.subscription_id
-                subscription = stripe.Subscription.retrieve(subscription_id)
+            #if org.subscription_id:
+                #subscription_id = org.subscription_id
+                #subscription = stripe.Subscription.retrieve(subscription_id)
                 
-
-                trial_end = subscription['trial_end']
-                sub_status = subscription['status']
+               
+                #trial_end = subscription['trial_end']
+                #sub_status = subscription['status']
                 
                 # Check if still in trial
-                created = datetime.datetime.fromtimestamp(
-                            int(subscription["created"])
-                            ).strftime('%B %-d, %Y')
+                #created = datetime.datetime.fromtimestamp(
+                #            int(subscription["created"])
+                #            ).strftime('%B %-d, %Y')
 
-                current_end_date = datetime.datetime.fromtimestamp(
-                                int(subscription["current_period_end"])
-                                ).strftime('%B %-d, %Y')
-                context['current_end_date'] = current_end_date
+                #current_end_date = datetime.datetime.fromtimestamp(
+                #                int(subscription["current_period_end"])
+                #                ).strftime('%B %-d, %Y')
+                #context['current_end_date'] = current_end_date
 
                 # Only get current_start for users not in trial
-                if sub_status != "trialing":
-                    current_start_date = datetime.datetime.fromtimestamp(
-                                    int(subscription["current_period_start"])
-                                    ).strftime('%B %-d, %Y')
-                    context['current_start_date'] = current_start_date
+                #if sub_status != "trialing":
+                #    current_start_date = datetime.datetime.fromtimestamp(
+                #                    int(subscription["current_period_start"])
+                #                    ).strftime('%B %-d, %Y')
+                #    context['current_start_date'] = current_start_date
                 
 
-                next_payment_amount = "%.2f" % round(subscription["plan"]["amount"]/float(100), 2)
-                context['next_payment_amount'] = next_payment_amount
+                #next_payment_amount = "%.2f" % round(subscription["plan"]["amount"]/float(100), 2)
+                #context['next_payment_amount'] = next_payment_amount
                 
 
-                if sub_status == "trialing":
-                    print "not"
-                else:
+                #if sub_status == "trialing":
+                #    print "not"
+                #else:
                     # Out of trial
                     # If paid bill
-                    print "great"
+                #    print "great"
 
-            
-
-            
             # Include admin payment details
-            if user.stripe_id:
-                
-                customer_id = user.stripe_id
-                customer = stripe.Customer.retrieve(customer_id)
-                if customer.default_source:
-                    card_id = customer.default_source
-                    source = customer.sources.retrieve(card_id)
-                    context['default_source'] = source
-                else:
-                    print "no card"
+            if user.cc_last_four:
+                context['user_cc'] = True
             else:
-                print "no stripe id"
+                context['user_cc'] = False
 
         
 

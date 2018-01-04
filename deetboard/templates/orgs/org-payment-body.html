@@ -16,24 +16,21 @@
                 {{ org.get_sub_clean }}
                 <br>
                 <span class="profile-label">Next Payment: </span>
-                ${{ next_payment_amount }} on {{ current_end_date }}
-                {% if current_start_date %}
+                ${{ org.subscription_amount }} on {{ org.current_period_end|date:"M-d-Y" }}
+                {% if org.sub_status_int > 2 %}
                 <br>
-                <span class="profile-label">Current Cycle Start: </span>
-                {{ current_start_date }}
+                <span class="profile-label">Period Start: </span>
+                {{ org.current_period_start }}
                 {% endif %}
             </p>
             
-                {% if default_source %}
+                {% if user_cc %}
                 <h4>Team Payment Source</h4>
-                <span class="profile-label">CC Number: </span>
-                xxxx - xxxx - xxxx - {{ default_source.last4 }}
-                <br>
                 <span class="profile-label">CC Email: </span>
-                {{ default_source.name }}
+                {{ user.cc_email }}
                 <br>
-                <span class="profile-label">CC Expiration: </span>
-                {{ default_source.exp_month }}/{{ default_source.exp_year }}
+                <span class="profile-label">CC Number: </span>
+                xxxx - xxxx - xxxx - {{ user.cc_last_four }}
                 <br>
                 <br>
                 {% endif %}
@@ -44,7 +41,7 @@
                         {% csrf_token %}
                         <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
                         
-                        {% if default_source %}
+                        {% if user_cc %}
                             <script
                                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                                 data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
@@ -61,7 +58,7 @@
                     </form>
                 </span>
 
-                {% if default_source %}
+                {% if user_cc %}
                 <!-- Remove current default source from user -->                                
                 <form action="/home/profile/delete-card/" method="POST">
                     {% csrf_token %}

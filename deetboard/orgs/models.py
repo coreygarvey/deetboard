@@ -12,16 +12,29 @@ class Org(TimeStampedModel):
     subscription_type = models.CharField(max_length=30)
     # active, inactive, or failed (CC not working)
     subscription_status = models.CharField(max_length=30)
+
+    current_period_start = models.DateTimeField(null=True)
+    current_period_end = models.DateTimeField(null=True)
+    subscription_amount = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
+
     # Based on update_sub_status_int(self) below
     sub_status_int = models.IntegerField(blank=True, null=True)
 
     email_domain = models.CharField(max_length=50)
     email_all = models.BooleanField(default=False)
 
-    def set_subscription(self, stripe_id, stype, sstatus):
-        self.subscription_id = stripe_id
-        self.subscription_type = stype
-        self.subscription_status = sstatus
+    def set_subscription(self, subscription_id, subscription_type,
+                                subscription_status, current_period_start,
+                                current_period_end, subscription_amount):
+        self.subscription_id = subscription_id
+        self.subscription_type = subscription_type
+        self.subscription_status = subscription_status
+        
+        self.current_period_start = current_period_start
+        
+        self.current_period_end = current_period_end
+        
+        self.subscription_amount = subscription_amount
         self.save()
 
 

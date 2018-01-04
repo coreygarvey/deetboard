@@ -24,7 +24,7 @@ from django.contrib.auth.views import login, password_reset_confirm, password_re
 
 from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm
 
-from views import home, home_dash
+from views import home, home_dash, stripe_webhooks
 from accounts.views import register, register_success, logout_page, custom_login
 from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, HomeInvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView, ProfilePublicView, UpdateCCView, RemoveCCView
 
@@ -44,6 +44,9 @@ urlpatterns = [
     url(r'^login/$', custom_login),
     url(r'^logout/$', logout_page),
 
+    url(r'^stripe-webhooks/$', stripe_webhooks,
+    ),
+
     # Account Registration Views
     # Remove this?!
     url(r'^accounts/register/$', 
@@ -54,6 +57,8 @@ urlpatterns = [
         RegistrationView.as_view(),
         name='landing',
     ), 
+
+
 
     url(r'^new_org/$',
         RegistrationView.as_view(),
@@ -212,6 +217,8 @@ urlpatterns = [
             ),
         name = 'org_payment'
     ),
+
+
     
     url(r'^home/team/(?P<pk>\d+)/products/$', 
         OrgProductsView.as_view(

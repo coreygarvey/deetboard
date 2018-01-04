@@ -970,11 +970,23 @@ class UpdateCCView(LoginRequiredMixin, FormView):
             # Create source for customer
             user.stripe_id = customer.id
             user.save()
+
+        
+        
+
         
         # Update with new card
         token = form.cleaned_data['stripeToken']
         source = customer.sources.create(source=token)
         customer.save()
+
+        default_card = source.id
+
+        card_details = customer.sources.retrieve(default_card)
+
+        user.cc_email = card_details.name
+        user.cc_last_four = card_details.last4
+        user.save()
 
         if form.cleaned_data['next']:
             next = form.cleaned_data['next']
@@ -987,7 +999,7 @@ class UpdateCCView(LoginRequiredMixin, FormView):
         if len(admin_orgs) > 0:
             new_status = "active"
             for org in admin_orgs:
-                org.set_subscription(org.subscription_id, org.subscription_type, new_status)
+                org.subscription_status = new_status
                 org.update_sub_status_int()
 
         return HttpResponseRedirect(success_url)

@@ -52,3 +52,33 @@ def home_dash(request):
             'admin_orgs': admin_orgs
         }
     )
+
+
+def stripe_webhooks(request):
+    print "REQUEST FROM WEBHOOKS"
+    print request
+
+    # Write Pseudocode for each of the webhooks that will be sent for different payments and resulting actions
+    # Add next payment date to Org
+    # For failed payment, determine where and how payment will be paid
+'''
+    charge_success
+        send email
+        set org subscription_status to active
+        set org subscription_type to monthly 
+        update sub_status_int
+        retrieve subscription:
+            update org.current_period_start
+            update org.current_period_end
+
+
+    charge_failure
+        send emaii
+        set org subscription_status to failed
+        update sub_status_int
+'''
+    #charge_fail
+
+
+
+
