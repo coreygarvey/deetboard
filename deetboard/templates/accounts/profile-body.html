@@ -55,8 +55,13 @@
 
 
 				                <!-- Remove current default source from user -->
-								<button type="button" class="btn btn-main" />Delete Payment Source</button>
 								
+								<form action="/home/profile/delete-card/" method="POST">
+			                        {% csrf_token %}
+			                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
+			                    	<input type="submit" class="btn btn-main" value="Delete CC"/>
+			                    </form>
+
 
 				            {% else %}
 				                <span>

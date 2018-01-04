@@ -19,7 +19,7 @@ from django.contrib.auth.views import login as login_view
 from django.contrib.auth.backends import ModelBackend
 
 from models import Account
-from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, ProfileUpdateForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm, UpdatePaymentForm
+from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, ProfileUpdateForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm, UpdatePaymentForm, RemoveCCForm
 from serializers import AccountSerializer
 from orgs.models import Org
 from braces.views import LoginRequiredMixin
@@ -1028,3 +1028,32 @@ class ProfilePublicView(TemplateView):
             return user
         except User.DoesNotExist:
             return None
+
+
+
+class RemoveCCView(FormView):
+    """
+    Remove the User's CC from their Profile
+    """
+    form_class = RemoveCCForm
+
+    def form_valid(self, form):
+        import stripe
+        stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
+        user = self.request.user
+
+        if user.stripe_id:
+            # Already a customer, update card
+            customer = stripe.Customer.retrieve(user.stripe_id)
+            default_card = customer.default_source
+            customer.sources.retrieve(default_card).delete()
+        
+        customer.save()
+        
+        if form.cleaned_data['next']:
+            next = form.cleaned_data['next']
+            success_url = next
+        else:
+            sucess_url = 'home/profile'
+
+        return HttpResponseRedirect(success_url)

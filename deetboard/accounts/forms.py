@@ -313,10 +313,6 @@ class FindOrgForm(Form):
         required_css_class = 'required'
 
 
-
-form_class = FindOrgForm
-
-
 class UpdatePaymentForm(Form):
     """
     Form for updating payment information
@@ -332,4 +328,15 @@ class UpdatePaymentForm(Form):
             'stripeToken',
             'stripeEmail',
             'stripeTokenType',
+        ]
+
+class RemoveCCForm(Form):
+    """
+    Form for updating payment information
+    """
+    next = forms.CharField(required=False)
+
+    class Meta:
+        fields = [
+            'next',
         ]
