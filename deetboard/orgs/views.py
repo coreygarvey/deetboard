@@ -75,23 +75,6 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
         org.sub_status = 0
 
 
-        '''
-        if org.subscription_type == "Trial":
-            if org.subscription_status == "Pending":
-                context['org_status'] = 0;
-                print "YUP!!!"
-            elif org.subscription_status == "Active":
-                context['org_status'] = 1;
-            elif org.subscription_status == "Failed":
-                context['org_status'] = 2;
-        elif org.subscription_type == "Monthly":
-            if org.subscription_status == "Active":
-                context['org_status'] = 3;
-            elif org.subscription_status == "Failed":
-                context['org_status'] = 4;
-        '''
-
-
 class FrontOrgCreateView(OrgCreateView):
     template_name = 'orgs/org-create-front.html'
 
