@@ -65,6 +65,8 @@ class Org(TimeStampedModel):
             sub_clean = "Inctive Trial - Input Credit Card"
         elif self.sub_status_int == 1:
             sub_clean = "Active Trial"
+        elif self.sub_status_int == 3:
+            sub_clean = "Inactive Monthly - Input Credit Card"
         return sub_clean
         
 

@@ -1,0 +1,21 @@
+<div class="org-home-body">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 org-home-header">
+            <h2>{{ org.title }}</h2>
+        </div>
+    </div>
+        
+        
+    <div class="row">
+        <div class="products-list">
+            Pay you scoundral
+            <br>
+            {% if admin %}
+                <a href="{{request.path}}payment">Payment details</a>
+            {% endif %}
+        </div>
+    </div>
+
+        
+
+</div>
