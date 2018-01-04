@@ -313,7 +313,7 @@ class FindOrgForm(Form):
         required_css_class = 'required'
 
 
-class UpdatePaymentForm(Form):
+class UpdateCCForm(Form):
     """
     Form for updating payment information
     """

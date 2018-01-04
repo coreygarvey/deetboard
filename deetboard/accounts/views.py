@@ -19,7 +19,7 @@ from django.contrib.auth.views import login as login_view
 from django.contrib.auth.backends import ModelBackend
 
 from models import Account
-from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, ProfileUpdateForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm, UpdatePaymentForm, RemoveCCForm
+from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, ProfileUpdateForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm, UpdateCCForm, RemoveCCForm
 from serializers import AccountSerializer
 from orgs.models import Org
 from braces.views import LoginRequiredMixin
@@ -33,9 +33,10 @@ from registration.views import RegistrationView as BaseRegistrationView
 from PIL import Image
 
 import re
-
+import stripe
 
 REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
+stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
 
 class RegistrationTypeView(TemplateView):
     template_name = "registration/registration_type.html"
@@ -145,38 +146,15 @@ class RegistrationView(ActivationContextMixin, ActivationKeyMixin,
         form_email = form.cleaned_data['email']
         new_user.is_active = False
         new_user.save()
-        print "I can make the customer and subscription right here"
-        import stripe
-        stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
-
+        # Create customer, org will be subscribed to it later
         customer = stripe.Customer.create(
           email=new_user.email,
         )
-
-
         # Store Stripe ID for user
         customer_id = customer.id
         new_user.stripe_id = customer.id
         new_user.save()
 
-        '''
-        new_user.stripe_id = customer.id
-        print customer_id
-        # Set your secret key: remember to change this to your live secret key in production
-        # See your keys here: https://dashboard.stripe.com/account/apikeys
-        subscription = stripe.Subscription.create(
-          customer=customer_id,
-          items=[
-            {
-              "plan": "basic-plan",
-            },
-          ],
-          trial_period_days=30,
-        )
-
-        print "Customer subscription: "
-        print subscription
-        '''
         self.send_activation_email(new_user)
         return new_user
 
@@ -871,101 +849,32 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         # 1.10).
         return self.render_to_response(self.get_context_data(form=form))
 
-class ProfileView(FormView):
+class ProfileView(LoginRequiredMixin, TemplateView):
     """
     View the User's Profile
     """
     disallowed_url = 'registration_disallowed'
     template_name = "accounts/profile.html"
-    form_class = UpdatePaymentForm
+    form_class = UpdateCCForm
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
         context = super(ProfileView, self).get_context_data(**kwargs)
         user = self.request.user
-        print "user after new page"
-        print user
         user_orgs = user.orgs.all()
         context['user'] = user
         context['user_orgs'] = user_orgs
 
-
+        # If user has Stripe ID and default source, add it to context
         if user.stripe_id:
-            import stripe
-            stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
+
             stripe_id = user.stripe_id
             customer = stripe.Customer.retrieve(stripe_id)
             if customer.default_source:
                 card_id = customer.default_source
                 source = customer.sources.retrieve(card_id)
                 context['default_source'] = source
-                print "default_source: "
-                print source
-            else:
-                print "no card yet"
-        else:
-            print "no stripe id"
         return context
-
-    def form_valid(self, form):
-        ###### NEEDS PERMISSIONS!!! #####
-        # Updating the payment options for a user
-
-        # Need to protect for only admin of org
-        import stripe
-        stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
-
-        # Take token as payment info and store to user
-        # If user does not have stripe_id, create customer assigned to user
-        user = self.request.user
-
-
-        token = form.cleaned_data['stripeToken']
-        if user.stripe_id:
-            # Already a customer, update card
-            customer = stripe.Customer.retrieve(user.stripe_id)
-
-            # Get current card and delete
-            default_card = customer.default_source
-            customer.sources.retrieve(default_card).delete()
-            
-            
-        else:
-            # Create customer, add default source
-            customer = stripe.Customer.create(
-              email=user.email,
-            )
-            # Create source for customer
-            user.stripe_id = customer.id
-            user.save()
-        
-        # Update with new card
-        source = customer.sources.create(source=token)
-        customer.save()
-        print "New Source:"
-        print source
-
-        if form.cleaned_data['next']:
-            next = form.cleaned_data['next']
-            success_url = next
-        else:
-            sucess_url = 'home/profile'
-        
-
-        
-
-        # Update orgs that this user is the admin to
-        admin_orgs = user.admin_orgs.all()
-        if len(admin_orgs) > 0:
-            new_status = 'Active'
-            for org in admin_orgs:
-                self.update_sub_status(org, new_status)
-
-        return HttpResponseRedirect(success_url)
-
-    def update_sub_status(self, org, new_status):
-        org.subscription_status = new_status
-        org.update_sub_status()
 
     def get_user(self, username):        
         #Given the verified username, look up and return the
@@ -983,7 +892,7 @@ class ProfileView(FormView):
 
 
 
-class ProfilePublicView(TemplateView):
+class ProfilePublicView(LoginRequiredMixin, TemplateView):
     """
     View any User's Profile
     """
@@ -1030,16 +939,68 @@ class ProfilePublicView(TemplateView):
             return None
 
 
+class UpdateCCView(LoginRequiredMixin, FormView):
+    """
+    Remove the User's CC from their Profile
+    """
+    form_class = UpdateCCForm
 
-class RemoveCCView(FormView):
+    def form_valid(self, form):
+        ###### NEEDS PERMISSIONS!!! #####
+        # Updating the payment options for a user
+
+        # Need to protect for only admin of org
+        # Take token as payment info and store to user
+        # If user does not have stripe_id, create customer assigned to user
+        user = self.request.user
+        
+        if user.stripe_id:
+            # Already a customer, remove current card if present
+            customer = stripe.Customer.retrieve(user.stripe_id)
+            # Get current card and delete
+            default_card = customer.default_source
+            if default_card:
+                customer.sources.retrieve(default_card).delete()
+            
+        else:
+            # Create customer, add default source
+            customer = stripe.Customer.create(
+              email=user.email,
+            )
+            # Create source for customer
+            user.stripe_id = customer.id
+            user.save()
+        
+        # Update with new card
+        token = form.cleaned_data['stripeToken']
+        source = customer.sources.create(source=token)
+        customer.save()
+
+        if form.cleaned_data['next']:
+            next = form.cleaned_data['next']
+            success_url = next
+        else:
+            sucess_url = 'home/profile'
+
+        # Update orgs that this user is the admin to
+        admin_orgs = user.admin_orgs.all()
+        if len(admin_orgs) > 0:
+            new_status = "active"
+            for org in admin_orgs:
+                org.set_subscription(org.subscription_id, org.subscription_type, new_status)
+                org.update_sub_status_int()
+
+        return HttpResponseRedirect(success_url)
+
+class RemoveCCView(LoginRequiredMixin, FormView):
     """
     Remove the User's CC from their Profile
     """
     form_class = RemoveCCForm
 
+
+
     def form_valid(self, form):
-        import stripe
-        stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
         user = self.request.user
 
         if user.stripe_id:
@@ -1055,5 +1016,13 @@ class RemoveCCView(FormView):
             success_url = next
         else:
             sucess_url = 'home/profile'
+
+        # Update orgs that this user is the admin to
+        admin_orgs = user.admin_orgs.all()
+        if len(admin_orgs) > 0:
+            new_status = "inactive"
+            for org in admin_orgs:
+                org.set_subscription(org.subscription_id, org.subscription_type, new_status)
+                org.update_sub_status_int()
 
         return HttpResponseRedirect(success_url)

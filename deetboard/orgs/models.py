@@ -6,30 +6,41 @@ from core.models import TimeStampedModel
 class Org(TimeStampedModel):
     title = models.CharField(max_length=50)
     admin = models.ForeignKey('accounts.Account', related_name="admin_orgs")
-    subscription_type = models.CharField(max_length=30)
+    
     subscription_id = models.CharField(max_length=30)
+    # trial or monthly
+    subscription_type = models.CharField(max_length=30)
+    # active, inactive, or failed (CC not working)
     subscription_status = models.CharField(max_length=30)
-    sub_status = models.IntegerField(blank=True)
+    # Based on update_sub_status_int(self) below
+    sub_status_int = models.IntegerField(blank=True, null=True)
 
     email_domain = models.CharField(max_length=50)
     email_all = models.BooleanField(default=False)
 
-    def update_sub_status(self):
+    def set_subscription(self, stripe_id, stype, sstatus):
+        self.subscription_id = stripe_id
+        self.subscription_type = stype
+        self.subscription_status = sstatus
+        self.save()
+
+
+    def update_sub_status_int(self):
         subscription_type = self.subscription_type
         subscription_status = self.subscription_status
         # The user identified by email
-        if subscription_type == "Trial":
-            if subscription_status == "Pending":
-                self.sub_status = 0;
-            elif subscription_status == "Active":
-                self.sub_status = 1;
-            elif subscription_status == "Failed":
-                self.sub_status = 2;
-        elif subscription_type == "Monthly":
-            if subscription_status == "Active":
-                self.sub_status = 3;
-            elif subscription_status == "Failed":
-                self.sub_status = 4;
+        if subscription_type == "trial":
+            if subscription_status == "inactive":
+                self.sub_status_int = 0;
+            elif subscription_status == "active":
+                self.sub_status_int = 1;
+            elif subscription_status == "failed":
+                self.sub_status_int = 2;
+        elif subscription_type == "monthly":
+            if subscription_status == "inactive":
+                self.sub_status_int = 3;
+            elif subscription_status == "active":
+                self.sub_status_int = 4;
         self.save()
 
     # Fields to add: size, category

@@ -25,8 +25,8 @@ from django.contrib.auth.views import login, password_reset_confirm, password_re
 from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm
 
 from views import home, home_dash
-from accounts.views import register, register_success, logout_page, custom_login, RemoveCCView
-from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, HomeInvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView, ProfilePublicView
+from accounts.views import register, register_success, logout_page, custom_login
+from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, HomeInvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView, ProfilePublicView, UpdateCCView, RemoveCCView
 
 from views import IndexView
 from orgs.views import FrontOrgCreateView, HomeOrgCreateView, OrgHomeView, OrgPaymentView, OrgProductsView
@@ -170,6 +170,13 @@ urlpatterns = [
         ProfileView.as_view(
             ),
         name = 'profile'
+    ),
+
+     # Remove Account Card
+    url(r'^home/profile/update-card/$', 
+        UpdateCCView.as_view(
+            ),
+        name = 'update_cc'
     ),
 
      # Remove Account Card

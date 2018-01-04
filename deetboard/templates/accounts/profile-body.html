@@ -30,9 +30,12 @@
 							<span class="profile-label">Username</span>
 							<p>{{ user.username }}</p>
 							
+							{% if user.role %}
 							<span class="profile-label">Role</span>
 							<p>{{ user.role }}</p>
-							
+							{% endif %}
+
+
 							{% if default_source %}
 								<span class="profile-label">CC Number</span>
 								<p>xxxx - xxxx - xxxx - {{ default_source.last4 }}</p>
@@ -40,42 +43,40 @@
 								<p>{{ default_source.name }}</p>
 								<span class="profile-label">CC Expiration</span>
 								<p>{{ default_source.exp_month }}/{{ default_source.exp_year }}</p>
-								
-								<span>
-				                    <form action="{{ request.path }}" method="POST">
-				                        {% csrf_token %}
-				                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
-				                        <script
-				                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-				                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
-				                            data-label="Update CC details">
-				                        </script>
-				                    </form>
-				                </span>
+							{% endif %}
 
+							<br>
+							
 
-				                <!-- Remove current default source from user -->
-								
-								<form action="/home/profile/delete-card/" method="POST">
+							<span>
+			                    <form action="/home/profile/update-card/" method="POST">
 			                        {% csrf_token %}
 			                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
-			                    	<input type="submit" class="btn btn-main" value="Delete CC"/>
+			                        {% if default_source %}
+			                        <script
+			                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+			                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+			                            data-label="Update CC details">
+			                        </script>
+			                        {% else %}
+			                        <script
+			                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+			                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+			                            data-label="Add CC details">
+			                        </script>
+			                        {% endif %}
 			                    </form>
+			                </span>
+								
+							{% if default_source %}
+			                <!-- Remove current default source from user -->								
+							<form action="/home/profile/delete-card/" method="POST">
+		                        {% csrf_token %}
+		                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
+		                    	<input type="submit" class="btn btn-main" value="Delete CC"/>
+		                    </form>
+		                    {% endif %}
 
-
-				            {% else %}
-				                <span>
-				                    <form action="{{ request.path }}" method="POST">
-				                        {% csrf_token %}
-				                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
-				                        <script
-				                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-				                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
-				                            data-label="Add CC details">
-				                        </script>
-				                    </form>
-				                </span>
-				            {% endif %}
 		        		</div>
 
 

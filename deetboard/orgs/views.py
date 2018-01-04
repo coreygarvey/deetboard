@@ -40,7 +40,7 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
 
         org = form.instance
 
-        self.set_org_subscription(current_user, org)
+        self.create_initial_subscription(current_user, org)
         return super(OrgCreateView, self).form_valid(form)
 
     def get_form_kwargs(self):
@@ -50,7 +50,7 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
         })
         return kwargs
 
-    def set_org_subscription(self, current_user, org):
+    def create_initial_subscription(self, current_user, org):
         # Retrieve customer from user's stripe_id
         customer_id = current_user.stripe_id
         # Set your secret key: remember to change this to your live secret key in production
@@ -69,10 +69,9 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
         )
 
         # Initial org subscription
-        org.subscription_type = "Trial"
-        org.subscription_id = subscription.id
-        org.subscription_status = "Pending"
-        org.sub_status = 0
+        org.set_subscription(subscription.id, "trial", "inactive")
+        org.update_sub_status_int()
+        
 
 
 class FrontOrgCreateView(OrgCreateView):
