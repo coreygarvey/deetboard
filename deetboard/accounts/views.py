@@ -918,6 +918,8 @@ class ProfileView(FormView):
         # Take token as payment info and store to user
         # If user does not have stripe_id, create customer assigned to user
         user = self.request.user
+        
+        
         token = form.cleaned_data['stripeToken']
         
         if form.cleaned_data['next']:
@@ -939,9 +941,20 @@ class ProfileView(FormView):
         source = customer.sources.create(source=token)
         customer.default_source = source.id
         customer.save()
+
+        # Update orgs that this user is the admin to
+        admin_orgs = user.admin_orgs.all()
+        if len(admin_orgs) > 0:
+            new_status = 'Active'
+            for org in admin_orgs:
+                self.update_sub_status(org, new_status)
+
+
         return HttpResponseRedirect(success_url)
 
-
+    def update_sub_status(self, org, new_status):
+        org.subscription_status = new_status
+        org.update_sub_status()
 
     def get_user(self, username):        
         #Given the verified username, look up and return the

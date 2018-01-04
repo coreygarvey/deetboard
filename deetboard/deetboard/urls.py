@@ -25,7 +25,7 @@ from django.contrib.auth.views import login, password_reset_confirm, password_re
 from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm
 
 from views import home, home_dash
-from accounts.views import register, register_success, logout_page, custom_login, update_payment
+from accounts.views import register, register_success, logout_page, custom_login
 from accounts.views import RegistrationTypeView, RegistrationView, ActivationView, InvitationView, HomeInvitationView, GeneralInvitationView, ReactivateView, FindOrgView, ProfileUpdateView, ProfileView, ProfilePublicView
 
 from views import IndexView
