@@ -24,6 +24,12 @@ from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import assign_perm
 
 import re
+import stripe
+import datetime
+import time
+
+
+stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
 
 class OrgCreateView(LoginRequiredMixin, CreateView):
     form_class = OrgForm
@@ -206,24 +212,63 @@ class OrgPaymentView(LoginRequiredMixin, TemplateView):
         # Indicate if user is admin to 
         org_admin = org.admin
         if user == org.admin:
-            print "User is admin of this org:"
             context['admin'] = True
+
+            if org.subscription_id:
+                subscription_id = org.subscription_id
+                subscription = stripe.Subscription.retrieve(subscription_id)
+                
+
+                trial_end = subscription['trial_end']
+                sub_status = subscription['status']
+                
+                # Check if still in trial
+                created = datetime.datetime.fromtimestamp(
+                            int(subscription["created"])
+                            ).strftime('%B %-d, %Y')
+
+                current_end_date = datetime.datetime.fromtimestamp(
+                                int(subscription["current_period_end"])
+                                ).strftime('%B %-d, %Y')
+                context['current_end_date'] = current_end_date
+
+                # Only get current_start for users not in trial
+                if sub_status != "trialing":
+                    current_start_date = datetime.datetime.fromtimestamp(
+                                    int(subscription["current_period_start"])
+                                    ).strftime('%B %-d, %Y')
+                    context['current_start_date'] = current_start_date
+                
+
+                next_payment_amount = "%.2f" % round(subscription["plan"]["amount"]/float(100), 2)
+                context['next_payment_amount'] = next_payment_amount
+                
+
+                if sub_status == "trialing":
+                    print "not"
+                else:
+                    # Out of trial
+                    # If paid bill
+                    print "great"
+
+            
+
+            
             # Include admin payment details
             if user.stripe_id:
-                import stripe
-                stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
-                stripe_id = user.stripe_id
-                customer = stripe.Customer.retrieve(stripe_id)
+                
+                customer_id = user.stripe_id
+                customer = stripe.Customer.retrieve(customer_id)
                 if customer.default_source:
                     card_id = customer.default_source
                     source = customer.sources.retrieve(card_id)
                     context['default_source'] = source
-                    print "default_source: "
-                    print source
                 else:
-                    print "no card yet"
+                    print "no card"
             else:
                 print "no stripe id"
+
+        
 
         else:
             context['admin'] = False
