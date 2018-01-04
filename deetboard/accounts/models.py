@@ -81,6 +81,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     stripe_id = models.CharField(max_length=30, blank=True)
     cc_last_four = models.IntegerField(null=True)
     cc_email = models.CharField(max_length=50, blank=True)
+    cc_active = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

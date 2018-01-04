@@ -283,15 +283,7 @@ class OrgPaymentView(LoginRequiredMixin, TemplateView):
                 #    print "great"
 
             # Include admin payment details
-            if user.cc_last_four:
-                context['user_cc'] = True
-            else:
-                context['user_cc'] = False
-
-        
-
-        else:
-            context['admin'] = False
+        context['user_cc'] = user.cc_active
 
         return context
 

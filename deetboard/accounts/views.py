@@ -970,10 +970,6 @@ class UpdateCCView(LoginRequiredMixin, FormView):
             # Create source for customer
             user.stripe_id = customer.id
             user.save()
-
-        
-        
-
         
         # Update with new card
         token = form.cleaned_data['stripeToken']
@@ -986,6 +982,7 @@ class UpdateCCView(LoginRequiredMixin, FormView):
 
         user.cc_email = card_details.name
         user.cc_last_four = card_details.last4
+        user.cc_active = True
         user.save()
 
         if form.cleaned_data['next']:
@@ -1011,7 +1008,6 @@ class RemoveCCView(LoginRequiredMixin, FormView):
     form_class = RemoveCCForm
 
 
-
     def form_valid(self, form):
         user = self.request.user
 
@@ -1019,8 +1015,9 @@ class RemoveCCView(LoginRequiredMixin, FormView):
             # Already a customer, update card
             customer = stripe.Customer.retrieve(user.stripe_id)
             default_card = customer.default_source
-            customer.sources.retrieve(default_card).delete()
-        
+            if default_card:
+                customer.sources.retrieve(default_card).delete()
+
         customer.save()
         
         if form.cleaned_data['next']:
@@ -1034,7 +1031,10 @@ class RemoveCCView(LoginRequiredMixin, FormView):
         if len(admin_orgs) > 0:
             new_status = "inactive"
             for org in admin_orgs:
-                org.set_subscription(org.subscription_id, org.subscription_type, new_status)
+                org.subscription_status = new_status
                 org.update_sub_status_int()
+
+        user.cc_active = False
+        user.save()
 
         return HttpResponseRedirect(success_url)

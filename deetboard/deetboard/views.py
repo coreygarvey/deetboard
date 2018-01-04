@@ -65,7 +65,8 @@ def stripe_webhooks(request):
     charge_success
         send email
         set org subscription_status to active
-        set org subscription_type to monthly 
+        if sub_status_int <= 2
+            set org subscription_type to monthly 
         update sub_status_int
         retrieve subscription:
             update org.current_period_start
