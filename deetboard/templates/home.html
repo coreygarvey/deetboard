@@ -10,11 +10,10 @@
 
 {% endblock %}
 
-{% block trial_content %}
+{% block bottom-banner %}
 	{% if org.sub_status_int == 0 %}
-	<h2>Trial Period</h2>
+		{% include "orgs/home-bottom-banner-0.html" %}
 	{% endif %}
-
 {% endblock %}
 
 {% block postjs %}

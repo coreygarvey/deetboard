@@ -43,6 +43,18 @@ class Org(TimeStampedModel):
                 self.sub_status_int = 4;
         self.save()
 
+
+
+    def get_sub_clean(self):
+        # The user identified by their email
+        #   and role
+        if self.sub_status_int == 0:
+            sub_clean = "Inctive Trial - Input Credit Card"
+        elif self.sub_status_int == 1:
+            sub_clean = "Active Trial"
+        return sub_clean
+        
+
     # Fields to add: size, category
     
     def __str__(self):

@@ -11,8 +11,7 @@
             <h1>Payments</h1>
             <br>
             <h4>Subscription Status</h4>
-            <p>{{ org.subscription_type }} - {{ org.subscription_status }}</p>
-            <br>
+            <p>{{ org.get_sub_clean }}</p>
             
                 {% if default_source %}
                 <h4>Team Payment Source</h4>

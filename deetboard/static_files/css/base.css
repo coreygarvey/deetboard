@@ -365,6 +365,37 @@ h1 {
   padding: 18px 0 0 5px;;
 }
 
+/* Bottom Banner */
+#home-bottom-banner{
+  position: fixed;
+  bottom: 20px;
+  left: 0px;
+  padding: 10px 30px;
+  background-color: #C2D4EE;
+  color: #214478;
+}
+
+.banner-header{
+  font-size:14px;
+  font-weight: 600;
+}
+
+.banner-text{
+  font-size:12px;
+  font-weight: 400 ;
+}
+
+.banner-text a{
+  text-decoration: underline;
+  color: #214478;
+}
+
+.banner-text a:hover,
+.banner-text a:focus{
+  text-decoration: underline;
+  color: #3165B3;
+}
+
 
 
 .products-dropdown-menu, 
@@ -496,7 +527,7 @@ h1 {
   height:100%;
   position: fixed;
   overflow-y: auto;
-  z-index: 1000;
+  /*z-index: 1000;*/
   padding: 0px 0px;
   vertical-align: top;
   color: #2e466b;
