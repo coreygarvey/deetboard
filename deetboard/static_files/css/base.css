@@ -358,6 +358,10 @@ h1 {
   margin: 4px 10px;
 }
 
+.home-dropdown-profile {
+  margin: 7px 50px 7px 0;
+}
+
 .home-nav-icon{
   float:left;
   font-size: 26px;
@@ -436,6 +440,31 @@ h1 {
   background-color: transparent;
 }
 
+
+.profile-dropdown-menu {
+  padding: 0px 0px;
+  min-width: 50px;
+}
+
+.profile-dropdown-menu > li > a {
+  color: #214478;
+  display: inline-block;
+  white-space: nowrap;
+  height: 100%;
+  width: 100%;
+
+}
+.profile-dropdown-menu > li > a {
+  padding: 10px 30px 10px;
+}
+
+.profile-dropdown-menu > li > a:hover, 
+.profile-dropdown-menu > li > a:focus {
+  color: #214478;
+  text-decoration: none;
+  background-color: transparent;
+}
+
 .dropdown-toggle {
   display: block;
   text-decoration: none;
@@ -507,6 +536,26 @@ h1 {
 .btn-products-icon{
   float: left;
 }
+
+.btn-profile {
+  min-width: 45px;
+  min-height: 40px;
+  color: #214478;
+  font-weight: 300;
+  text-align:left;
+  padding: 6px 5px;
+  background-color: transparent;
+  border: none;
+}
+
+.btn-profile:active:hover, .btn-profile:hover, .btn-profile:active, .btn-profile:active:focus, .btn-profile:focus  {
+  background-color: rgb(250,250,250);
+  color: #214478;
+  border: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+
 
 .btn-text-column {
   float:left;
@@ -629,6 +678,27 @@ h1 {
 .home-dropdown > ul > li:active:focus, 
 .home-dropdown > ul > li:focus  {
   background-color: #dadfe7;
+  color: #214478;
+  cursor: pointer;
+}
+
+.profile-dropdown > ul > li {
+  line-height: 30px;
+  font-size: 13px;
+  padding: 0px;
+  -o-transition:.2s;
+  -ms-transition:.2s;
+  -moz-transition:.2s;
+  -webkit-transition:.2s;
+  /* ...and now for the proper property */
+  transition:.2s;
+}
+
+.profile-dropdown > ul > li:hover, 
+.profile-dropdown > ul > li:active, 
+.profile-dropdown > ul > li:active:focus, 
+.profile-dropdown > ul > li:focus  {
+  background-color: #e9ecf1;
   color: #214478;
   cursor: pointer;
 }
@@ -1253,6 +1323,16 @@ box-shadow: 0px 0px 2px #999;
   border-radius: 12px;
   box-shadow: 0px 0px 2px #ccc;
   margin-right:8px;
+}
+.profile-btn-image{
+  float:left;
+  border-radius: 18px;
+  transition: .2s;
+
+}
+.profile-btn-image:hover{
+  box-shadow: 0px 0px 4px #000;
+  
 }
 .feature-screenshot{
   float: left;
