@@ -341,9 +341,12 @@ class ResponseCreateView(LoginRequiredMixin, CreateView):
         })
         return kwargs
 
-    def get_success_url(self):
+    def get_success_url(self, *args, **kwargs):
         response = self.object
-
+        org_pk = self.kwargs['opk']
+        product_pk = self.kwargs['ppk']
+        feature_pk = self.kwargs['fpk']
+        question_pk = self.object.question.id
         product = response.question.product
         org = product.org
         groupName = org.title + str(org.pk)
@@ -351,12 +354,14 @@ class ResponseCreateView(LoginRequiredMixin, CreateView):
         assign_perm('view_response', orgUserGroup, response)
         current_user = self.request.user
         assign_perm('questions.delete_response', current_user, response)
+        
 
-        return reverse('question_home', 
+        return reverse('question_home',
                     args=(
-                        self.object.question.product.org.id,
-                        self.object.question.product.id,
-                        self.object.question.id
+                        org_pk,
+                        product_pk,
+                        feature_pk,
+                        question_pk
                         )
                     )
 
