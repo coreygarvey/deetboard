@@ -9,3 +9,10 @@
 <script type="text/javascript" src="{% static '/js/annotorious2.min.js' %}"></script>
 <script type="text/javascript" src="{% static '/js/anno-psql-plugin.js' %}"></script>
 
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>

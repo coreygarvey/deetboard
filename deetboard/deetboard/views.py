@@ -42,13 +42,24 @@ def home(request):
 def home_dash(request):
     current_user = request.user
     user_orgs = current_user.orgs.all()
+
+    user_orgs_list = []
+    for org in user_orgs:
+        user_org = {
+            'org': org,
+            'stats': org.return_stats()
+            }
+        user_orgs_list.append(user_org)
+
     admin_orgs = Org.objects.filter(admin=current_user)
     
+
+
     return render_to_response(
         'home/home.html',
         { 
             'user': current_user,
-            'user_orgs': user_orgs,
+            'user_orgs': user_orgs_list,
             'admin_orgs': admin_orgs
         }
     )

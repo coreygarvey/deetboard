@@ -83,6 +83,48 @@ class Org(TimeStampedModel):
         elif self.sub_status_int == 5:
             sub_clean = "Monthly - Delinquent - Payment Needed"
         return sub_clean
+
+    def return_stats(self):
+
+        members_count = self.accounts.all().count()
+
+        products = self.products.all()
+        products_count = products.count()
+
+        features_count = 0
+        questions_count = 0
+        responses_count = 0
+
+        for product in products:
+            features = product.features.all()
+            features_count += features.count()
+
+            for feature in features:
+                questions = feature.questions.all()
+                questions_count += questions.count()
+
+                for question in questions:
+                    responses_count += question.responses.all().count()
+        
+        print "counts:"
+        print "members_count"
+        print members_count
+        print "products_count"
+        print products_count
+        print "features_count"
+        print features_count
+        print "questions_count"
+        print questions_count
+        print "responses_count"
+        print responses_count
+        stats = {
+        "members_count": members_count,
+        "products_count": products_count,
+        "features_count": features_count,
+        "questions_count": questions_count,
+        "responses_count": responses_count
+        }
+        return stats
         
 
     # Fields to add: size, category

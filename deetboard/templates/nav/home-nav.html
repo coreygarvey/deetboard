@@ -47,13 +47,12 @@
         </div>
       {% else %}
       <!-- Teams Dropdown -->
+        {% if org %}
         <div class="dropdown home-dropdown home-dropdown-teams pull-left">
           <button class="btn btn-default btn-teams" data-toggle="dropdown">
-            {% if org %}
+            
               {{ org.title }}
-            {% else %}
-              Teams
-            {% endif %}
+            
             <i class="fa fa-caret-down" aria-hidden="true"></i>
           </button>
 
@@ -70,6 +69,7 @@
             </ul>
           {% endif %}
         </div>
+      {% endif %}
       {% endif %}
 
       <a class="home-link" href="/home/dashboard/"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a>
