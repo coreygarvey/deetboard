@@ -1,7 +1,12 @@
 <div class="home-left-nav">
 	<ul id="MainMenu" class="sidebar-nav">
 		
-
+		<li class="left-nav-title">
+			<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/create-feature/">
+				<i class="fa fa-fw fa-plus left-nav-icon" aria-hidden="true"></i>
+				<span class="left-nav-text">Create New Feature</span>
+			</a>
+		</li>
 		{% for feature in prod_features %}
 			<li class="left-nav-title">
 				<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">

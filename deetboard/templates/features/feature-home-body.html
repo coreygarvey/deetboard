@@ -15,8 +15,11 @@
 	  <li class="breadcrumb-item">
 	  	<a href="/home/team/{{ org.pk }}">{{org.title}}</a>
 	  </li>
-	  <li class="breadcrumb-item active">
+	  <li class="breadcrumb-item">
 	  	<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">{{product.title}}</a>
+	  </li>
+	  <li class="breadcrumb-item active">
+	  	<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}/feature/{{ feature.pk }}">{{feature.title}}</a>
 	  </li>
 	</ol>
 		
@@ -24,7 +27,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="row">
-            	<div class="col-md-10 col-md-offset-1 feature-header">
+            	<div class="col-md-12 feature-header">
 		            <div class="feature-details">
 			            <h2>{{ feature.title }}</h2>
 			            <p>{{ feature.description }}</p>

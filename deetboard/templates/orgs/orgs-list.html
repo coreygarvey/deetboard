@@ -2,8 +2,8 @@
     <div class="row equal">
 		<div class="orgs-list">
 			<h4>Teams</h4>
-			<div class="orgs-list-item">
-				<a href="/home/create-team/">
+			<a href="/home/create-team/">
+				<div class="orgs-list-item">
 					<h3>
 						New Team
 					</h3>
@@ -11,18 +11,16 @@
 					<div class="orgs-list-image">
 						<i class="fa fa-plus-square-o fa-3x" aria-hidden="true"></i>
 					</div>
-
-				</a>
-			</div>
+				</div>
+			</a>
 			{% for org in user_orgs.all %}
-			
-				<div class="orgs-list-item">
-					<a href="/home/team/{{ org.pk }}">
+				<a href="/home/team/{{ org.pk }}">
+					<div class="orgs-list-item">
 						<h3>
 							{{ org.title }}
 						</h3>
-					</a>
-				</div>
+					</div>
+				</a>
 
 			{% endfor %}
 		</div>

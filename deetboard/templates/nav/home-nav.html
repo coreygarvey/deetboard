@@ -75,8 +75,17 @@
       <a class="home-link" href="/home/dashboard/"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a>
 
         <div class="dropdown profile-dropdown home-dropdown-profile pull-right">
+          
           <div class="btn btn-default btn-profile" data-toggle="dropdown">
-            <img src="{% get_media_prefix %}{{ user.profile_pic }}" style="height:35px; width:35px;" id="profile-btn-image" class="profile-btn-image">
+            <span class="profile-btn-image-text">
+              {{ user.first_name }}
+            </span>   
+            {% if user.profile_pic %}
+              <img src="{% get_media_prefix %}{{ user.profile_pic }}" style="height:35px; width:35px;" id="profile-btn-image" class="profile-btn-image">
+            {% else %}
+              <img src="{% get_media_prefix %}profile_pics/avatar.png" style="height:35px; width:35px;" id="profile-btn-image" class="profile-btn-image">
+            {% endif %}
+            
           </div>
           <ul class="dropdown-menu profile-dropdown-menu" aria-labelledby="dropdownMenu1">
 

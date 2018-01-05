@@ -11,11 +11,14 @@
       <li class="breadcrumb-item">
         <a href="/home/team/{{ org.pk }}">{{org.title}}</a>
       </li>
+      <li class="breadcrumb-item active">
+        <a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">{{product.title}}</a>
+      </li>
     </ol>
 
 
     <div class="row">
-        <div class="col-md-10 col-md-offset-1 product-header">
+        <div class="col-md-12 product-header">
         	<div class="product-details">
 	            <h2>{{ product.title }}</h2>
             </div>

@@ -243,8 +243,6 @@ h1 {
 }
 .registration-form{
   width: 280px;
-  margin: 0 auto;
-
 }
 .registration-input{
   height: 45px;
@@ -407,7 +405,7 @@ h1 {
 .products-collapse-menu,
 .features-collapse-menu {
   padding: 0px 0px;
-  min-width: 150px;
+  min-width: 50px;
 }
 
 .products-dropdown-menu > li > a,
@@ -423,7 +421,7 @@ h1 {
 }
 .products-dropdown-menu > li > a,
 .teams-dropdown-menu > li > a {
-  padding: 14px 30px 0px;
+  padding: 10px 30px 10px;
 }
 
 
@@ -509,17 +507,16 @@ h1 {
   padding: 6px 4px;
   background-color: transparent;
   border: none;
-  border-radius:3px;
-  -o-transition:.5s;
-  -ms-transition:.5s;
-  -moz-transition:.5s;
-  -webkit-transition:.5s;
+  -o-transition:.3s;
+  -ms-transition:.3s;
+  -moz-transition:.3s;
+  -webkit-transition:.3s;
   /* ...and now for the proper property */
-  transition:.5s;
+  transition:.3s;
 }
 
 .btn-products:hover, .btn-products:active, .btn-products:active:focus, .btn-products:focus  {
-  background-color: #dadfe7;
+  background-color: #e9ecf1;
   color: #214478;
   border: none;
 }
@@ -622,21 +619,21 @@ h1 {
   height: 50px;
   line-height: 13px;
   font-size: 12px;
-  padding: 16px 0px 4px 20px;
+  padding: 20px 0px 4px 20px;
   border-bottom: 1px solid rgba(0,0,0,0.12);
-  -o-transition:.5s;
-  -ms-transition:.5s;
-  -moz-transition:.5s;
-  -webkit-transition:.5s;
+  -o-transition:.3s;
+  -ms-transition:.3s;
+  -moz-transition:.3s;
+  -webkit-transition:.3s;
   /* ...and now for the proper property */
-  transition:.5s;
+  transition:.3s;
 }
 
 .home-left-nav > ul > li:hover, 
 .home-left-nav > ul > li:active, 
 .home-left-nav > ul > li:active:focus, 
 .home-left-nav > ul > li:focus  {
-  background-color: #dadfe7;
+  background-color: #e9ecf1;
   color: #214478;
   cursor: pointer;
   border-bottom: 1px solid rgba(0,0,0,0.12);
@@ -661,23 +658,22 @@ h1 {
 }
 
 .home-dropdown > ul > li {
-  height: 50px;
-  line-height: 50px;
-  font-size: 16px;
+  line-height: 30px;
+  font-size: 14px;
   padding: 0px;
-  -o-transition:.5s;
-  -ms-transition:.5s;
-  -moz-transition:.5s;
-  -webkit-transition:.5s;
+  -o-transition:.2s;
+  -ms-transition:.2s;
+  -moz-transition:.2s;
+  -webkit-transition:.2s;
   /* ...and now for the proper property */
-  transition:.5s;
+  transition:.2s;
 }
 
 .home-dropdown > ul > li:hover, 
 .home-dropdown > ul > li:active, 
 .home-dropdown > ul > li:active:focus, 
 .home-dropdown > ul > li:focus  {
-  background-color: #dadfe7;
+  background-color: #e9ecf1;;
   color: #214478;
   cursor: pointer;
 }
@@ -779,6 +775,11 @@ box-shadow: 0px 0px 2px #999;
 }
 
 .home-wrapper {
+  overflow-x: hidden;
+  height:100%;
+}
+
+.home-feature-wrapper {
   padding-left: 220px;
   overflow-x: hidden;
   height:100%;
@@ -797,7 +798,7 @@ box-shadow: 0px 0px 2px #999;
   width: 97%;
   min-height: 94.5%;
   margin: 15px;
-  padding: 20px;
+  padding: 20px 40px;
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0px 2px 6px #ccc;
@@ -892,10 +893,16 @@ box-shadow: 0px 0px 2px #999;
   display: inline-block;
 }
 
-.profile-header{
+
+.profile-header-container{
   text-align: left;
   border-bottom: 1px solid #bbb;
   color: #333;
+}
+
+.profile-header{
+  display:inline-block;
+  margin-right:15px;
 }
 
 .profile-image{
@@ -1291,7 +1298,7 @@ box-shadow: 0px 0px 2px #999;
 }
 
 .feature-experts{
-  padding: 0px 10%;
+  padding: 0px 5%;
   float:left;
   margin-right: 10%;
   
@@ -1328,11 +1335,18 @@ box-shadow: 0px 0px 2px #999;
   float:left;
   border-radius: 18px;
   transition: .2s;
-
+  margin-right: 5px;
 }
 .profile-btn-image:hover{
   box-shadow: 0px 0px 4px #000;
   
+}
+.profile-btn-image-text{
+  margin-right: 12px;
+  float:left;
+  /* height: 35px; */
+  line-height: 35px;
+  font-weight: 500;
 }
 .feature-screenshot{
   float: left;
@@ -1646,4 +1660,5 @@ box-shadow: 0px 0px 2px #999;
 .breadcrumb{
   display: inline-block;
   font-size: 11px;
+  margin-bottom: 5px;
 }

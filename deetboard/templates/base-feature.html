@@ -1,0 +1,34 @@
+{% load staticfiles %}
+<!DOCTYPE html lang="en" PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title>DeetBoard |
+        {% block title %}{% endblock %}</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        {% include "styles.html" %}    
+		
+    </head>
+    <body>
+        {% block nav %}{% endblock %}  
+        {% block subnav %}{% endblock %}  
+
+        
+        <div class="home-feature-wrapper">
+
+            <div class="row home-body-row">
+
+                {% block content %}{% endblock %}
+
+            </div>
+
+        </div><!-- /.container -->
+
+        {% block bottom-banner %} {% endblock %}
+
+        {% include "postjs.html" %}  
+
+        {% block postjs %} {% endblock %}
+    </body>
+</html>

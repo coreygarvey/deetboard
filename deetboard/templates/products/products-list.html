@@ -2,8 +2,8 @@
     <div class="row equal">
 		<div class="products-list">
 			<h4>Products</h4>
-			<div class="products-list-item">
-				<a href="/home/team/{{ org.pk }}/create-product/">
+			<a href="/home/team/{{ org.pk }}/create-product/">
+				<div class="products-list-item">
 					<h3>
 						New Product	
 					</h3>
@@ -15,12 +15,13 @@
 					<p class="products-list-description">
 						Organized collection of features and conversations to connect your team with internal experts.
 					</p>
-				</a>
-			</div>
+				
+				</div>
+			</a>
 			{% for product in products.all %}
-			
-				<div class="products-list-item">
-					<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">					
+				<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">					
+					<div class="products-list-item">
+					
 						<h3>
 							{{ product.title }}		
 						</h3>
@@ -34,8 +35,9 @@
 							{{ product.description }}
 						</p>
 
-					</a>
-				</div>
+					
+					</div>
+				</a>
 
 			{% endfor %}
 		</div>

@@ -4,9 +4,9 @@
     <div class="container">
 		
 		<div class="row">
-	        <div class="col-md-10 col-md-offset-1 profile-header">
+	        <div class="col-md-10 col-md-offset-1 profile-header-container">
 	            <!--<h2>Welcome {{ user.first_name }} {{ user.last_name }}</h2>-->
-	            <h2>Profile</h2>
+	            <h2 class="profile-header">Profile</h2>
 	        </div>
 	    </div>
 
@@ -17,7 +17,9 @@
 			<div class="col-md-10 col-md-offset-1 profile-body">
 				<div class="row">
 					<div class="col-md-3">
+						{% if user.profile_pic %}
 						<img src="{% get_media_prefix %}{{ profile_user.profile_pic }}" class="profile-image" style="height:150px; width:150px;">
+						{% endif %}
 					</div>
 					<div class="col-md-4 profile-title">
 						<h2>{{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
