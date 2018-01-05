@@ -76,7 +76,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=30, default='')
     tooltip = models.CharField(max_length=50, default='')
     notifs = models.BooleanField(default=False)
-    features_following = models.ManyToManyField('products.Feature', related_name='followers')
+    features_following = models.ManyToManyField('products.Feature', related_name='followers', null=True, blank=True)
 
     stripe_id = models.CharField(max_length=30, blank=True)
     cc_last_four = models.IntegerField(null=True)

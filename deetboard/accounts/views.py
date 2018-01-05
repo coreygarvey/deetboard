@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from django.shortcuts import render, render_to_response, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -18,9 +19,9 @@ from django.contrib.auth.views import login as login_view
 
 from django.contrib.auth.backends import ModelBackend
 
-from models import Account
-from forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, ProfileUpdateForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm, UpdateCCForm, RemoveCCForm
-from serializers import AccountSerializer
+from accounts.models import Account
+from accounts.forms import AccountRegistrationForm, MyRegistrationForm, MyActivationForm, ProfileUpdateForm, AdminInvitationForm, ReactivateForm, FindOrgForm, GeneralInvitationForm, UpdateCCForm, RemoveCCForm
+from accounts.serializers import AccountSerializer
 from orgs.models import Org
 from braces.views import LoginRequiredMixin
 
@@ -34,6 +35,9 @@ from PIL import Image
 
 import re
 import stripe
+
+from accounts.tasks import mailer
+from accounts.tasks import add
 
 REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
 stripe.api_key = "sk_test_3aMNJsprXJcMdh1KffsskjMB"
@@ -95,8 +99,28 @@ class ActivationEmailMixin(object):
         html_message = render_to_string(self.email_body_html_template, 
                                     context)
         
-        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL, 
+        #user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL, 
+        #                html_message=html_message)
+        
+        value = add.delay(4, 4)
+
+        
+
+        print "Before mailer delay: "
+        print "subject: " + subject
+        print "message: " + message
+        print "from: " + settings.DEFAULT_FROM_EMAIL
+        from_email = settings.DEFAULT_FROM_EMAIL
+        print "to: " + user.email
+        to_email = user.email
+        print "mailer"
+        print mailer
+
+        delayed_mail = mailer.delay(subject, message, from_email, to_email,
                         html_message=html_message)
+        print delayed_mail
+
+        return
 
 class InvitationAllowedMixin(object):
     def invitation_allowed(self):
