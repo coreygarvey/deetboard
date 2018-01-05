@@ -8,15 +8,10 @@
     	
 		{% include "../nav/home-left-nav.html" %}
 
-        {% if org.sub_status_int != 3 %}
             
             
-            {% include "./org-home-body.html" %}
-		{% else %}
+        {% include "./org-home-body.html" %}
 
-			{% include "../orgs/pay-home-body.html" %}
-        
-        {% endif %}
     
 {% endblock %}
 

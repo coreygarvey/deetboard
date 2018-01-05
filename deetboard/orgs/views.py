@@ -66,8 +66,8 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
         
         # End now + 3 minutes and print that time
         now = datetime.datetime.now()
-        now_plus_3 = now + datetime.timedelta(minutes = 3)
-        now_plus_3_int = int(now_plus_3.strftime("%s"))
+        now_plus_30 = now + datetime.timedelta(minutes = 30)
+        now_plus_30_int = int(now_plus_30.strftime("%s"))
 
 
         subscription = stripe.Subscription.create(
@@ -78,7 +78,7 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
             },
           ],
 
-          trial_end=now_plus_3_int,
+          trial_end=now_plus_30_int,
         )
 
         # Initial org subscription
@@ -86,7 +86,7 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
         # trial or monthly
         subscription_type = "trial"
         # active, inactive, or failed (CC not working)
-        subscription_status = "inactive"
+        subscription_status = "paid"
 
         current_period_start = datetime.datetime.fromtimestamp(subscription.current_period_start)
         current_period_end = datetime.datetime.fromtimestamp(subscription.current_period_end)
@@ -245,45 +245,16 @@ class OrgPaymentView(LoginRequiredMixin, TemplateView):
         if user == org.admin:
             context['admin'] = True
 
-            #if org.subscription_id:
-                #subscription_id = org.subscription_id
-                #subscription = stripe.Subscription.retrieve(subscription_id)
-                
-               
-                #trial_end = subscription['trial_end']
-                #sub_status = subscription['status']
-                
-                # Check if still in trial
-                #created = datetime.datetime.fromtimestamp(
-                #            int(subscription["created"])
-                #            ).strftime('%B %-d, %Y')
+        if org.subscription_status == 'unpaid':
+            unpaid_invoice = org.unpaid_invoice
+            # Get invoice from stripe
+            # invoice = stripe.Invoice.retrieve(unpaid_invoice)
+            # if invoice.paid == false and invoice.attempted == true:
+            #   context['invoice'] = unpaid_invoice
+            #   context['invoice_total'] = invoice.total
 
-                #current_end_date = datetime.datetime.fromtimestamp(
-                #                int(subscription["current_period_end"])
-                #                ).strftime('%B %-d, %Y')
-                #context['current_end_date'] = current_end_date
-
-                # Only get current_start for users not in trial
-                #if sub_status != "trialing":
-                #    current_start_date = datetime.datetime.fromtimestamp(
-                #                    int(subscription["current_period_start"])
-                #                    ).strftime('%B %-d, %Y')
-                #    context['current_start_date'] = current_start_date
-                
-
-                #next_payment_amount = "%.2f" % round(subscription["plan"]["amount"]/float(100), 2)
-                #context['next_payment_amount'] = next_payment_amount
-                
-
-                #if sub_status == "trialing":
-                #    print "not"
-                #else:
-                    # Out of trial
-                    # If paid bill
-                #    print "great"
-
-            # Include admin payment details
-        context['user_cc'] = user.cc_active
+            context['invoice'] = unpaid_invoice
+            context['invoice_total'] =  org.subscription_amount
 
         return context
 

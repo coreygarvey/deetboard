@@ -20,52 +20,63 @@
                 {% if org.sub_status_int > 2 %}
                 <br>
                 <span class="profile-label">Period Start: </span>
-                {{ org.current_period_start }}
+                {{ org.current_period_start|date:"M-d-Y" }}
                 {% endif %}
             </p>
+
+            {% if org.sub_status_int == 5 %}
+            <!-- Remove current default source from user -->                                
+            <form action="/home/org/{{ org.pk }}/pay-invoice/" method="POST">
+                {% csrf_token %}
+                <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
+                <input placeholder="Invoice" name="invoice" type="hidden" value="{{ invoice }}">
+                <input type="submit" class="btn btn-main" value="Pay ${{ invoice_total }} Invoice"/>
+            </form>
+            {% endif %}
             
-                {% if user_cc %}
-                <h4>Team Payment Source</h4>
-                <span class="profile-label">CC Email: </span>
-                {{ user.cc_email }}
-                <br>
-                <span class="profile-label">CC Number: </span>
-                xxxx - xxxx - xxxx - {{ user.cc_last_four }}
-                <br>
-                <br>
-                {% endif %}
+            {% if user.cc_active %}
+            <h4>Team Payment Source</h4>
+            <span class="profile-label">CC Email: </span>
+            {{ user.cc_email }}
+            <br>
+            <span class="profile-label">CC Number: </span>
+            xxxx - xxxx - xxxx - {{ user.cc_last_four }}
+            <br>
+            <br>
+            {% endif %}
 
-            
-                <span>
-                    <form action="/home/profile/update-card/" method="POST">
-                        {% csrf_token %}
-                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
-                        
-                        {% if user_cc %}
-                            <script
-                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
-                                data-label="Update CC details">
-                            </script>
-                        {% else %}
-                            <script
-                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
-                                data-label="Add CC details">
-                            </script>
-                        {% endif %}
-
-                    </form>
-                </span>
-
-                {% if user_cc %}
-                <!-- Remove current default source from user -->                                
-                <form action="/home/profile/delete-card/" method="POST">
+            <span>
+                <form action="/home/profile/update-card/" method="POST">
                     {% csrf_token %}
                     <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
-                    <input type="submit" class="btn btn-main" value="Delete CC"/>
+                    
+                    {% if user.cc_active %}
+                        <script
+                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+                            data-label="Update CC details">
+                        </script>
+                    {% else %}
+                        <script
+                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+                            data-label="Add CC details">
+                        </script>
+                    {% endif %}
+
                 </form>
-                {% endif %}
+            </span>
+
+            {% if user.cc_active %}
+            <!-- Remove current default source from user -->                                
+            <form action="/home/profile/delete-card/" method="POST">
+                {% csrf_token %}
+                <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
+                <input type="submit" class="btn btn-main" value="Delete CC"/>
+            </form>
+            {% endif %}
+
+                
         </div>
     </div>
 </div>

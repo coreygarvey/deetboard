@@ -994,10 +994,21 @@ class UpdateCCView(LoginRequiredMixin, FormView):
         # Update orgs that this user is the admin to
         admin_orgs = user.admin_orgs.all()
         if len(admin_orgs) > 0:
-            new_status = "active"
             for org in admin_orgs:
-                org.subscription_status = new_status
                 org.update_sub_status_int()
+                
+
+        # Get Customer Invoices
+        # For invoice where attempted = true and paid = false
+            # Get subscription of invoice
+            # Add invoice to Org
+            # Set Org status to failed
+
+        #### IF INACTIVE OR FAILED - PAY INVOICE! ####
+        """ Get Customer Invoices - https://stripe.com/docs/api/python#list_invoices """
+        ## https://stripe.com/docs/api/python#pay_invoice ##
+
+
 
         return HttpResponseRedirect(success_url)
 
@@ -1026,15 +1037,14 @@ class RemoveCCView(LoginRequiredMixin, FormView):
         else:
             sucess_url = 'home/profile'
 
+        # Set user CC details to inform org_sub_status_int
+        user.cc_active = False
+        user.save()
+
         # Update orgs that this user is the admin to
         admin_orgs = user.admin_orgs.all()
         if len(admin_orgs) > 0:
-            new_status = "inactive"
             for org in admin_orgs:
-                org.subscription_status = new_status
                 org.update_sub_status_int()
-
-        user.cc_active = False
-        user.save()
 
         return HttpResponseRedirect(success_url)

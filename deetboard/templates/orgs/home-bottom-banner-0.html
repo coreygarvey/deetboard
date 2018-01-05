@@ -1,9 +1,0 @@
-<div id="home-bottom-banner">
-	<span class="banner-header">Trial Period - {{ org.title }}</span>
-	<br>
-	<span class="banner-text">
-	{% if org.admin == user %}
-		<a href="{{ request.path }}payment/">Set a payment option</a>
-	{% endif %}
-	</span>
-</div>

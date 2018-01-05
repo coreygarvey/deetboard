@@ -1,0 +1,32 @@
+
+	{% if org.sub_status_int == 0 %}
+	<div id="home-bottom-banner">
+		<span class="banner-header">Trial Period - {{ org.title }}</span>
+		<br>
+		<span class="banner-text">
+		{% if org.admin == user %}
+			<a href="{{ request.path }}payment/">Set a payment option</a>
+		{% endif %}
+		</span>
+	</div>
+	{% elif org.sub_status_int == 4 %}	
+	<div id="home-bottom-banner">
+		<span class="banner-header">Delinquent - {{ org.title }}</span>
+		<br>
+		<span class="banner-text">
+		{% if org.admin == user %}
+			<a href="{{ request.path }}payment/">Set a payment option and pay</a>
+		{% endif %}
+		</span>
+	</div>
+	{% elif org.sub_status_int == 5 %}	
+	<div id="home-bottom-banner">
+		<span class="banner-header">Delinquent - {{ org.title }}</span>
+		<br>
+		<span class="banner-text">
+		{% if org.admin == user %}
+			<a href="{{ request.path }}payment/">Please pay</a>
+		{% endif %}
+		</span>
+	</div>
+	{% endif %}

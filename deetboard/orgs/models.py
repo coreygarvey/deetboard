@@ -10,12 +10,16 @@ class Org(TimeStampedModel):
     subscription_id = models.CharField(max_length=30)
     # trial or monthly
     subscription_type = models.CharField(max_length=30)
-    # active, inactive, or failed (CC not working)
+    # paid or unpaid
     subscription_status = models.CharField(max_length=30)
+
+    unpaid_invoice = models.CharField(max_length=40, blank=True)
 
     current_period_start = models.DateTimeField(null=True)
     current_period_end = models.DateTimeField(null=True)
     subscription_amount = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
+
+
 
     # Based on update_sub_status_int(self) below
     sub_status_int = models.IntegerField(blank=True, null=True)
@@ -41,19 +45,24 @@ class Org(TimeStampedModel):
     def update_sub_status_int(self):
         subscription_type = self.subscription_type
         subscription_status = self.subscription_status
+        admin_cc_active = self.admin.cc_active
         # The user identified by email
         if subscription_type == "trial":
-            if subscription_status == "inactive":
+            if admin_cc_active == False:
                 self.sub_status_int = 0;
-            elif subscription_status == "active":
+            elif admin_cc_active == True:
                 self.sub_status_int = 1;
-            elif subscription_status == "failed":
-                self.sub_status_int = 2;
         elif subscription_type == "monthly":
-            if subscription_status == "inactive":
-                self.sub_status_int = 3;
-            elif subscription_status == "active":
-                self.sub_status_int = 4;
+            if subscription_status == "paid":
+                if admin_cc_active == False:
+                    self.sub_status_int = 2;
+                elif admin_cc_active == True:
+                    self.sub_status_int = 3;
+            if subscription_status == "unpaid":
+                if admin_cc_active == False:
+                    self.sub_status_int = 4;
+                elif admin_cc_active == True:
+                    self.sub_status_int = 5;
         self.save()
 
 
@@ -62,11 +71,17 @@ class Org(TimeStampedModel):
         # The user identified by their email
         #   and role
         if self.sub_status_int == 0:
-            sub_clean = "Inctive Trial - Input Credit Card"
+            sub_clean = "Trial - Credit Card Needed"
         elif self.sub_status_int == 1:
-            sub_clean = "Active Trial"
+            sub_clean = "Trial"
+        elif self.sub_status_int == 2:
+            sub_clean = "Monthly - Credit Card Needed"
         elif self.sub_status_int == 3:
-            sub_clean = "Inactive Monthly - Input Credit Card"
+            sub_clean = "Monthly"
+        elif self.sub_status_int == 4:
+            sub_clean = "Monthly - Delinquent - CC Needed"
+        elif self.sub_status_int == 5:
+            sub_clean = "Monthly - Delinquent - Payment Needed"
         return sub_clean
         
 

@@ -11,8 +11,16 @@
     </div>
         
         
+            {% if org.sub_status_int < 4 %}
+            
+                {% include "../products/products-list.html" %}
 
-            {% include "../products/products-list.html" %}
+            {% else %}
+
+                {% include "../orgs/pay-home-body.html" %}
+            
+            {% endif %}
+            
 
             {% include "./org-members-list.html" %}
 

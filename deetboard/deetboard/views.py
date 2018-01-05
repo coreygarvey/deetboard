@@ -64,10 +64,16 @@ def stripe_webhooks(request):
 '''
     charge_success
         send email
-        set org subscription_status to active
-        if sub_status_int <= 2
-            set org subscription_type to monthly 
+        if sub_status_int <= 1
+            set org_subscription_type to monthly
+
+        update org_status = paid
+        if unpaid_invoice: 
+            set=''
+            Change subscription to make startdate now and end date 1 cycle from now
+
         update sub_status_int
+
         retrieve subscription:
             update org.current_period_start
             update org.current_period_end
@@ -75,7 +81,15 @@ def stripe_webhooks(request):
 
     charge_failure
         send emaii
-        set org subscription_status to failed
+        if sub_status_int <= 1
+            set org subscription_type to monthly
+
+        update org_status = unpaid
+        
+        get org_subscription_id
+        get subscription and customer invoice linked to subscription 
+        update org_unpaid_invoice = invoice
+
         update sub_status_int
 '''
     #charge_fail

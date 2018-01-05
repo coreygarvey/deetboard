@@ -10,9 +10,7 @@
 
 
 {% block bottom-banner %}
-	{% if org.sub_status_int == 0 %}
-		{% include "orgs/home-bottom-banner-0.html" %}
-	{% endif %}
+	{% include "orgs/home-bottom-banner.html" %}
 {% endblock %}
 
 {% block postjs %}
