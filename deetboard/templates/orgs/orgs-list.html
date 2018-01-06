@@ -32,6 +32,9 @@
 		<table class="col-md-8 col-md-offset-1 orgs-list" id="orgs-list">
 		  <tr>
 		    <th><h4>Team</h4></th>
+		    
+		    <th><h5>Status</h5></th>
+		    
 		    <th><h5>Members</h5></th> 
 		    <th><h5>Products</h5></th>
 		    <th><h5>Features</h5></th>
@@ -42,6 +45,41 @@
 		  
 		  <tr class="org-object clickable-row" data-href="/home/team/{{ org_obj.org.pk }}">
 		    <td>{{ org_obj.org.title }}</td>
+
+
+			{% if user == org_obj.org.admin %}
+		    
+			    {% if org_obj.org.sub_status_int == 0 %}
+			    	<td  class="org-status-icon-cc" data-toggle="tooltip" title="Credit card needed">
+						<i class="fa fa-credit-card" aria-hidden="true"></i>
+			    	</td>
+			    {% elif org_obj.org.sub_status_int == 1 %}
+					<td class="org-status-icon-good" data-toggle="tooltip" title="All good!">
+						<i class="fa fa-check" aria-hidden="true"></i>
+					</td>
+			    {% elif org_obj.org.sub_status_int == 2 %}
+					<td class="org-status-icon-cc" data-toggle="tooltip" title="Credit card needed">
+							<i class="fa fa-credit-card" aria-hidden="true"></i>
+					</td>
+			    {% elif org_obj.org.sub_status_int == 3 %}
+					<td class="org-status-icon-good" data-toggle="tooltip" title="All good!">
+						<i class="fa fa-check" aria-hidden="true"></i>
+					</td>
+			    {% elif org_obj.org.sub_status_int == 4 %}
+					<td class="org-status-icon-fail" data-toggle="tooltip" title="Credit card and payment needed">
+						<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+					</td>
+			    {% elif org_obj.org.sub_status_int == 5 %}
+					<td class="org-status-icon-fail" data-toggle="tooltip" title="Payment needed">
+						<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+					</td>
+				{% endif %}
+
+			{% else %}
+				<td></td>
+
+			{% endif %}
+
 		    <td>{{ org_obj.stats.members_count }}</td>
 		    <td>{{ org_obj.stats.products_count }}</td>
 		    <td>{{ org_obj.stats.features_count }}</td>
