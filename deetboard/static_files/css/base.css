@@ -368,13 +368,19 @@ h1 {
 }
 
 /* Bottom Banner */
-#home-bottom-banner{
+.home-bottom-banner{
   position: fixed;
   bottom: 20px;
   left: 0px;
   padding: 10px 30px;
+}
+.banner-trial{
   background-color: #C2D4EE;
   color: #214478;
+}
+.banner-fail{
+  background-color: #D3B9B6;
+  color: #782A21;
 }
 
 .banner-header{
@@ -809,6 +815,11 @@ box-shadow: 0px 0px 2px #999;
   height:100%;
 }
 
+.pay-home-body{
+  padding-top: 20px;
+  padding-bottom: 60px;
+}
+
 
 /* Home Dash */
 .orgs-list {
@@ -1054,6 +1065,11 @@ box-shadow: 0px 0px 2px #999;
 .org-home-header{
   text-align: left;
   color: #333;
+}
+
+.org-home-header h2{
+  display: block;
+  font-size:40px;
 }
 
 /* Create Product - First time */

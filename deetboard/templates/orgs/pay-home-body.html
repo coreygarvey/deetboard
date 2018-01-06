@@ -1,7 +1,15 @@
-
-            Pay you scoundral
-            <br>
-            {% if admin %}
-                <a href="{{request.path}}payment">Payment details</a>
-            {% endif %}
-
+<div class="row">
+	<div class="col-md-10 col-md-offset-1 pay-home-body">
+		<h3>
+			We're missing a payment from you
+		</h3>
+		<br>
+		<p>
+		{% if admin %}
+		Head to the <a href="{{request.path}}payment">Team Payment Details</a> to get back up and running.
+		{% else %}
+		Tell your Team Admin to head to the <a href="{{request.path}}payment">Team Payment Details</a> to get back up and running
+		{% endif %}
+		</p>
+	</div>
+</div>

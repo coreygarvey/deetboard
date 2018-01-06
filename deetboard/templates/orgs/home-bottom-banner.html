@@ -1,6 +1,6 @@
 
 	{% if org.sub_status_int == 0 %}
-	<div id="home-bottom-banner">
+	<div class="home-bottom-banner banner-trial">
 		<span class="banner-header">Trial Period - {{ org.title }}</span>
 		<br>
 		<span class="banner-text">
@@ -10,7 +10,7 @@
 		</span>
 	</div>
 	{% elif org.sub_status_int == 4 %}	
-	<div id="home-bottom-banner">
+	<div class="home-bottom-banner banner-fail">
 		<span class="banner-header">Delinquent - {{ org.title }}</span>
 		<br>
 		<span class="banner-text">
@@ -20,7 +20,7 @@
 		</span>
 	</div>
 	{% elif org.sub_status_int == 5 %}	
-	<div id="home-bottom-banner">
+	<div class="home-bottom-banner banner-fail">
 		<span class="banner-header">Delinquent - {{ org.title }}</span>
 		<br>
 		<span class="banner-text">
