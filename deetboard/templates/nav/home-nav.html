@@ -45,16 +45,25 @@
                   </li>
             </ul>
         </div>
-      {% else %}
+      {% elif user_orgs %}
       <!-- Teams Dropdown -->
-        {% if org %}
+        
         <div class="dropdown home-dropdown home-dropdown-teams pull-left">
-          <button class="btn btn-default btn-teams" data-toggle="dropdown">
-            
-              {{ org.title }}
-            
-            <i class="fa fa-caret-down" aria-hidden="true"></i>
-          </button>
+          {% if org %}
+            <button class="btn btn-default btn-teams" data-toggle="dropdown">
+              
+                {{ org.title }}
+              
+              <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </button>
+          {% else %}
+            <button class="btn btn-default btn-teams" data-toggle="dropdown">
+              
+                Teams
+              
+              <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </button>
+          {% endif %}
 
           {% if user_orgs %}
             <ul class="dropdown-menu teams-dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -70,9 +79,7 @@
           {% endif %}
         </div>
       {% endif %}
-      {% endif %}
 
-      <a class="home-link" href="/home/dashboard/"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a>
 
         <div class="dropdown profile-dropdown home-dropdown-profile pull-right">
           
@@ -96,8 +103,8 @@
             </li>
 
             <li>
-              <a href="/home/profile/">
-                <i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp; &nbsp; Payments
+              <a href="/home/dashboard/">
+                <i class="fa fa-users" aria-hidden="true"></i>&nbsp; &nbsp; Teams
               </a>
             </li>
 

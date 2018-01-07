@@ -41,7 +41,7 @@
 		    <th><h5>Questions</h5></th>
 		    <th><h5>Responses</h5></th>
 		  </tr>
-		{% for org_obj in user_orgs %}
+		{% for org_obj in user_orgs_list %}
 		  
 		  <tr class="org-object clickable-row" data-href="/home/team/{{ org_obj.org.pk }}">
 		    <td>{{ org_obj.org.title }}</td>

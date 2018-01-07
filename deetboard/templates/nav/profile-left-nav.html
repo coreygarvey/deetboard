@@ -1,0 +1,14 @@
+<div class="home-left-nav">
+	<ul id="MainMenu" class="sidebar-nav">
+
+		{% for org in user_orgs %}
+			<li class="left-nav-title">
+				<a href="/home/team/{{ org.pk }}">
+					<i class="fa fa-fw fa-cube left-nav-icon" aria-hidden="true"></i>
+					<span class="left-nav-text">{{ org.title }}</span>
+				</a>
+			</li>
+		{% endfor %}
+
+	</ul>
+</div>

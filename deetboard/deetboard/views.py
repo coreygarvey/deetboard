@@ -59,7 +59,7 @@ def home_dash(request):
         'home/home.html',
         { 
             'user': current_user,
-            'user_orgs': user_orgs_list,
+            'user_orgs_list': user_orgs_list,
             'admin_orgs': admin_orgs
         }
     )

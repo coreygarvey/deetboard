@@ -794,8 +794,11 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
         context = super(ProfileUpdateView, self).get_context_data(**kwargs)
+        context['back'] = self.request.META['HTTP_REFERER']
         user = self.request.user
         context['user'] = user
+        context['user_orgs'] = user_orgs
+        user_orgs = user.orgs.all()
         return context
 
     def get_object(self):
@@ -884,6 +887,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
         context = super(ProfileView, self).get_context_data(**kwargs)
+        context['back'] = self.request.META['HTTP_REFERER']
         user = self.request.user
         user_orgs = user.orgs.all()
         context['user'] = user
@@ -899,7 +903,6 @@ class ProfileView(LoginRequiredMixin, TemplateView):
                 source = customer.sources.retrieve(card_id)
                 context['default_source'] = source
 
-        context['back'] = self.request.META['HTTP_REFERER']
         return context
 
     def get_user(self, username):        
@@ -939,7 +942,8 @@ class ProfilePublicView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
         context = super(ProfilePublicView, self).get_context_data(**kwargs)
-        
+        context['back'] = self.request.META['HTTP_REFERER']
+
         user = self.request.user
         profile_user_pk = self.kwargs['pk']
         profile_user = Account.objects.get(pk=profile_user_pk)
