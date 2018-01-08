@@ -182,6 +182,50 @@ class RegistrationView(ActivationContextMixin, ActivationKeyMixin,
         self.send_activation_email(new_user)
         return new_user
 
+class RegistrationView2(ActivationContextMixin, ActivationKeyMixin, 
+                        ActivationEmailMixin, RegistrationMixin, BaseRegistrationView):
+    """
+    Register a new (inactive) user account, generate an activation key
+    and email it to the user.
+    This is different from the model-based activation workflow in that
+    the activation key is simply the username, signed using Django's
+    TimestampSigner, with HMAC verification on activation.
+    """
+    email_body_template = 'registration/emails/activation_email_body.txt'
+    email_body_html_template = 'registration/emails/activation_email_body.html'
+    email_subject_template = 'registration/emails/activation_email_subject.txt'
+    form_class = MyRegistrationForm
+    template_name = 'registration/landing2.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect('/home/')
+        return super(RegistrationView2, self).dispatch(request, *args, **kwargs)
+
+    def get_success_url(self, user):
+        return ('registration_complete', (), {})
+
+    def create_inactive_user(self, form):
+        """
+        Create the inactive user account and send an email containing
+        activation instructions.
+        """
+        new_user = form.save(commit=False)
+        form_email = form.cleaned_data['email']
+        new_user.is_active = False
+        new_user.save()
+        # Create customer, org will be subscribed to it later
+        customer = stripe.Customer.create(
+          email=new_user.email,
+        )
+        # Store Stripe ID for user
+        customer_id = customer.id
+        new_user.stripe_id = customer.id
+        new_user.save()
+
+        self.send_activation_email(new_user)
+        return new_user
+
 class ActivationView(UpdateView):
     """
     Given a valid activation key, activate the user's
