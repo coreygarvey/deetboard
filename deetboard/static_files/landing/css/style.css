@@ -146,3 +146,20 @@
     bottom: 10px;
     position: relative;
 }
+
+
+/* Pricing */
+.pricing-top-container{
+    min-height: 180px;
+}
+
+
+/* Login */
+.login-links a,
+.login-links a:visited,
+.login-links a:hover,
+.login-links a:active,
+.login-links a:focus {
+    color: #FFF;
+    text-decoration: underline;
+}

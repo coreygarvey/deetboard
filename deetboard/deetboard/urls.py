@@ -36,18 +36,7 @@ from questions.views import QuestionCreateView, QuestionView, QuestionListView, 
 from annotations.views import annotations, annotation_search
 
 
-from accounts.views import RegistrationView2
-
 urlpatterns = [
-    url(r'^landing/',
-        RegistrationView2.as_view(),
-        name='landing-new',
-    ), 
-
-
-
-
-
     url(r'^admin/', admin.site.urls),
     url(r'^orgs/', include('orgs.urls'), name="org"),
 

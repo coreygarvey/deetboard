@@ -1,0 +1,32 @@
+{% extends "base-feature.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}DeetBoard{% endblock %}
+
+{% block nav %}{% include "nav/landing-nav.html" %}{% endblock %}
+
+{% block content %}
+    <div id="landing-body">
+    	<div id="tagline">
+    		<h1>Know More Sell More</h1>
+    		<h4>No matter your pitch, DeetBoard connects companies to deliver the best information to customers.
+    	</div>
+
+	    <div id="landing-form">
+	    	<form method="post" action="">{% csrf_token %}
+		            
+					
+				{% render_field form.email placeholder="Email address" id+="landing-input" class+="form-control" %}
+					
+				<input type="submit" class="btn btn-main" value="Start a new team" />
+
+		    </form>
+		    <div id="landing-links">
+				Is your company already on DeetBoard? 
+				<a href="/login/">Login</a> or
+		    	<a href="/find_org/">find your team</a>
+	    </div>
+	</div>
+    
+{% endblock %}
