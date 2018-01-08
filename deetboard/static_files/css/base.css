@@ -626,7 +626,6 @@ h1 {
   height: 50px;
   line-height: 13px;
   font-size: 12px;
-  padding: 20px 0px 4px 20px;
   border-bottom: 1px solid rgba(0,0,0,0.12);
   -o-transition:.3s;
   -ms-transition:.3s;
@@ -715,6 +714,7 @@ h1 {
   display: inline-block;
   height: 100%;
   width: 100%;
+  padding: 20px 0px 4px 20px;
 }
 
 .sidebar-nav > li > a:hover {

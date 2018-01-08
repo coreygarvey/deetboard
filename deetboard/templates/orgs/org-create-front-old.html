@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Create a Team{% endblock %}
+
+{% block nav %}{% include "nav/front-nav.html" %}{% endblock %}
+
+{% block content %}
+    <div id="create-org-body" class="registration-body">
+        <div class="title">
+            <h1>Create Your Team</h1>
+        </div>
+		<div class="create-org-text">
+			<p>Discuss product updates and feature changes within your organization.</p>
+		</div>
+		<br>
+		{% if form.errors %}
+            <p>Sorry, that team name is already taken.</p>
+        {% endif %}
+		<form method="post" action="" >{% csrf_token %}
+	        {% render_field form.title placeholder="Team name" class+="form-control create-org-input" %}
+			
+			<br>
+			<br>
+
+	        <input type="submit" class="btn btn-main btn-reg" value="Create" />
+
+	    </form>
+	    <br>
+	    <br>
+	    Company already on DeetBoard? <a href="/find_org/">Find your team</a>.
+{% endblock %}

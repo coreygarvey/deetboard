@@ -81,10 +81,14 @@
                         <div class="col-lg-8 pt-3 text-center">
 
                             <h2 class="font-alt font-w-600 letter-spacing-2 mb-3 mt-3 text-uppercase text-white title-xs-extra-large title-extra-large-3">
-                                Create Your Team
+                                Build Your Team
                             </h2>
 
-                            <!--<span class="bg-base-color d-inline-block mt-4 sep-line-medium-thick"></span>-->
+                            <span class="bg-base-color d-inline-block mt-4 sep-line-medium-thick"></span>
+
+                            <span class="d-block font-alt font-w-600 letter-spacing-2 mb-3 mt-4 text-large text-uppercase text-db-blue">
+                                Invite product experts and teammates to join your team on Deetboard
+                            </span>
 
                             <!--<a href="#product" class="page-scroll btn btn-base-color btn-large btn-shadow mr-0 mt-4">Explore Now</a>
                             <br>
@@ -99,16 +103,32 @@
                             -->
                             <div class="row align-items-center justify-content-center">
                                 <div class="col-lg-6 pt-3 text-center text-gray-extra-dark">
-                                    {% if form.errors %}
-                                        <p>Sorry, that team name is already taken.</p>
-                                    {% endif %}
-                                    <form method="post" action="" >
+                                    <form method="post" action="" enctype="multipart/form-data">
                                         {% csrf_token %}
 
-                                        {% render_field form.title placeholder="Team name" class+="create-org-input form-control" %}
+                                        {% render_field form.invite1 placeholder="Email" class+="form-control registration-input" %}
+                                        
+                                        {% render_field form.invite2 placeholder="Email" class+="form-control registration-input" %}
+                                        
+                                        {% render_field form.invite3 placeholder="Email" class+="form-control registration-input" %}
 
-                                        <br>
-                                        <input type="submit" class="btn btn-base-color btn-large btn-shadow mr-0 mt-2" value="Create" />
+                                        {% if form.next %}
+                                        <input placeholder="Next" name="next" type="hidden" value="{{ request.GET.next }}">
+                                        {% endif %}
+                                        
+                                        {% if form.inviteEmail %}
+                                        <div id="checkbox">
+                                            {% render_field form.inviteEmail class+="invite-checkbox" type+="checkbox" %}
+                                            <span id="checkbox-text">
+                                                Check box to allow anyone with <span id="email-domain">{{ domain }}</span> email address to join the team.
+                                            </span>
+                                        </div>
+                                        {% endif %}
+
+
+
+                                        <input type="submit" class="btn btn-base-color btn-large btn-shadow mr-0 mt-2" value="Send Invitations" />
+                                    </form>
                                 </div>
                             </div>
                         </div>

@@ -1,24 +1,178 @@
-{% extends "base.html" %}
+{% load staticfiles %}
 
 {% load widget_tweaks %}
 
-{% block title %}Registration Complete{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <!--
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109324832-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
 
-{% block nav %}{% include "nav/front-nav.html" %}{% endblock %}
+          gtag('config', 'UA-109324832-1');
+        </script>
+        -->
 
-{% block content %}
-    <div id="email-sent-body" class="registration-body">
-        <div class="title">
-            <h1>Welcome</h1>
-        </div>
-        <div class="email-sent-text">
-        	<p>
-        		<br>
-        		Glad to have you on Deetboard!
-        		<br>
-        		<br>
-        		Check your email to confirm your account and get started.
-        	</p>
-        </div>
-	</div>
-{% endblock %}
+        <title>Deetboard</title>
+        <meta name="description" content=""/>
+        <meta name="keywords" content=""/>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        
+        <!-- Bootstrap CSS -->
+        <link href="{% static 'landing/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+        
+        <!-- Font Awesome CSS -->
+        <link href="{% static 'landing/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+        
+        <!-- Include all css plugins (below), or include individual files as needed -->
+        <link href="{% static 'landing/css/flickity.min.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'landing/css/magnific-popup.css' %}" rel="stylesheet" type="text/css">
+        
+        <!-- Theme CSS -->
+        <link href="{% static 'landing/css/theme-light.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'landing/css/style.css' %}" rel="stylesheet" type="text/css">
+        
+        <!-- Color Scheme CSS -->
+        <link href="{% static 'landing/css/color_green.css' %}" rel="stylesheet" type="text/css">
+
+
+        
+
+
+
+    </head>
+    <body id="page-top">
+        
+        <!-- Navigation Start -->
+        <nav id="navigation" class="navbar navbar-light navbar-toggleable-md bg-faded fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand page-scroll" href="/">
+                        <img src="{% static 'landing/images/deetboard-logo-lg.png' %}" alt="" class="logo-text-black' %}"/>
+                        <img src="{% static 'landing/images/deetboard-logo-lg.png' %}" alt="" class="logo-text-white' %}"/>
+                    </a>
+                    
+                    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar-rinjani" aria-controls="navbar-rinjani" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                <!-- //.navbar-header -->
+
+            </div>
+            <!-- //.container -->
+        </nav>
+        <!-- //Navigation End -->
+        
+        
+        <!-- Section - Home Start -->
+        <section id="home-bg-parallax" class="h-100 overflow-hidden p-0 w-100">
+            <!-- BG Parallax -->
+            <div class="bg-parallax bg-light bg-overlay-black-1"></div>
+            
+            <div class="h-100 left-0 position-absolute top-0 w-100">
+                <div class="container h-100">
+                    <div class="row align-items-center h-100 justify-content-center">
+                        <div class="col-lg-8 pt-3 text-center">
+                            <!--
+                            <span class="d-block font-alt font-w-600 letter-spacing-2 text-medium text-uppercase text-db-blue">
+                                Welcome
+                            </span>
+
+                            <span class="bg-base-color d-inline-block mt-4 sep-line-medium-thick"></span>
+                        -->
+
+                            <h2 class="font-alt font-w-600 letter-spacing-2 mb-3 mt-3 text-uppercase text-white title-xs-extra-large title-extra-large-3">
+                                Confirm Your Account
+                            </h2>
+
+                            <span class="d-block font-alt font-w-600 letter-spacing-2 mb-3 mt-4 text-large text-uppercase text-db-blue">
+                                Check your email to get started
+                            </span>
+
+                            <!--<a href="#product" class="page-scroll btn btn-base-color btn-large btn-shadow mr-0 mt-4">Explore Now</a>
+                            <br>
+
+                            <form method="post" action="">
+                    
+                                <input class="from-control" id="landing-input" name="email" placeholder="Email address" type="email" required/>
+                                <br>
+                                <input type="submit" class="btn btn-base-color btn-large btn-shadow mr-0 mt-4" value="Start a team" />
+
+                            </form>
+                            -->
+
+                        </div>
+                        <!-- //.col-lg-8 -->
+                    </div>
+                    <!-- //.row -->
+                </div>
+                <!-- //.container -->
+            </div>
+            <!-- //.h-100 -->
+        </section>
+        <!-- //Section - Home End -->
+
+
+
+        <!-- Footer Start -->
+        <footer class="bg-white py-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center text-md-left">
+                        <img src="{% static 'landing/images/deetboard-logo-sm.png' %}" alt="" class="logo-text-white' %}" alt="" class="footer-logo opacity-9"/>
+                    </div>
+                    <!-- //.col-md-8 -->
+                    
+                    <div class="col-md-8">
+                        <ul class="footer-icon-social mb-0 mt-4 p-0 text-center text-md-right title-xs-small title-medium">
+                        </ul>
+                    </div>
+                    <!-- //.col-md-8 -->
+                </div>
+                <!-- //.row -->
+                
+                
+            </div>
+            <!-- //.container -->
+        </footer>
+        <!-- //Footer End -->
+        
+        
+        <!-- Scroll to top -->
+        <a href="#page-top" class="page-scroll scroll-to-top"><i class="fa fa-angle-up"></i></a>
+        
+        
+        <!-- Main JS -->
+        <script src="{% static 'landing/js/jquery.min.js' %}"></script>
+        <script src="{% static 'landing/js/tether.min.js' %}"></script>
+        <script src="{% static 'landing/js/bootstrap.min.js' %}"></script>
+        
+        <!-- Include all js plugins (below) -->
+        <script src="{% static 'landing/js/pace.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.easing.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.inview.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.countTo.js' %}"></script>
+        <script src="{% static 'landing/js/imagesloaded.pkgd.min.js' %}"></script>
+        <script src="{% static 'landing/js/flickity.pkgd.min.js' %}"></script>
+        <script src="{% static 'landing/js/isotope.pkgd.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.magnific-popup.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.easypiechart.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.countdown.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.validate.min.js' %}"></script>
+        
+        <!-- BG Parallax -->
+        <script src="{% static 'landing/js/lib/greensock/TweenMax.min.js' %}"></script>
+        <script src="{% static 'landing/js/ScrollMagic.min.js' %}"></script>
+        <script src="{% static 'landing/js/animation.gsap.min.js' %}"></script>
+        
+        <!-- Theme JS -->
+        <script src="{% static 'landing/js/theme2.js' %}"></script>
+        
+    </body>
+</html>

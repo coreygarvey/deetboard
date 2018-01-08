@@ -365,7 +365,7 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
     disallowed_url = 'invitation_disallowed'
     form_class = AdminInvitationForm
     success_url = None
-    template_name = 'registration/invitation-front.html'
+    template_name = 'registration/invitation-front-new.html'
 
 
     def dispatch(self, *args, **kwargs):
@@ -526,8 +526,6 @@ class GeneralInvitationView(InvitationView):
             return redirect(to, *args, **kwargs)
         except ValueError:
             return redirect(success_url)
-
-    
         
 
 class HomeInvitationView(GeneralInvitationView):
