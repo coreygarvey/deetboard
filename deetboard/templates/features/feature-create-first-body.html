@@ -1,10 +1,14 @@
 {% load widget_tweaks %}
 {% load staticfiles %}
 <div class="feature-home-body">
-	<a class="back-btn btn btn-default btn-xs" href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">
-		<i class="fa fa-arrow-left" aria-hidden="true"></i>
-		<b>{{product.title}}</b>
-	</a>
+	<ol class="breadcrumb">
+	  <li class="breadcrumb-item">
+	  	<a href="/home/team/{{ org.pk }}">{{org.title}}</a>
+	  </li>
+	  <li class="breadcrumb-item active">
+	  	<a href="/home/team/{{ org.pk }}/prod/{{ product.pk }}">{{product.title}}</a>
+	  </li>
+	</ol>
 
 	<div class="title">
 	    <h1>Create a Feature</h1>
@@ -17,18 +21,19 @@
 		<div class="row feature-create-first">
 			<div class="col-md-5">
 				<h3>Details</h3>
-				<p>Name the features and define the specifics. Better details allow for more directed conversations.</p>
+				<p>Create the first feature for {{ product.title }} (e.g. "Signup form")</p>
 				{% render_field form.title placeholder="Feature name" class+="form-control create-feature-input" %}
 
 				{% render_field form.description placeholder="Feature description" class+="form-control create-feature-input" %}
 			</div>
-			<div class="col-md-5 col-md-offset-2">
+			<div class="col-md-5 col-md-offset-1">
 				<h3>Experts</h3>
-				<p>Decide on teammates with the expertise to answer questions and handle feedback.</p>
+				<p>Annoint experts (hint: they're the one answering the same question over and over...)
+				</p>
 				{% render_field form.experts placeholder="Feature experts" class+="create-feature-input feature-field" %}
 
 				<h3>Screenshot</h3>
-				<p>Add detailed screenshots where teammates can point out trouble spots and highlight specific areas.</p>
+				<p>Add a screenshot to make it clear</p>
 				<p style="font-size:10px;margin-top:-5px">(square 1000px or smaller, please)</p>
 				<label class="btn btn-default btn-file" for="feature-screenshot-selector">
 					Choose File...

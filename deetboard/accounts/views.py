@@ -365,7 +365,7 @@ class InvitationView(ActivationContextMixin, ActivationKeyMixin,
     disallowed_url = 'invitation_disallowed'
     form_class = AdminInvitationForm
     success_url = None
-    template_name = 'registration/invitation-front-new.html'
+    template_name = 'registration/invitation-front.html'
 
 
     def dispatch(self, *args, **kwargs):

@@ -1,27 +1,19 @@
 {% load widget_tweaks %}
 <div class="product-home-body">
 	
-	<a class="back-btn btn btn-default btn-xs" href="/home/team/{{ org.pk }}">
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-        <b>{{org.title}}</b>
-    </a>
+	<ol class="breadcrumb">
+	  <li class="breadcrumb-item">
+	  	<a href="/home/team/{{ org.pk }}">{{org.title}}</a>
+	  </li>
+	</ol>
 		
 	<div class="title">
 	    <h1>Create a Product</h1>
 	</div>
 
 	<div class="row product-create-first">
-		<div class="col-md-4">
-			<h3>Start</h3>
-			<p>Products are composed of features that your team can track and discuss. Create separate products for web, mobile, and different versions of your software.</p>
-		</div>
-		<div class="col-md-4">
-			<h3>Discuss</h3>
-			<p>Match experts to each feature who can answer questions and manage feedback from teammates.</p>
-		</div>
-		<div class="col-md-4">
-			<h3>Organize</h3>
-			<p>Promote discussion across teams through screenshots and directed questions.</p>
+		<div class="col-md-8 col-md-offset-2 first-text">
+			<p>Get started by creating a product (e.g. "Desktop Website" or "Chat App")</p>
 		</div>
 	</div>
 
@@ -30,13 +22,13 @@
 		{% csrf_token %}
 	
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-4 col-md-offset-2">
 				<h3>Details</h3>
 				{% render_field form.title placeholder="Product name" class+="form-control create-product-input" %}
 				
 				{% render_field form.description placeholder="Product description" class+="form-control create-product-input" %}
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-4 text-center">
 				<h3>Screenshot</h3>
 				
 				<label class="btn btn-default btn-file" for="product-image-selector">
@@ -50,9 +42,11 @@
 			</div>
 		</div>
 		<br>
+		<br>
+		<br>
 		
 		<div class="row">
-			<div class="col-md-6 col-md-offset-4">
+			<div class="text-center">
 				<input type="submit" class="btn btn-main product-create-btn" value="Create Product" />
 			</div>
 			

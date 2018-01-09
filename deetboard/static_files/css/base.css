@@ -11,7 +11,8 @@ body {
 
 h1 {
 	font-size: 80px;
-    color: #FCA205;
+  color: #FCA205;
+  text-align: center;
 }
 
 .navbar-landing {
@@ -801,6 +802,7 @@ box-shadow: 0px 0px 2px #999;
 .feature-delete-body,
 .question-home-body,
 .response-home-body{
+  position: relative;
   min-width: 700px;
   width: 97%;
   min-height: 94.5%;
@@ -1074,19 +1076,33 @@ box-shadow: 0px 0px 2px #999;
 }
 
 /* Create Product - First time */
-.product-create-first,
-.feature-create-first{
+.product-create-first{
   margin-top: 20px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
-  color: #555;
+  color: #214478;
   width: 100%;
+  text-align: center;
 }
 .product-create-first h3,
 .feature-create-first h3{
   font-weight:600;
   font-size: 19px;
   color: #333;
+}
+
+.feature-create-first {
+  margin-top: 20px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #214478;
+  width: 100%;
+  text-align: center;
+}
+
+.feature-create-first p{
+  width: 70%;
+  margin: 0 auto 10px;
 }
 
 /* Create Product */
@@ -1201,12 +1217,14 @@ box-shadow: 0px 0px 2px #999;
 
 /* Product Page */
 .product-header{
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #bbb;
   color: #333;
 }
 
+
 .product-details{
+  padding-top: 10px;
 }
 
 /* Features List */
@@ -1327,6 +1345,8 @@ box-shadow: 0px 0px 2px #999;
 }
 .create-feature-form label {
   font-weight:normal;
+  color:#333;
+  font-size: 16px;
 }
 .create-feature-form label > input{
   margin-right: 5px;
@@ -1406,6 +1426,7 @@ box-shadow: 0px 0px 2px #999;
   color: #333;
 }
 .feature-details{
+  padding-top: 10px;
 }
 .feature-details h2{
   font-size: 30px;
@@ -1781,4 +1802,6 @@ box-shadow: 0px 0px 2px #999;
   display: inline-block;
   font-size: 11px;
   margin-bottom: 5px;
+  margin-top: -10px;
+  position: absolute;
 }

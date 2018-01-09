@@ -1394,7 +1394,7 @@ label.error {
 .navbar-toggler {
     border-color: rgba(255, 255, 255, 0.3) !important;
     border-radius: 0;
-    top: 20px;
+    top: 12px;
 }
 .navbar .nav-item {
     padding: 8px 0;
