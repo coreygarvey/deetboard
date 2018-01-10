@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="112.30811"
-     inkscape:cy="851.21577"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="406.01652"
+     inkscape:cy="600.38642"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -91,5 +91,56 @@
            id="tspan4147">Deet</tspan><tspan
            id="tspan4149"
            style="fill:#afc6e9">Board</tspan></tspan></text>
+    <g
+       id="g3510">
+      <rect
+         ry="47.018684"
+         y="352.82413"
+         x="312.17038"
+         height="300"
+         width="300"
+         id="rect3436"
+         style="opacity:0.45800003;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:179.71208191px;line-height:100%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#e5ebf6;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="309.21033"
+         y="526.8139"
+         id="text3428"
+         sodipodi:linespacing="100%"
+         inkscape:export-filename="/Users/coreygarvey/Documents/Projects/deetboard_project/new-landing-page/html/assets/images/landing-nav-logo-md-2.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"><tspan
+           sodipodi:role="line"
+           id="tspan3430"
+           x="309.21033"
+           y="526.8139"
+           style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:204.73748779px;line-height:100%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;letter-spacing:-5.34823179px;writing-mode:lr-tb;text-anchor:start;fill:#3771c8;fill-opacity:1"><tspan
+             style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:204.73748779px;line-height:100%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#214478;fill-opacity:1"
+             id="tspan3432"><tspan
+               id="tspan3506"
+               style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:225px;line-height:100%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;writing-mode:lr-tb;text-anchor:start">D </tspan></tspan><tspan
+             style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:204.73748779px;line-height:100%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#4b7fce;fill-opacity:1"
+             id="tspan3434" /></tspan></text>
+      <text
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/Users/coreygarvey/Documents/Projects/deetboard_project/new-landing-page/html/assets/images/landing-nav-logo-md-2.png"
+         sodipodi:linespacing="100%"
+         id="text3438"
+         y="632.87994"
+         x="443.72305"
+         style="font-style:normal;font-weight:normal;font-size:179.71208191px;line-height:100%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#e5ebf6;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:204.73748779px;line-height:100%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;letter-spacing:-5.34823179px;writing-mode:lr-tb;text-anchor:start;fill:#3771c8;fill-opacity:1"
+           y="632.87994"
+           x="443.72305"
+           id="tspan3440"
+           sodipodi:role="line"><tspan
+             id="tspan3444"
+             style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:204.73748779px;line-height:100%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#4b7fce;fill-opacity:1"><tspan
+               id="tspan3508"
+               style="font-style:oblique;font-variant:normal;font-weight:800;font-stretch:normal;font-size:225px;line-height:100%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold Oblique';text-align:start;writing-mode:lr-tb;text-anchor:start">B </tspan></tspan></tspan></text>
+    </g>
   </g>
 </svg>

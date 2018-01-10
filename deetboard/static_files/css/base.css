@@ -823,6 +823,14 @@ box-shadow: 0px 0px 2px #999;
   padding-bottom: 60px;
 }
 
+.payment-label{
+  color: #777;
+}
+
+.payment-column{
+  text-align: left;
+}
+
 
 /* Home Dash */
 .orgs-list {
@@ -1038,7 +1046,7 @@ box-shadow: 0px 0px 2px #999;
 }
 
 .profile-label{
-  font-size: 11px;
+  font-size: 13px;
   font-weight: normal;
   color: #777;
   display: inline-block;
@@ -1062,6 +1070,11 @@ box-shadow: 0px 0px 2px #999;
 }
 .profile-update-submit{
   margin: 20px 0 0 20%;
+}
+
+#id_profile_pic{
+  display: inline-block;
+  width: auto;
 }
 
 /* Org home page */
@@ -1801,7 +1814,6 @@ box-shadow: 0px 0px 2px #999;
 .breadcrumb{
   display: inline-block;
   font-size: 11px;
-  margin-bottom: 5px;
-  margin-top: -10px;
-  position: absolute;
+  margin-bottom: 0px;
+  margin-top: -5px;
 }

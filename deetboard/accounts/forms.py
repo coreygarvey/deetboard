@@ -131,6 +131,9 @@ class ProfileUpdateForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileUpdateForm, self).__init__(*args, **kwargs)
         #eeeself.fields['username'].widget.attrs['placeholder'] = "testing"
+        self.fields["username"].required = False
+        self.fields["role"].required = False
+        self.fields["profile_pic"].required = False
         if self.instance:
             self.fields['primary_org'].queryset = Org.objects.filter(accounts = self.instance)
 

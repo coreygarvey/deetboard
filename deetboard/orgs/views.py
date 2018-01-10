@@ -224,9 +224,9 @@ class OrgPaymentView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         org_pk = self.kwargs['pk']
         org = Org.objects.get(pk=org_pk)
-        #if user != org.admin:
-        #    url = reverse('org_home', kwargs={'pk': org_pk})
-        #    return HttpResponseRedirect(url)
+        if user != org.admin:
+            url = reverse('org_home', kwargs={'pk': org_pk})
+            return HttpResponseRedirect(url)
         return super(OrgPaymentView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -237,8 +237,10 @@ class OrgPaymentView(LoginRequiredMixin, TemplateView):
         org = Org.objects.get(pk=org_pk)
         
         context['user'] = user
-        print user.cc_last_four
         context['org'] = org
+
+        user_orgs = user.orgs.all()
+        context['user_orgs'] = user_orgs
         
         # Indicate if user is admin to 
         org_admin = org.admin

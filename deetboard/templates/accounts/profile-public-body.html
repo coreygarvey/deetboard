@@ -1,59 +1,45 @@
 {% load static %}
 
 <div class="home-body">
-    <div class="container">
-
-		<ol class="breadcrumb">
-	      <li class="breadcrumb-item">
-	        <a href="{{ back }}">Back</a>
-	      </li>
-	    </ol>
-		
-		<div class="row">
-	        <div class="col-md-10 col-md-offset-1 profile-header-container">
-	            <!--<h2>Welcome {{ user.first_name }} {{ user.last_name }}</h2>-->
-	            <h2 class="profile-header">Profile</h2>
-	        </div>
-	    </div>
-
-
-
-		<div class="row">
-			
-			<div class="col-md-10 col-md-offset-1 profile-body">
-				<div class="row">
-					{% if profile_user.profile_pic %}
-					<div class="col-md-3">
-						<img src="{% get_media_prefix %}{{ profile_user.profile_pic }}" class="profile-image" style="height:150px; width:150px;">
-					</div>
-					{% endif %}
-					{% if profile.user.active %}
-					<div class="col-md-4 profile-title">
-						<h2>{{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
-		        		
-		        		<div class="profile-details">
-							<span class="profile-label">Username</span>
-							<p>{{ profile_user.username }}</p>
-							
-							<span class="profile-label">Role</span>
-							<p>{{ profile_user.role }}</p>
-
-		        		</div>
-
-
-					</div>
-					{% else %}
-					<div class="col-md-4 profile-title">
-						<h2>{{ profile_user.email }}</h2>
-					</div>
-					{% endif %}
+	<ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{{ back }}">Back</a>
+      </li>
+    </ol>
+	
+	<div class="row">
+        <div class="col-md-10 col-md-offset-1 profile-header-container">
+            <!--<h2>Welcome {{ user.first_name }} {{ user.last_name }}</h2>-->
+            <h2 class="profile-header">Profile</h2>
+        </div>
+    </div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1 profile-body">
+			<div class="row">
+				{% if profile_user.profile_pic %}
+				<div class="col-md-3">
+					<img src="{% get_media_prefix %}{{ profile_user.profile_pic }}" class="profile-image" style="height:150px; width:150px;">
 				</div>
+				{% endif %}
+				{% if profile.user.active %}
+				<div class="col-md-4 profile-title">
+					<h2>{{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
+	        		
+	        		<div class="profile-details">
+						<span class="profile-label">Username</span>
+						<p>{{ profile_user.username }}</p>
+						
+						<span class="profile-label">Role</span>
+						<p>{{ profile_user.role }}</p>
+
+	        		</div>
+				</div>
+				{% else %}
+				<div class="col-md-4 profile-title">
+					<h2>{{ profile_user.email }}</h2>
+				</div>
+				{% endif %}
 			</div>
-
-
 		</div>
 	</div>
-
-    
-
 </div>

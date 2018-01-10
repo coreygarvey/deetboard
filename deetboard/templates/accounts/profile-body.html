@@ -1,100 +1,94 @@
 {% load static %}
 
 <div class="home-body">
-    <div class="container">
+	<ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{{ back }}">Back</a>
+      </li>
+    </ol>
+
+	<div class="row">
+        <div class="col-md-10 col-md-offset-1 profile-header-container">
+            <!--<h2>Welcome {{ user.first_name }} {{ user.last_name }}</h2>-->
+            <h2 class="profile-header">Profile</h2> <a href="/home/profile/update">Update</a>
+        </div>
+    </div>
+
+
+	<div class="row">
 		
-		<ol class="breadcrumb">
-	      <li class="breadcrumb-item">
-	        <a href="{{ back }}">Back</a>
-	      </li>
-	    </ol>
+		<div class="col-md-10 col-md-offset-1 profile-body">
+			<div class="row">
+				{% if user.profile_pic %}
+				<div class="col-md-3">
+					<img src="{% get_media_prefix %}{{ user.profile_pic }}" class="profile-image" style="height:150px; width:150px;">
+					<br>
+				</div>
+				{% endif %}
+				<div class="col-md-4 profile-title">
+					<h2>{{ user.first_name }} {{ user.last_name }}</h2>
+	        		
+	        		<div class="profile-details">
+						<span class="profile-label">Email</span>
+						<p>{{ user.email }}</p>
 
-		<div class="row">
-	        <div class="col-md-10 col-md-offset-1 profile-header-container">
-	            <!--<h2>Welcome {{ user.first_name }} {{ user.last_name }}</h2>-->
-	            <h2 class="profile-header">Profile</h2> <a href="/home/profile/update">Update</a>
-	        </div>
-	    </div>
+						<span class="profile-label">Username</span>
+						<p>{{ user.username }}</p>
+						
+						{% if user.role %}
+						<span class="profile-label">Role</span>
+						<p>{{ user.role }}</p>
+						{% endif %}
 
 
-		<div class="row">
-			
-			<div class="col-md-10 col-md-offset-1 profile-body">
-				<div class="row">
-					{% if user.profile_pic %}
-					<div class="col-md-3">
-						<img src="{% get_media_prefix %}{{ user.profile_pic }}" class="profile-image" style="height:150px; width:150px;">
+						{% if default_source %}
+							<span class="profile-label">CC Number</span>
+							<p>xxxx - xxxx - xxxx - {{ default_source.last4 }}</p>
+							<span class="profile-label">CC Email</span>
+							<p>{{ default_source.name }}</p>
+							<span class="profile-label">CC Expiration</span>
+							<p>{{ default_source.exp_month }}/{{ default_source.exp_year }}</p>
+						{% endif %}
+
 						<br>
-					</div>
-					{% endif %}
-					<div class="col-md-4 profile-title">
-						<h2>{{ user.first_name }} {{ user.last_name }}</h2>
-		        		
-		        		<div class="profile-details">
-							<span class="profile-label">Email</span>
-							<p>{{ user.email }}</p>
+						
 
-							<span class="profile-label">Username</span>
-							<p>{{ user.username }}</p>
-							
-							{% if user.role %}
-							<span class="profile-label">Role</span>
-							<p>{{ user.role }}</p>
-							{% endif %}
-
-
-							{% if default_source %}
-								<span class="profile-label">CC Number</span>
-								<p>xxxx - xxxx - xxxx - {{ default_source.last4 }}</p>
-								<span class="profile-label">CC Email</span>
-								<p>{{ default_source.name }}</p>
-								<span class="profile-label">CC Expiration</span>
-								<p>{{ default_source.exp_month }}/{{ default_source.exp_year }}</p>
-							{% endif %}
-
-							<br>
-							
-
-							<span>
-			                    <form action="/home/profile/update-card/" method="POST">
-			                        {% csrf_token %}
-			                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
-			                        {% if default_source %}
-			                        <script
-			                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-			                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
-			                            data-label="Update CC details">
-			                        </script>
-			                        {% else %}
-			                        <script
-			                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-			                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
-			                            data-label="Add CC details">
-			                        </script>
-			                        {% endif %}
-			                    </form>
-			                </span>
-								
-							{% if default_source %}
-			                <!-- Remove current default source from user -->								
-							<form action="/home/profile/delete-card/" method="POST">
+						<span>
+		                    <form action="/home/profile/update-card/" method="POST">
 		                        {% csrf_token %}
 		                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
-		                    	<input type="submit" class="btn btn-main" value="Delete CC"/>
+		                        {% if default_source %}
+		                        <script
+		                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+		                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+		                            data-label="Update CC details">
+		                        </script>
+		                        {% else %}
+		                        <script
+		                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+		                            data-key="pk_test_rYhRKdREwHaMp6KoaveWVNsE"
+		                            data-label="Add CC details">
+		                        </script>
+		                        {% endif %}
 		                    </form>
-		                    {% endif %}
+		                </span>
+							
+						{% if default_source %}
+		                <!-- Remove current default source from user -->								
+						<form action="/home/profile/delete-card/" method="POST">
+	                        {% csrf_token %}
+	                        <input placeholder="Next" name="next" type="hidden" value="{{ request.path }}">
+	                    	<input type="submit" class="btn btn-main" value="Delete CC"/>
+	                    </form>
+	                    {% endif %}
 
-		        		</div>
+	        		</div>
 
 
-					</div>
 				</div>
-
-				
 			</div>
+
+			
 		</div>
 	</div>
-
-    
-
 </div>

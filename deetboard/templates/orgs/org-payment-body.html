@@ -11,18 +11,26 @@
             <h1>Payments</h1>
             <br>
             <h4>Subscription</h4>
-            <p>
-                <span class="profile-label">Status: </span>
-                {{ org.get_sub_clean }}
-                <br>
-                <span class="profile-label">Next Payment: </span>
-                ${{ org.subscription_amount }} on {{ org.current_period_end|date:"M-d-Y" }}
-                {% if org.sub_status_int > 2 %}
-                <br>
-                <span class="profile-label">Period Start: </span>
-                {{ org.current_period_start|date:"M-d-Y" }}
-                {% endif %}
-            </p>
+            <div class="row">
+                <div class="col-xs-3 col-xs-offset-3 col-md-2 col-md-offset-4 payment-column">
+                    <span class="payment-label">Status: </span>
+                    <br>
+                    <span class="payment-label">Next Payment: </span>
+                    {% if org.sub_status_int > 2 %}
+                    <br>
+                    <span class="payment-label">Period Start: </span>
+                    {% endif %}
+                </div>
+                <div class="col-xs-6 payment-column">
+                    {{ org.get_sub_clean }}
+                    <br>
+                    ${{ org.subscription_amount }} on {{ org.current_period_end|date:"M-d-Y" }}
+                    {% if org.sub_status_int > 2 %}
+                    <br>
+                    {{ org.current_period_start|date:"M-d-Y" }}
+                    {% endif %}
+                </div>
+            </div>
 
         {% if user == org.admin %}
 
@@ -38,13 +46,22 @@
             
             {% if user.cc_active %}
             <h4>Team Payment Source</h4>
-            <span class="profile-label">CC Email: </span>
-            {{ user.cc_email }}
-            <br>
-            <span class="profile-label">CC Number: </span>
-            xxxx - xxxx - xxxx - {{ user.cc_last_four }}
-            <br>
-            <br>
+            <div class="row">
+                <div class="col-xs-3 col-xs-offset-3 col-md-2 col-md-offset-4 payment-column">
+                    <span class="profile-label">CC Email: </span>
+                    <br>
+                    <span class="profile-label">CC Number: </span>
+                    <br>
+                    <br>
+                </div>
+                <div class="col-xs-6 payment-column">
+                    {{ user.cc_email }}
+                    <br>
+                    xxxx - xxxx - xxxx - {{ user.cc_last_four }}
+                    <br>
+                    <br>
+                </div>
+            </div>    
             {% endif %}
 
             <span>

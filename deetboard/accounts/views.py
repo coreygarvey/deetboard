@@ -793,11 +793,13 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
         context = super(ProfileUpdateView, self).get_context_data(**kwargs)
-        context['back'] = self.request.META['HTTP_REFERER']
+        if 'HTTP_REFERER' in self.request.META:
+            context['back'] = self.request.META['HTTP_REFERER']
         user = self.request.user
         context['user'] = user
-        context['user_orgs'] = user_orgs
         user_orgs = user.orgs.all()
+        context['user_orgs'] = user_orgs
+        
         return context
 
     def get_object(self):
@@ -886,7 +888,8 @@ class ProfileView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
         context = super(ProfileView, self).get_context_data(**kwargs)
-        context['back'] = self.request.META['HTTP_REFERER']
+        if 'HTTP_REFERER' in self.request.META:
+            context['back'] = self.request.META['HTTP_REFERER']
         user = self.request.user
         user_orgs = user.orgs.all()
         context['user'] = user
@@ -941,7 +944,10 @@ class ProfilePublicView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """Use this to add extra context (the user)."""
         context = super(ProfilePublicView, self).get_context_data(**kwargs)
-        context['back'] = self.request.META['HTTP_REFERER']
+        print "here we go"
+        print self.request.META
+        if 'HTTP_REFERER' in self.request.META:
+            context['back'] = self.request.META['HTTP_REFERER']
 
         user = self.request.user
         profile_user_pk = self.kwargs['pk']

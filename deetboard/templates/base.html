@@ -1,4 +1,6 @@
 {% load staticfiles %}
+{% load widget_tweaks %}
+
 <!DOCTYPE html lang="en" PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head>
@@ -6,6 +8,8 @@
         {% block title %}{% endblock %}</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        {% include "favicon.html" %}   
         
         {% include "styles.html" %}    
 		

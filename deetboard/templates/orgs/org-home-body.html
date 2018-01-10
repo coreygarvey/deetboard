@@ -2,7 +2,9 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1 org-home-header">
             <h2>{{ org.title }}</h2> 
-            <a href="{{request.path}}payment">Account Details</a>
+            {% if user == org.admin %}
+                <a href="{{request.path}}payment">Account Details</a>
+            {% endif %}
 
         </div>
     </div>
