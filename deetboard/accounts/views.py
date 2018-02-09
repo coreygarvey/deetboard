@@ -104,21 +104,11 @@ class ActivationEmailMixin(object):
         
         value = add.delay(4, 4)
 
-        
-
-        print "Before mailer delay: "
-        print "subject: " + subject
-        print "message: " + message
-        print "from: " + settings.DEFAULT_FROM_EMAIL
         from_email = settings.DEFAULT_FROM_EMAIL
-        print "to: " + user.email
         to_email = user.email
-        print "mailer"
-        print mailer
 
         delayed_mail = mailer.delay(subject, message, from_email, to_email,
                         html_message=html_message)
-        print delayed_mail
 
         return
 
