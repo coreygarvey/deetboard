@@ -35,4 +35,4 @@ This remains in development and all feedback is welcome. A few plans for future 
 * Mobile application support
 
 ## Contact
-For all questions, comments, and feedback please email corey@deetboard.com
+For all questions, comments, and feedback please email corey@coreygarvey.com
