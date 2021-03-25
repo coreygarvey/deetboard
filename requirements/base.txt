@@ -37,7 +37,7 @@ pycurl==7.19.0
 pystache==0.5.3
 python-daemon==1.5.2
 python-dateutil==2.1
-PyYAML==3.10
+PyYAML==5.4
 rcssmin==1.0.6
 requests==1.2.3
 rjsmin==1.0.12
