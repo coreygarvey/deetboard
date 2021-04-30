@@ -58,7 +58,7 @@ rcssmin==1.0.6
 redis==2.10.6
 requests==2.18.4
 rjsmin==1.0.12
-rsa==3.4.1
+rsa==4.7
 simplejson==3.6.5
 six==1.10.0
 ssh==1.7.14
