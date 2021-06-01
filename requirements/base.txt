@@ -46,7 +46,7 @@ simplejson==3.6.5
 six==1.10.0
 ssh==1.7.14
 stevedore==1.20.0
-urllib3==1.8.2
+urllib3==1.26.5
 virtualenv==12.0.7
 virtualenv-clone==0.2.6
 virtualenvwrapper==4.7.2
